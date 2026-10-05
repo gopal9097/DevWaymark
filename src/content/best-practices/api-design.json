@@ -1,0 +1,34 @@
+{
+  "id": "api-design",
+  "title": "Production REST & API Design Standards",
+  "area": "API Design",
+  "summary": "Designing predictable, backward-compatible, well-documented APIs that developers love to consume.",
+  "readTime": "8 min read",
+  "level": "Intermediate",
+  "icon": "globe",
+  "keyPrinciples": [
+    "Consistent URL naming: use plural nouns for resources (`/api/v1/orders`), never verbs.",
+    "Standard error formats: adopt RFC 7807 (Problem Details) for machine-readable error responses.",
+    "Explicit versioning: never break existing consumers without an explicit deprecation period."
+  ],
+  "rules": [
+    {
+      "title": "Use Standard HTTP Status Codes Semantically",
+      "description": "Never return `200 OK` with an error message in the JSON body. Use proper 4xx client and 5xx server status codes so clients and caching proxies handle failures correctly.",
+      "badExample": {
+        "code": "// Bad: 200 OK with embedded error payload\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\n  \"success\": false,\n  \"error\": \"User not found\"\n}",
+        "explanation": "Clients must manually parse every response body to know if the request actually succeeded."
+      },
+      "goodExample": {
+        "code": "// Good: Standard 404 Not Found with RFC 7807 Problem Details\nHTTP/1.1 404 Not Found\nContent-Type: application/problem+json\n\n{\n  \"type\": \"https://api.devwaymark.org/errors/user-not-found\",\n  \"title\": \"User Not Found\",\n  \"status\": 404,\n  \"detail\": \"No user exists with id 'usr_98124'\",\n  \"instance\": \"/api/v1/users/usr_98124\"\n}",
+        "explanation": "Standardized format readable by any HTTP client library and observability dashboard."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "OpenAPI / Swagger specification generated automatically from code schemas.",
+    "Pagination standardized on cursor-based tokens (`cursor` and `limit`) for large collections.",
+    "Mutation endpoints support `Idempotency-Key` headers for safe retries.",
+    "Rate limits declared via standard headers (`RateLimit-Limit`, `RateLimit-Remaining`)."
+  ]
+}

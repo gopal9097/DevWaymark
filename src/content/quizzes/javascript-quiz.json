@@ -1,0 +1,39 @@
+{
+  "id": "javascript-quiz",
+  "title": "JavaScript Language Quiz",
+  "track": "JavaScript",
+  "description": "Deep dive into JS prototypes, closures, V8 optimizations, and strict equality behavior.",
+  "questions": [
+    {
+      "id": "js-q1",
+      "question": "What will the following code output to the console?",
+      "codeSnippet": "for (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 10);\n}",
+      "options": [
+        "0, 1, 2",
+        "3, 3, 3",
+        "undefined, undefined, undefined",
+        "ReferenceError"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Because `var` is function-scoped rather than block-scoped, there is only one shared `i` variable in the outer scope. By the time the setTimeout callbacks run 10ms later, the loop has finished and `i` equals 3. Replacing `var` with block-scoped `let` creates a new binding for each iteration, which prints 0, 1, 2.",
+      "difficulty": "Beginner",
+      "topic": "Closures & Scope",
+      "relatedRoadmapSlug": "javascript"
+    },
+    {
+      "id": "js-q2",
+      "question": "What is the primary difference between `WeakMap` and standard `Map` in JavaScript?",
+      "options": [
+        "WeakMap values are restricted to primitive numbers and booleans.",
+        "WeakMap keys must be objects or non-registered symbols, and they do not prevent their keys from being garbage-collected if no other references exist.",
+        "WeakMap cannot be accessed inside asynchronous functions.",
+        "WeakMap operates in O(N) lookup time while Map is O(1)."
+      ],
+      "correctAnswer": 1,
+      "explanation": "In standard `Map`, holding an object as a key prevents that object from being garbage-collected even if no other references exist in the application. In `WeakMap`, object keys are held weakly; once the object has no external references, the entry is automatically freed by the garbage collector.",
+      "difficulty": "Intermediate",
+      "topic": "Memory & Data Structures",
+      "relatedRoadmapSlug": "javascript"
+    }
+  ]
+}

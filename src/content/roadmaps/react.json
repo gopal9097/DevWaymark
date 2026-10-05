@@ -1,0 +1,120 @@
+{
+  "id": "react",
+  "title": "React Architecture & Next.js",
+  "tagline": "Component reconciliation, hook lifecycles, Server Components, and production state patterns",
+  "description": "Deep dive into React 19, Fiber reconciler internals, concurrent rendering, custom hooks, Server Components (RSC), and production Next.js App Router patterns.",
+  "domain": "Frontend",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 16,
+  "icon": "react",
+  "badge": "Most Used",
+  "featured": true,
+  "prerequisites": [
+    "Solid JavaScript (ES6+) foundations",
+    "Basic DOM knowledge"
+  ],
+  "stages": [
+    {
+      "id": "react-stage-1",
+      "number": 1,
+      "title": "Stage 1: Core React & Reconciliation",
+      "description": "JSX, Virtual DOM, Fiber tree architecture, and render vs commit phases.",
+      "nodes": [
+        {
+          "id": "react-fiber-reconciliation",
+          "title": "React Fiber Architecture & Re-rendering Rules",
+          "description": "How React divides work into incremental units (Fibers), performs reconciliation with diffing algorithms, and batches state updates.",
+          "whyItMatters": "Unnecessary re-renders in large component trees slow down user interactions. Knowing what causes a render allows surgical optimization.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "React Official Docs: Rendering Process",
+              "url": "https://react.dev/learn/render-and-commit",
+              "type": "docs"
+            },
+            {
+              "title": "A Cartoon Guide to Fiber",
+              "url": "https://www.youtube.com/watch?v=ZCuYPiUIONs",
+              "type": "video"
+            }
+          ],
+          "keyTakeaways": [
+            "A component re-renders when its state changes or its parent re-renders (unless memoized).",
+            "Never use array indices as keys if items can be reordered, inserted, or deleted.",
+            "React 18+ automatically batches multiple state updates even inside async callbacks."
+          ],
+          "interviewTips": "Explain why React moved from the legacy stack reconciler to the Fiber reconciler, and what priority-based interruptible rendering means."
+        }
+      ]
+    },
+    {
+      "id": "react-stage-2",
+      "number": 2,
+      "title": "Stage 2: Hooks Deep-Dive & Performance",
+      "description": "useState, useEffect, useMemo, useCallback, useTransition, and custom hook encapsulation.",
+      "nodes": [
+        {
+          "id": "react-hooks-mastery",
+          "title": "Advanced Hooks & Concurrent Features",
+          "description": "Managing side effects safely, avoiding stale closures, and using useTransition to mark non-urgent state updates for instant UI responsiveness.",
+          "whyItMatters": "Improper useEffect dependency arrays create infinite render loops or subtle stale closure bugs. useTransition keeps typing inputs snappy during heavy list filtering.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "React Docs: You Might Not Need an Effect",
+              "url": "https://react.dev/learn/you-might-not-need-an-effect",
+              "type": "article"
+            },
+            {
+              "title": "Overreacted: A Complete Guide to useEffect",
+              "url": "https://overreacted.io/a-complete-guide-to-useeffect/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Do not use useEffect for calculating derived state; compute it during render.",
+            "useCallback and useMemo only help if passing callbacks to memoized children or computing heavy math.",
+            "useTransition lets React yield to user interactions while rendering expensive views."
+          ],
+          "interviewTips": "Expect scenario questions where a useEffect captures a stale state variable, and you must resolve it with functional state updater or useRef."
+        }
+      ]
+    },
+    {
+      "id": "react-stage-3",
+      "number": 3,
+      "title": "Stage 3: Server Components & Next.js",
+      "description": "React Server Components (RSC), streaming HTML with Suspense, Server Actions, and Next.js App Router.",
+      "nodes": [
+        {
+          "id": "react-server-components",
+          "title": "React Server Components (RSC) & Streaming",
+          "description": "Executing components exclusively on the server to eliminate zero-bundle-size client overhead, access databases directly, and stream UI with Suspense.",
+          "whyItMatters": "Traditional client bundles send megabytes of JS to the browser. RSC keeps dependencies on the server, drastically accelerating Time to Interactive.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            {
+              "title": "Next.js App Router Docs",
+              "url": "https://nextjs.org/docs/app",
+              "type": "docs"
+            },
+            {
+              "title": "Dan Abramov: React Server Components Mental Model",
+              "url": "https://github.com/reactwg/server-components",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Server Components do not ship JavaScript to the client; Client Components require 'use client' at the top.",
+            "Pass Server Components as children to Client Components to avoid forcing the whole subtree into the client bundle.",
+            "Use React Suspense to stream slow database queries into the browser without blocking the initial page layout."
+          ],
+          "interviewTips": "Be prepared to explain the architectural boundaries between 'use client' and 'use server' directives in modern Next.js."
+        }
+      ]
+    }
+  ]
+}

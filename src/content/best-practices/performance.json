@@ -1,0 +1,46 @@
+{
+  "id": "performance",
+  "title": "Performance Optimization & Web Vitals",
+  "area": "Performance",
+  "summary": "Systematic techniques for sub-second page loads, minimal server latency, and low memory consumption.",
+  "readTime": "8 min read",
+  "level": "Intermediate",
+  "icon": "zap",
+  "keyPrinciples": [
+    "Measure before optimizing: profile production bottlenecks with Chrome DevTools and APM tools.",
+    "The fastest code is the code that never runs: cache early, prune dependencies, avoid unnecessary work.",
+    "Protect the main thread: avoid long tasks (>50ms) to ensure instant user interaction."
+  ],
+  "rules": [
+    {
+      "title": "Prevent N+1 Query Traps in Database Relationships",
+      "description": "Fetching associated records inside a loop generates N separate roundtrips to the database instead of a single batched query.",
+      "badExample": {
+        "code": "// Bad: 1 query for posts + 100 queries for authors (N+1)\nconst posts = await db.query('SELECT * FROM posts LIMIT 100');\nfor (const post of posts) {\n  post.author = await db.query('SELECT * FROM users WHERE id = ?', [post.authorId]);\n}",
+        "explanation": "Introduces massive database network roundtrip latency."
+      },
+      "goodExample": {
+        "code": "// Good: Single SQL JOIN or batched DataLoader query\nconst posts = await db.query(`\n  SELECT p.*, json_build_object('id', u.id, 'name', u.name) as author\n  FROM posts p\n  INNER JOIN users u ON p.author_id = u.id\n  LIMIT 100\n`);",
+        "explanation": "Executes in one single database roundtrip with zero sequential wait times."
+      }
+    },
+    {
+      "title": "Declare Explicit Dimensions on Media Elements to Eliminate CLS",
+      "description": "Images without explicit aspect-ratio or width/height attributes trigger layout shifts when loaded, disrupting user reading position.",
+      "badExample": {
+        "code": "<!-- Bad: Zero dimensions reserved. Shifts layout when image downloads -->\n<img src=\"/hero-banner.jpg\" alt=\"Developer Hub\" />",
+        "explanation": "Browser assumes 0x0 size until image header is parsed, jumping the layout."
+      },
+      "goodExample": {
+        "code": "<!-- Good: Aspect ratio reserved upfront in layout engine -->\n<img \n  src=\"/hero-banner.jpg\" \n  alt=\"Developer Hub\" \n  width=\"1200\" \n  height=\"630\" \n  loading=\"eager\" \n  fetchpriority=\"high\"\n  class=\"aspect-[1200/630] w-full h-auto\"\n/>",
+        "explanation": "Space is pre-allocated immediately; Cumulative Layout Shift score stays 0."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Core Web Vitals monitored via real-user monitoring (RUM).",
+    "Critical images above the fold preloaded with fetchpriority='high'.",
+    "Database queries indexed on foreign keys and WHERE/ORDER BY columns.",
+    "Asset bundling configured with modern code-splitting and brotli compression."
+  ]
+}

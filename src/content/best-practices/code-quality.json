@@ -1,0 +1,46 @@
+{
+  "id": "code-quality",
+  "title": "Code Quality & Clean Architecture",
+  "area": "Code Quality",
+  "summary": "Essential principles for maintainable, readable, and refactor-safe codebases in modern software engineering.",
+  "readTime": "7 min read",
+  "level": "Fundamental",
+  "icon": "code",
+  "keyPrinciples": [
+    "Clarity over cleverness: write code for the developer who has to debug it at 3 AM.",
+    "Single Responsibility: every module, class, or function should have exactly one reason to change.",
+    "Pure functions and immutability: minimize side effects to make behavior deterministic and testable."
+  ],
+  "rules": [
+    {
+      "title": "Avoid Boolean Flag Arguments in Functions",
+      "description": "Passing boolean flags (e.g. `getUser(id, true)`) obscures intent and forces a single function to do two distinct things. Split into two dedicated functions instead.",
+      "badExample": {
+        "code": "// Bad: What does 'true' mean here?\nfunction fetchUser(id: string, includeFullProfile: boolean) {\n  if (includeFullProfile) {\n    return db.users.findWithProfile(id);\n  }\n  return db.users.findBasic(id);\n}\n\nfetchUser('u_123', true);",
+        "explanation": "At the call site, the boolean literal provides zero readability without inspecting the function signature."
+      },
+      "goodExample": {
+        "code": "// Good: Explicit intent and decoupled responsibilities\nfunction fetchBasicUser(id: string) {\n  return db.users.findBasic(id);\n}\n\nfunction fetchUserWithProfile(id: string) {\n  return db.users.findWithProfile(id);\n}\n\nfetchUserWithProfile('u_123');",
+        "explanation": "Each function has a clear, self-documenting contract and no internal branching on boolean flags."
+      }
+    },
+    {
+      "title": "Return Early (Guard Clauses) Over Deeply Nested Conditionals",
+      "description": "Deep nesting creates cognitive overload. Use early guard returns to handle invalid inputs or edge cases upfront.",
+      "badExample": {
+        "code": "// Bad: Deep arrow anti-pattern\nfunction processOrder(order: Order) {\n  if (order.isValid) {\n    if (order.hasInventory) {\n      if (order.paymentAuthorized) {\n        executeFulfillment(order);\n      } else {\n        throw new Error('Payment unauthorized');\n      }\n    } else {\n      throw new Error('Out of stock');\n    }\n  } else {\n    throw new Error('Invalid order');\n  }\n}",
+        "explanation": "Mental overhead compounds with every indentation layer."
+      },
+      "goodExample": {
+        "code": "// Good: Linear execution with guard clauses\nfunction processOrder(order: Order) {\n  if (!order.isValid) throw new Error('Invalid order');\n  if (!order.hasInventory) throw new Error('Out of stock');\n  if (!order.paymentAuthorized) throw new Error('Payment unauthorized');\n\n  executeFulfillment(order);\n}",
+        "explanation": "Preconditions are validated at the top; happy path runs flat and unobstructed."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Strict linting and formatting configured in pre-commit hooks (Biome or ESLint + Prettier).",
+    "Functions are generally kept under 30 lines and do exactly one conceptual thing.",
+    "Dead code, commented-out blocks, and unused variables are pruned before merging.",
+    "Error cases return typed error objects or throw descriptive custom error classes."
+  ]
+}

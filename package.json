@@ -1,0 +1,22 @@
+{
+  "name": "devwaymark",
+  "version": "1.0.0",
+  "description": "DevWaymark — The Free, Open Visual Career Trajectory & Learning Hub for Developers",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^5.18.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.8.2"
+  }
+}

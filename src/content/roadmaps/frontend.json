@@ -1,0 +1,211 @@
+{
+  "id": "frontend",
+  "title": "Frontend Engineering",
+  "tagline": "Modern web interfaces, performance budgets, accessibility, and client architecture",
+  "description": "A complete path from semantic HTML and modern CSS through JavaScript/TypeScript internals, modern component architecture, state management, and web performance optimization.",
+  "domain": "Frontend",
+  "difficulty": "Beginner",
+  "estimatedWeeks": 18,
+  "icon": "layout",
+  "badge": "Most Popular",
+  "featured": true,
+  "prerequisites": ["Basic computer literacy", "Understanding of how the web works"],
+  "stages": [
+    {
+      "id": "fe-stage-1",
+      "number": 1,
+      "title": "Stage 1: Web Foundations & Accessibility",
+      "description": "Master document structure, semantic markup, accessible landmarks, and intrinsic responsive layouts.",
+      "nodes": [
+        {
+          "id": "fe-html-semantics",
+          "title": "Semantic HTML & Accessibility Landmarks",
+          "description": "Structured markup using meaningful elements (<main>, <nav>, <article>, <header>, <section>) rather than generic div containers.",
+          "whyItMatters": "Accessibility assistive tech (screen readers) and search engines navigate through the accessibility tree. Semantic structure drastically reduces custom ARIA hacks and improves indexability.",
+          "importance": "essential",
+          "estimatedHours": 10,
+          "resources": [
+            { "title": "MDN HTML Semantics", "url": "https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantics_in_html", "type": "docs" },
+            { "title": "W3C ARIA Authoring Practices Guide (APG)", "url": "https://www.w3.org/WAI/ARIA/apg/", "type": "docs" },
+            { "title": "WebAIM Screen Reader Survey", "url": "https://webaim.org/projects/screenreadersurvey9/", "type": "article" }
+          ],
+          "keyTakeaways": [
+            "Use native interactive elements (<button>, <a href>, <dialog>) to get built-in keyboard navigation and focus management.",
+            "Maintain strict heading levels (h1 through h6) without skipping levels.",
+            "Verify all interactive elements provide visible text or descriptive aria-label."
+          ],
+          "interviewTips": "Expect questions contrasting <div> vs semantic elements, and how browser accessibility trees are constructed from the DOM."
+        },
+        {
+          "id": "fe-css-modern",
+          "title": "Modern CSS: Grid, Flexbox & Container Queries",
+          "description": "Layout systems for one-dimensional alignments (Flexbox), two-dimensional grids (CSS Grid), and modular container queries.",
+          "whyItMatters": "Fluid, responsive CSS prevents brittle breakpoint media queries, eliminates Cumulative Layout Shifts (CLS), and ensures interfaces adapt to any viewport or card width.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            { "title": "MDN CSS Grid Layout", "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout", "type": "docs" },
+            { "title": "CSS Tricks Guide to Flexbox", "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/", "type": "article" },
+            { "title": "web.dev Container Queries", "url": "https://web.dev/articles/cq-stable", "type": "article" }
+          ],
+          "keyTakeaways": [
+            "Use Flexbox for unidirectional flow and toolbar items; use CSS Grid for page skeleton layouts.",
+            "Container queries enable reusable components that respond to their container width rather than global screen dimensions.",
+            "Leverage minmax(), clamp(), and calc() to create scalable fluid typography."
+          ],
+          "interviewTips": "Common questions include CSS specificity calculations, margin collapsing rules, and building responsive card grids without media queries."
+        },
+        {
+          "id": "fe-browser-apis",
+          "title": "Browser Architecture & DOM Manipulation",
+          "description": "Understanding the Critical Rendering Path: parsing HTML/CSS, DOM and CSSOM generation, render tree, layout/reflow, paint, and compositing.",
+          "whyItMatters": "Frequent DOM writes and layout thrashing drop animation framerates below 60fps. Understanding the rendering pipeline is key to smooth UI performance.",
+          "importance": "essential",
+          "estimatedHours": 12,
+          "resources": [
+            { "title": "How Browsers Work (web.dev)", "url": "https://web.dev/articles/howbrowserswork", "type": "article" },
+            { "title": "MDN Document Object Model", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Avoid reading computed layout properties immediately after writing styles to prevent forced synchronous layouts.",
+            "Prefer CSS transforms and opacity for animations because they run on the GPU compositor thread.",
+            "Understand event bubbling, capturing, and delegation to optimize memory usage."
+          ],
+          "interviewTips": "Be prepared to explain the exact steps a browser takes from entering a URL to displaying pixels on the screen."
+        }
+      ]
+    },
+    {
+      "id": "fe-stage-2",
+      "number": 2,
+      "title": "Stage 2: JavaScript Runtime & TypeScript",
+      "description": "Deep dive into execution context, event loop, asynchronous promises, closures, and static type safety.",
+      "nodes": [
+        {
+          "id": "fe-js-async",
+          "title": "Async JS & The Event Loop",
+          "description": "Call stack, Web APIs, Microtask queue (Promises), Macrotask queue (setTimeout, I/O), and event loop ticks.",
+          "whyItMatters": "JavaScript is single-threaded. Blocking the call stack freezes user input, drops frames, and triggers 'Page Unresponsive' warnings.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            { "title": "Philip Roberts: What the heck is the event loop anyway?", "url": "https://www.youtube.com/watch?v=8aGhZQkoFbQ", "type": "video" },
+            { "title": "MDN Asynchronous JavaScript", "url": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Microtasks (Promise callbacks, queueMicrotask) run immediately after the current script and before any macrotasks.",
+            "Use AbortController to cleanly cancel fetch requests and prevent memory leaks or stale state race conditions.",
+            "Always handle Promise rejections to prevent unhandled rejection crashes."
+          ],
+          "interviewTips": "Almost every senior frontend interview includes predicting output order for mixed setTimeout, Promise.then, and console.log snippets."
+        },
+        {
+          "id": "fe-typescript",
+          "title": "TypeScript in Modern Applications",
+          "description": "Static type system: generics, union types, discriminated unions, utility types, and strict mode.",
+          "whyItMatters": "Catches entire classes of runtime null/undefined bugs at compile time and makes large codebases refactorable with confidence.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            { "title": "TypeScript Official Handbook", "url": "https://www.typescriptlang.org/docs/handbook/intro.html", "type": "docs" },
+            { "title": "Total TypeScript Tutorials", "url": "https://www.totaltypescript.com/tutorials", "type": "interactive" }
+          ],
+          "keyTakeaways": [
+            "Use discriminated unions to represent distinct UI states (idle, loading, success, error) safely.",
+            "Enable strict: true in tsconfig to enforce null checks and avoid implicit any types.",
+            "Favor interfaces/types with readonly attributes for immutable state models."
+          ],
+          "interviewTips": "Expect questions on generics, `keyof`, `typeof`, type narrowing via type guards, and `unknown` vs `any`."
+        }
+      ]
+    },
+    {
+      "id": "fe-stage-3",
+      "number": 3,
+      "title": "Stage 3: Modern UI Architecture & State",
+      "description": "Component design systems, declarative rendering, state management patterns, and client-server synchronization.",
+      "nodes": [
+        {
+          "id": "fe-component-architecture",
+          "title": "Component Design Systems & Composition",
+          "description": "Building composable, accessible UI libraries with clear props contracts, slots/children composition, and design tokens.",
+          "whyItMatters": "Duplicated ad-hoc UI code creates visual inconsistencies, accessibility regressions, and engineering velocity bottlenecks.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            { "title": "Brad Frost Atomic Design", "url": "https://atomicdesign.bradfrost.com/", "type": "article" },
+            { "title": "Radix UI Primitives", "url": "https://www.radix-ui.com/primitives", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Prefer composition over deep prop-drilling or giant multi-boolean configurations.",
+            "Separate presentational dumb components from stateful container components.",
+            "Use design tokens (colors, spacing, shadows) defined once in CSS variables."
+          ],
+          "interviewTips": "You may be asked to design an accessible Modal, Dropdown, or Combobox component from scratch with keyboard focus trap."
+        },
+        {
+          "id": "fe-state-management",
+          "title": "Client State vs Server Cache",
+          "description": "Differentiating transient local UI state from remote server cache (TanStack Query, SWR, Zustand).",
+          "whyItMatters": "Overusing global Redux stores for server data leads to stale cache bugs, duplicate fetch calls, and painful manual cache invalidation.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            { "title": "TanStack Query Docs", "url": "https://tanstack.com/query/latest", "type": "docs" },
+            { "title": "TkDodo's Practical React Query", "url": "https://tkdodo.eu/blog/practical-react-query", "type": "article" }
+          ],
+          "keyTakeaways": [
+            "Server state is owned by the backend and cached on the client; UI state is ephemeral and purely client-side.",
+            "Use automatic query deduplication, optimistic updates, and background revalidation.",
+            "Keep state as close to the consuming component as possible."
+          ],
+          "interviewTips": "Interviewers often test your knowledge of caching strategies: stale-while-revalidate, optimistic updates, and cache invalidation."
+        }
+      ]
+    },
+    {
+      "id": "fe-stage-4",
+      "number": 4,
+      "title": "Stage 4: Web Vitals & Production Performance",
+      "description": "Real-world web performance: LCP, INP, CLS, code-splitting, asset delivery, and bundle analysis.",
+      "nodes": [
+        {
+          "id": "fe-core-web-vitals",
+          "title": "Core Web Vitals & Loading Optimization",
+          "description": "Mastering Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS).",
+          "whyItMatters": "Every 100ms of latency costs e-commerce conversion. Google search rankings penalize slow CWV metrics.",
+          "importance": "essential",
+          "estimatedHours": 15,
+          "resources": [
+            { "title": "Google web.dev Core Web Vitals", "url": "https://web.dev/explore/learn-core-web-vitals", "type": "docs" },
+            { "title": "Chrome DevTools Performance Panel", "url": "https://developer.chrome.com/docs/devtools/performance/", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Optimize LCP by prioritizing the hero image with fetchpriority='high' and preloading critical web fonts.",
+            "Prevent CLS by explicitly declaring width and height attributes on images and video placeholders.",
+            "Keep long tasks under 50ms using scheduler.yield() or web workers to achieve excellent INP (<200ms)."
+          ],
+          "interviewTips": "Be prepared to explain how to diagnose slow LCP in Chrome DevTools and the architectural fixes required."
+        },
+        {
+          "id": "fe-security",
+          "title": "Frontend Security: XSS, CSRF & CSP",
+          "description": "Preventing Cross-Site Scripting, securing cookies with HttpOnly and SameSite, and crafting strict Content Security Policies.",
+          "whyItMatters": "One unescaped innerHTML call can allow attackers to steal user session tokens and take over accounts.",
+          "importance": "essential",
+          "estimatedHours": 12,
+          "resources": [
+            { "title": "OWASP Top Ten Web Application Security", "url": "https://owasp.org/www-project-top-ten/", "type": "docs" },
+            { "title": "MDN Content Security Policy (CSP)", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Never inject untrusted user input directly into innerHTML or dangerouslySetInnerHTML without DOMPurify sanitization.",
+            "Store authentication session cookies with HttpOnly, Secure, and SameSite=Lax flags.",
+            "Deploy a strict CSP header disallowing unsafe-eval and unauthorized remote script origins."
+          ],
+          "interviewTips": "Expect questions on how XSS differs from CSRF, and how modern frameworks prevent XSS by default via text node escaping."
+        }
+      ]
+    }
+  ]
+}

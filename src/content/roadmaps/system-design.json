@@ -1,0 +1,146 @@
+{
+  "id": "system-design",
+  "title": "System Design & Distributed Systems",
+  "tagline": "Scalable architectures, distributed consensus, data partitioning, and high availability",
+  "description": "Design systems that scale to millions of users: load balancers, database sharding, consistent hashing, message brokers, caching tiers, CAP theorem tradeoffs, and fault tolerance.",
+  "domain": "Architecture",
+  "difficulty": "Advanced",
+  "estimatedWeeks": 20,
+  "icon": "network",
+  "badge": "Senior / Staff Track",
+  "featured": true,
+  "prerequisites": [
+    "Solid understanding of Backend engineering",
+    "Familiarity with databases and networking"
+  ],
+  "stages": [
+    {
+      "id": "sd-stage-1",
+      "number": 1,
+      "title": "Stage 1: Scalability & Distributed Principles",
+      "description": "Vertical vs horizontal scaling, latency numbers every programmer should know, and the CAP theorem.",
+      "nodes": [
+        {
+          "id": "sd-cap-pacelc",
+          "title": "CAP Theorem & PACELC Tradeoffs",
+          "description": "Consistency, Availability, and Partition Tolerance in distributed networks, expanded by PACELC (Latency vs Consistency in normal operation).",
+          "whyItMatters": "In any distributed system, network partitions will occur. Choosing CP (Consistency) vs AP (Availability) dictates how your application behaves during network splits.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "A Primer on the CAP Theorem",
+              "url": "https://www.somethingsimilar.com/2013/01/14/notes-on-distributed-systems-for-young-bloods/",
+              "type": "article"
+            },
+            {
+              "title": "Designing Data-Intensive Applications",
+              "url": "https://dataintensive.net/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "You cannot choose CA in a distributed system; network partitions are an unavoidable reality of hardware.",
+            "CP systems (like etcd, CockroachDB) refuse stale writes/reads during network splits; AP systems (like Cassandra, DynamoDB) return available data that may be eventually consistent.",
+            "Understand eventual consistency, read-your-own-writes consistency, and monotonic read guarantees."
+          ],
+          "interviewTips": "Interviewers will ask how you choose between Cassandra (AP) and Postgres/etcd (CP) for specific product features like chat vs banking ledger."
+        },
+        {
+          "id": "sd-load-balancing",
+          "title": "Load Balancing & Consistent Hashing",
+          "description": "Layer 4 vs Layer 7 load balancers, health checks, algorithm strategies (round-robin, least connections), and Consistent Hashing rings.",
+          "whyItMatters": "Standard modulo hashing (hash(key) % N) re-indexes 90%+ of keys whenever a server is added or removed, causing massive cache stampedes. Consistent Hashing minimizes remapping to 1/N.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "Consistent Hashing Illustrated",
+              "url": "https://www.toptal.com/big-data/consistent-hashing",
+              "type": "article"
+            },
+            {
+              "title": "NGINX Load Balancing Guide",
+              "url": "https://www.nginx.com/resources/glossary/load-balancing/",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Layer 4 load balancers route at the transport layer (TCP/UDP); Layer 7 inspects HTTP headers, cookies, and URL paths.",
+            "Consistent Hashing places nodes and keys on a virtual ring (0 to 2^32-1) with virtual nodes to balance load distribution uniformly.",
+            "Use health checks with active polling and circuit breakers to remove dead backend instances automatically."
+          ],
+          "interviewTips": "Be prepared to draw a consistent hashing circle and demonstrate what happens when a node fails or is added."
+        }
+      ]
+    },
+    {
+      "id": "sd-stage-2",
+      "number": 2,
+      "title": "Stage 2: Storage Scaling & Partitioning",
+      "description": "Replication topologies, horizontal sharding, partition keys, and distributed transactions.",
+      "nodes": [
+        {
+          "id": "sd-sharding-replication",
+          "title": "Database Sharding & Read Replication",
+          "description": "Active-passive vs active-active replication, replication lag, choosing sharding keys, and cross-shard queries.",
+          "whyItMatters": "When database storage or write IOPS exceeds the capacity of the largest single hardware node, sharding splits data across multiple independent database clusters.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "Sharding Pinterest: How we scaled to 50B pins",
+              "url": "https://medium.com/pinterest-engineering/sharding-pinterest-how-we-scaled-our-mysql-fleet-3f34e96ca219",
+              "type": "article"
+            },
+            {
+              "title": "Distributed Database Patterns",
+              "url": "https://martinfowler.com/articles/patterns-of-distributed-systems/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Pick a shard key with high cardinality and even distribution to prevent hot-spotting.",
+            "Avoid cross-shard joins; denormalize data or execute application-level scatter-gather queries.",
+            "Account for replication lag when directing reads to read-replicas immediately after a user write."
+          ],
+          "interviewTips": "Classic interview question: How to scale a Twitter-like feed system (push vs pull fanout model)."
+        }
+      ]
+    },
+    {
+      "id": "sd-stage-3",
+      "number": 3,
+      "title": "Stage 3: Resiliency & Distributed Consensus",
+      "description": "Saga pattern, Raft consensus, rate limiting algorithms, and disaster recovery.",
+      "nodes": [
+        {
+          "id": "sd-saga-pattern",
+          "title": "Distributed Transactions: 2PC vs Saga Pattern",
+          "description": "Why Two-Phase Commit (2PC) blocks in distributed microservices, and how the Saga pattern coordinates local transactions with compensating transactions.",
+          "whyItMatters": "In microservices, a single business workflow (order -> payment -> inventory -> shipping) spans multiple databases. Sagas ensure eventual consistency without distributed locks.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            {
+              "title": "Microservices.io: Saga Pattern",
+              "url": "https://microservices.io/patterns/data/saga.html",
+              "type": "article"
+            },
+            {
+              "title": "Raft Consensus Algorithm Guide",
+              "url": "https://raft.github.io/",
+              "type": "interactive"
+            }
+          ],
+          "keyTakeaways": [
+            "Orchestration-based Sagas use a central orchestrator service; Choreography-based Sagas rely on event broadcasting.",
+            "Every action in a saga must have an inverse compensating action (e.g., refund payment if inventory reserve fails).",
+            "Design all steps to be idempotent to handle retried messages safely."
+          ],
+          "interviewTips": "Interviewers will ask how to recover if the orchestrator crashes midway through a transaction or if a compensating transaction fails."
+        }
+      ]
+    }
+  ]
+}

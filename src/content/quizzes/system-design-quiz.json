@@ -1,0 +1,53 @@
+{
+  "id": "system-design-quiz",
+  "title": "System Design & Distributed Systems Quiz",
+  "track": "System Design",
+  "description": "Evaluate your architectural intuition for high-scale distributed systems, consistency models, and fault tolerance.",
+  "questions": [
+    {
+      "id": "sd-q1",
+      "question": "In the CAP Theorem, why can a distributed system with multiple nodes over a physical network never choose 'CA' (Consistency and Availability without Partition Tolerance)?",
+      "options": [
+        "Because hardware load balancers only support round-robin routing.",
+        "Because network partitions (dropped packets, severed cables, routing failures) are an inevitable physical reality of distributed networks.",
+        "Because the CAP theorem only applies to relational databases like MySQL.",
+        "Because ACID transactions cannot be implemented on multi-core processors."
+      ],
+      "correctAnswer": 1,
+      "explanation": "In distributed systems, network partitions are inevitable. When a partition occurs, nodes cannot communicate. You must either continue serving requests with potentially out-of-date data (favoring Availability - AP) or refuse requests until consistency is restored (favoring Consistency - CP). You cannot avoid partitions.",
+      "difficulty": "Advanced",
+      "topic": "CAP Theorem",
+      "relatedRoadmapSlug": "system-design"
+    },
+    {
+      "id": "sd-q2",
+      "question": "What is the primary architectural purpose of the Saga pattern in microservice environments?",
+      "options": [
+        "To speed up SSL/TLS handshakes between microservices.",
+        "To coordinate distributed transactions across multiple independent service databases using local transactions and compensating actions.",
+        "To automatically compress Kafka event streams.",
+        "To enforce OAuth token validation on every microservice boundary."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Traditional distributed transactions (Two-Phase Commit / 2PC) lock database resources across services and create severe availability bottlenecks. The Saga pattern executes a sequence of local transactions, where each step publishes an event, and failures trigger compensating transactions to rollback business state.",
+      "difficulty": "Advanced",
+      "topic": "Distributed Transactions",
+      "relatedRoadmapSlug": "system-design"
+    },
+    {
+      "id": "sd-q3",
+      "question": "How does Consistent Hashing minimize cache reorganization when a server node is added or removed compared to standard modulo hashing (`hash(key) % N`)?",
+      "options": [
+        "It compresses cache keys into 8-bit integers.",
+        "It maps both servers and keys onto a circular hash ring, so adding a node only remaps approximately K/N keys (where K is total keys and N is total servers).",
+        "It routes all requests to a central in-memory master redis node.",
+        "It converts all cache keys into cryptographic public keys."
+      ],
+      "correctAnswer": 1,
+      "explanation": "In naive modulo hashing, changing N causes almost 100% of keys to remap to new nodes, causing catastrophic cache misses. Consistent hashing maps keys and servers to a 360-degree ring; adding or removing a node only impacts keys between that node and its predecessor (roughly 1/N of total keys).",
+      "difficulty": "Advanced",
+      "topic": "Consistent Hashing",
+      "relatedRoadmapSlug": "system-design"
+    }
+  ]
+}

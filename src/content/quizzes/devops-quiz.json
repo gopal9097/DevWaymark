@@ -1,0 +1,53 @@
+{
+  "id": "devops-quiz",
+  "title": "DevOps & Infrastructure Quiz",
+  "track": "DevOps",
+  "description": "Challenge your mastery of Linux processes, Docker container optimization, Kubernetes lifecycle, and CI/CD.",
+  "questions": [
+    {
+      "id": "devops-q1",
+      "question": "What is the critical behavioral difference between Kubernetes Liveness Probes and Readiness Probes?",
+      "options": [
+        "Liveness probes run once on startup; readiness probes run every second indefinitely.",
+        "If a liveness probe fails, Kubernetes restarts the pod container. If a readiness probe fails, Kubernetes stops routing service network traffic to the pod without restarting it.",
+        "Readiness probes only check TCP ports, whereas liveness probes only execute shell commands.",
+        "Liveness probes are strictly for database containers."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Liveness probes detect deadlocks where an app needs to be restarted. Readiness probes detect temporary unavailability (e.g. warming up caches or handling heavy load); failing readiness temporarily pulls the pod from the Service load balancer endpoint list without killing the process.",
+      "difficulty": "Intermediate",
+      "topic": "Kubernetes Orchestration",
+      "relatedRoadmapSlug": "devops"
+    },
+    {
+      "id": "devops-q2",
+      "question": "Why should you order instructions in a Dockerfile from least-frequently changed to most-frequently changed?",
+      "options": [
+        "Because Docker compiles instructions into machine code from bottom to top.",
+        "To maximize Docker layer cache hits during image rebuilds, avoiding redundant dependency downloads.",
+        "Because the Linux kernel requires package managers to run last.",
+        "To automatically compress image size with zstandard."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Docker caches image layers sequentially. As soon as an instruction changes (e.g. source code copy), that layer and all subsequent layers must be rebuilt from scratch. Placing slow, rarely changing commands (like installing system libraries and dependencies) first keeps their cached layers intact.",
+      "difficulty": "Beginner",
+      "topic": "Container Optimization",
+      "relatedRoadmapSlug": "devops"
+    },
+    {
+      "id": "devops-q3",
+      "question": "What happens when a Linux process receives the SIGKILL (signal 9) signal?",
+      "options": [
+        "The process executes its registered signal handler to close database connections and file locks.",
+        "The Linux kernel terminates the process immediately without notifying the process; the signal cannot be caught, blocked, or ignored.",
+        "The process enters a zombie state for 30 seconds before exiting.",
+        "The process reloads its configuration files."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Unlike SIGTERM (signal 15) or SIGINT (signal 2), which allow processes to clean up gracefully, SIGKILL is handled directly by the operating system kernel and cannot be intercepted or caught by application code.",
+      "difficulty": "Intermediate",
+      "topic": "Linux Systems",
+      "relatedRoadmapSlug": "devops"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "security",
+  "title": "Application Security & Defensive Engineering",
+  "area": "Security",
+  "summary": "Production security guidelines to protect APIs and frontend apps against OWASP Top 10 vulnerabilities.",
+  "readTime": "9 min read",
+  "level": "Advanced",
+  "icon": "shield",
+  "keyPrinciples": [
+    "Never trust client input: validate and sanitize all incoming payloads at the boundary.",
+    "Principle of Least Privilege: services and database users should only have the minimum required permissions.",
+    "Defense in depth: rely on multiple overlapping security controls rather than a single perimeter check."
+  ],
+  "rules": [
+    {
+      "title": "Always Scope Database Queries to the Authenticated Tenant/User",
+      "description": "Prevent Broken Object Level Authorization (BOLA/IDOR) by forcing the query to filter on user/tenant ownership, rather than trusting raw URL parameters.",
+      "badExample": {
+        "code": "// Bad: Vulnerable to IDOR. Any authenticated user can view invoice #4928\napp.get('/api/invoices/:id', async (req, res) => {\n  const invoice = await db.invoices.findById(req.params.id);\n  res.json(invoice);\n});",
+        "explanation": "The server fails to check if the requesting user actually owns the invoice."
+      },
+      "goodExample": {
+        "code": "// Good: Verified ownership via session context\napp.get('/api/invoices/:id', authenticateSession, async (req, res) => {\n  const invoice = await db.invoices.findOne({\n    where: {\n      id: req.params.id,\n      organizationId: req.user.organizationId\n    }\n  });\n  if (!invoice) return res.status(404).json({ error: 'Invoice not found' });\n  res.json(invoice);\n});",
+        "explanation": "The database query enforces tenant isolation at the data access layer."
+      }
+    },
+    {
+      "title": "Never Inject Secrets Directly Into Source Code or Git Repositories",
+      "description": "Hardcoded API keys, database credentials, or signing secrets in git commit history will be leaked. Load them from environment secrets managers at runtime.",
+      "badExample": {
+        "code": "// Bad: Leaks sensitive production credentials in source code\nconst stripe = new Stripe('sk_live_94820482048204820482');\nconst dbPassword = 'superSecretPassword123!';",
+        "explanation": "Once committed to git, credentials remain in git history even after deletion."
+      },
+      "goodExample": {
+        "code": "// Good: Injected from environment or secrets vault with schema validation\nimport { z } from 'zod';\n\nconst envSchema = z.object({\n  STRIPE_SECRET_KEY: z.string().startsWith('sk_'),\n  DATABASE_URL: z.string().url(),\n});\n\nconst env = envSchema.parse(process.env);\nconst stripe = new Stripe(env.STRIPE_SECRET_KEY);",
+        "explanation": "Secrets are loaded dynamically and validated strictly on process boot."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Automated secret scanning (Gitleaks, TruffleHog) in CI/CD pipeline.",
+    "Strict Content-Security-Policy (CSP) headers enabled on all web responses.",
+    "All user inputs validated with strict schemas (Zod, Pydantic, or JSON Schema).",
+    "Authentication tokens stored in HttpOnly, Secure, SameSite=Lax cookies."
+  ]
+}

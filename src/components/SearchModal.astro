@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+
+const roadmaps = await getCollection('roadmaps');
+const practices = await getCollection('best-practices');
+const quizzes = await getCollection('quizzes');
+
+const searchItems = [
+  ...roadmaps.map((r) => ({
+    title: r.data.title,
+    subtitle: `${r.data.domain} • ${r.data.difficulty} • ${r.data.estimatedWeeks}w`,
+    url: `/roadmaps/${r.data.id}`,
+    category: 'Roadmap Track',
+    badge: r.data.domain,
+  })),
+  ...roadmaps.flatMap((r) =>
+    r.data.stages.flatMap((s) =>
+      s.nodes.map((n) => ({
+        title: n.title,
+        subtitle: `In ${r.data.title} > ${s.title}`,
+        url: `/roadmaps/${r.data.id}#${n.id}`,
+        category: 'Milestone Node',
+        badge: n.importance,
+      }))
+    )
+  ),
+  ...practices.map((p) => ({
+    title: p.data.title,
+    subtitle: `${p.data.area} • ${p.data.readTime}`,
+    url: `/best-practices/${p.data.id}`,
+    category: 'Best Practice',
+    badge: p.data.area,
+  })),
+  ...quizzes.map((q) => ({
+    title: q.data.title,
+    subtitle: `${q.data.track} • ${q.data.questions.length} questions`,
+    url: `/practice?track=${encodeURIComponent(q.data.track)}`,
+    category: 'Practice Quiz',
+    badge: q.data.track,
+  })),
+];
+---
+
+<div id="search-modal-backdrop" class="fixed inset-0 z-50 hidden bg-forest-deep/70 backdrop-blur-sm transition-opacity duration-200" aria-hidden="true">
+  <div class="min-h-screen px-4 text-center flex items-start justify-center pt-16 sm:pt-24">
+    <div
+      id="search-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Search roadmaps, topics and quizzes"
+      class="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-bg-surface p-0 text-left align-middle shadow-2xl border border-border-subtle transition-all"
+    >
+      <div class="relative flex items-center border-b border-border-subtle px-4">
+        <svg class="w-5 h-5 text-text-faint mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search tracks, topics, best practices, quizzes..."
+          class="w-full bg-transparent py-4 text-base text-text-main placeholder-text-faint focus:outline-none"
+          autocomplete="off"
+        />
+        <button id="search-close-btn" type="button" class="p-1 rounded-lg text-text-muted hover:text-text-main hover:bg-bg-surface-hover text-xs font-mono px-2 py-1 border border-border-subtle">
+          ESC
+        </button>
+      </div>
+
+      <div id="search-results" class="max-h-96 overflow-y-auto p-2 space-y-1"></div>
+
+      <div class="flex items-center justify-between border-t border-border-subtle px-4 py-2.5 text-xs text-text-faint font-mono bg-bg-surface-hover">
+        <div class="flex items-center gap-3">
+          <span><kbd class="px-1.5 py-0.5 rounded bg-bg-surface border border-border-subtle text-text-main">↑</kbd> <kbd class="px-1.5 py-0.5 rounded bg-bg-surface border border-border-subtle text-text-main">↓</kbd> navigate</span>
+          <span><kbd class="px-1.5 py-0.5 rounded bg-bg-surface border border-border-subtle text-text-main">↵</kbd> select</span>
+        </div>
+        <span>DevWaymark Quick Finder</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ searchItems }}>
+  let selectedIndex = -1;
+  const backdrop = document.getElementById('search-modal-backdrop');
+  const input = document.getElementById('search-input');
+  const resultsContainer = document.getElementById('search-results');
+  const closeBtn = document.getElementById('search-close-btn');
+
+  function openSearch() {
+    if (!backdrop || !input) return;
+    backdrop.classList.remove('hidden');
+    backdrop.setAttribute('aria-hidden', 'false');
+    input.value = '';
+    renderResults(searchItems.slice(0, 8));
+    input.focus();
+  }
+
+  function closeSearch() {
+    if (!backdrop) return;
+    backdrop.classList.add('hidden');
+    backdrop.setAttribute('aria-hidden', 'true');
+    selectedIndex = -1;
+  }
+
+  function renderResults(items) {
+    if (!resultsContainer) return;
+    if (items.length === 0) {
+      resultsContainer.innerHTML = `
+        <div class="p-8 text-center text-sm text-text-muted">
+          No matches found for "${input.value}". Try "React", "Docker", "Security", or "HTTP".
+        </div>
+      `;
+      return;
+    }
+
+    resultsContainer.innerHTML = items
+      .map(
+        (item, index) => `
+        <a
+          href="${item.url}"
+          data-index="${index}"
+          class="search-item flex items-center justify-between p-3 rounded-xl hover:bg-sage/10 transition-colors ${
+            index === selectedIndex ? 'bg-sage/15' : ''
+          }"
+        >
+          <div class="min-w-0 pr-4">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-sm text-text-main truncate">${item.title}</span>
+              <span class="text-xs px-2 py-0.5 rounded-full font-mono font-medium border border-sage/30 bg-sage/10 text-forest dark:text-mint">
+                ${item.category}
+              </span>
+            </div>
+            <p class="text-xs text-text-muted truncate mt-0.5">${item.subtitle}</p>
+          </div>
+          <svg class="w-4 h-4 text-text-faint shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      `
+      )
+      .join('');
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (backdrop && backdrop.classList.contains('hidden')) {
+        openSearch();
+      } else {
+        closeSearch();
+      }
+    } else if (e.key === 'Escape' && backdrop && !backdrop.classList.contains('hidden')) {
+      closeSearch();
+    }
+  });
+
+  input?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (!query) {
+      renderResults(searchItems.slice(0, 8));
+      return;
+    }
+    const filtered = searchItems.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query) ||
+        item.subtitle.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query)
+    );
+    renderResults(filtered.slice(0, 12));
+    selectedIndex = -1;
+  });
+
+  window.addEventListener('open-devwaymark-search', openSearch);
+  closeBtn?.addEventListener('click', closeSearch);
+  backdrop?.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeSearch();
+  });
+</script>

@@ -1,0 +1,39 @@
+{
+  "id": "python-quiz",
+  "title": "Python Language & Systems Quiz",
+  "track": "Python",
+  "description": "Examine Python execution models, generators, GIL implications, and asyncio concurrency.",
+  "questions": [
+    {
+      "id": "py-q1",
+      "question": "Why does Python's Global Interpreter Lock (GIL) prevent CPU-bound tasks from running in parallel on multi-core systems when using the standard `threading` module?",
+      "options": [
+        "Because operating system kernels only assign one hardware thread to Python processes.",
+        "Because the GIL permits only one native thread to execute Python bytecodes at any given time to protect CPython's internal memory management and reference counting.",
+        "Because Python functions cannot allocate memory across multiple CPU caches.",
+        "Because multithreading in Python is restricted to 32-bit architectures."
+      ],
+      "correctAnswer": 1,
+      "explanation": "CPython uses reference counting for garbage collection. The GIL is a mutual-exclusion lock that prevents multiple native threads from executing Python bytecodes concurrently, avoiding race conditions in reference counts. To achieve parallel CPU execution, you must use `multiprocessing` or free-threaded Python 3.13+.",
+      "difficulty": "Intermediate",
+      "topic": "Python Concurrency & GIL",
+      "relatedRoadmapSlug": "python"
+    },
+    {
+      "id": "py-q2",
+      "question": "What will the following Python generator expression yield in terms of memory usage when processing 10 million records?",
+      "codeSnippet": "large_data = (x * 2 for x in range(10_000_000))",
+      "options": [
+        "Around 800 Megabytes of RAM to store the array in memory.",
+        "Negligible memory (under 200 bytes) because the generator produces values lazily on-demand.",
+        "MemoryError crash immediately upon variable assignment.",
+        "10 Gigabytes of temporary disk swap space."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Parentheses `(...)` create a generator expression rather than a list comprehension `[...]`. Generators evaluate lazily, producing numbers one at a time via the iterator protocol (`__next__`), using constant O(1) memory regardless of how many elements are iterated.",
+      "difficulty": "Beginner",
+      "topic": "Generators & Memory",
+      "relatedRoadmapSlug": "python"
+    }
+  ]
+}

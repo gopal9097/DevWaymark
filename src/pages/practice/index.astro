@@ -1,0 +1,426 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allQuizzes = await getCollection('quizzes');
+const quizzesData = allQuizzes.map((q) => ({
+  id: q.data.id,
+  title: q.data.title,
+  track: q.data.track,
+  questions: q.data.questions,
+}));
+
+const availableTracks = [
+  'All Tracks',
+  ...Array.from(new Set(allQuizzes.map((q) => q.data.track))),
+];
+---
+
+<BaseLayout
+  title="Practice Quizzes & Knowledge Checks — DevWaymark"
+  description="Topic-based software engineering quizzes with instant feedback, explanations, and score summary across Frontend, Backend, DevOps, System Design, and Security."
+  activeTab="practice"
+>
+  <section class="border-b border-border-subtle bg-bg-surface py-10 lg:py-14 bg-grid-pattern">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono">
+        <span>⚡</span> Instant Feedback & Detailed Explanations
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-text-main tracking-tight">
+        Practice Questions & Quizzes
+      </h1>
+      <p class="max-w-xl mx-auto text-sm sm:text-base text-text-muted">
+        Solidify your production understanding with scenario-based questions. Receive immediate explanations for every choice and track your score.
+      </p>
+
+      <div class="pt-4 flex items-center justify-center gap-2 flex-wrap" id="track-pills-bar">
+        {availableTracks.map((track, idx) => (
+          <button
+            type="button"
+            data-track={track}
+            class={`track-select-btn px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-colors ${
+              idx === 0
+                ? 'bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm'
+                : 'bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong'
+            }`}
+          >
+            {track}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+    <div id="quiz-arena-card" class="rounded-3xl bg-bg-surface border border-border-subtle shadow-xl overflow-hidden">
+      <div class="p-6 border-b border-border-subtle bg-bg-surface-hover space-y-3">
+        <div class="flex items-center justify-between text-xs font-mono">
+          <div class="flex items-center gap-2">
+            <span id="quiz-track-badge" class="px-2.5 py-0.5 rounded-full font-medium bg-sage/15 text-forest dark:text-mint border border-sage/30">
+              Frontend
+            </span>
+            <span id="quiz-topic-badge" class="px-2.5 py-0.5 rounded-full bg-bg-surface text-text-muted border border-border-subtle">
+              Event Loop
+            </span>
+          </div>
+          <span id="quiz-progress-text" class="text-text-muted font-semibold">Question 1 of 4</span>
+        </div>
+
+        <div class="h-1.5 w-full bg-border-subtle rounded-full overflow-hidden">
+          <div id="quiz-progress-bar" class="h-full bg-sage rounded-full w-1/4 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+        <h2 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-text-main leading-snug"></h2>
+
+        <div id="quiz-code-container" class="hidden rounded-xl bg-forest-deep p-4 border border-forest overflow-x-auto text-xs font-mono text-neutral-soft leading-relaxed">
+          <pre id="quiz-code-text"><code></code></pre>
+        </div>
+
+        <div id="quiz-options-container" class="space-y-3"></div>
+
+        <div id="quiz-feedback-box" class="hidden p-5 rounded-2xl border space-y-3">
+          <div class="flex items-center gap-2 text-xs font-mono font-bold uppercase" id="quiz-feedback-status"></div>
+          <p id="quiz-feedback-explanation" class="text-xs sm:text-sm text-text-muted leading-relaxed"></p>
+          <div id="quiz-roadmap-link-container" class="pt-1"></div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between">
+          <span class="text-[11px] font-mono text-text-faint">Use keys <kbd class="px-1 py-0.5 bg-bg-surface-hover rounded text-text-muted border border-border-subtle">1</kbd>-<kbd class="px-1 py-0.5 bg-bg-surface-hover rounded text-text-muted border border-border-subtle">4</kbd> to select</span>
+          <button
+            id="quiz-next-btn"
+            type="button"
+            class="hidden py-2.5 px-6 rounded-xl bg-forest hover:bg-forest-dark dark:bg-sage dark:text-forest-deep text-white font-semibold text-xs font-mono transition-colors shadow-sm"
+          >
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-summary-card" class="hidden rounded-3xl bg-bg-surface border border-border-subtle shadow-xl p-8 sm:p-10 space-y-8 text-center">
+      <div class="space-y-2">
+        <div class="text-4xl" id="summary-badge-icon">🏆</div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-main">
+          Quiz Completed!
+        </h2>
+        <p class="text-xs font-mono text-text-muted uppercase tracking-wider" id="summary-track-label">
+          Track Performance Summary
+        </p>
+      </div>
+
+      <div class="max-w-xs mx-auto p-6 rounded-2xl bg-sage/10 border border-sage/30 space-y-2">
+        <div class="text-4xl sm:text-5xl font-black text-forest dark:text-mint" id="summary-score-percent">
+          100%
+        </div>
+        <div class="text-xs font-mono text-text-muted" id="summary-score-ratio">
+          4 of 4 correct
+        </div>
+        <div class="text-xs font-semibold px-2 py-0.5 rounded-full inline-block bg-bg-surface text-forest dark:text-mint border border-sage/30" id="summary-tier-badge">
+          Mastery Tier
+        </div>
+      </div>
+
+      <div id="summary-review-container" class="space-y-3 text-left">
+        <h3 class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold">
+          Answer Review
+        </h3>
+        <div id="summary-review-list" class="space-y-2"></div>
+      </div>
+
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button
+          id="summary-retake-btn"
+          type="button"
+          class="w-full sm:w-auto py-3 px-6 rounded-xl bg-forest hover:bg-forest-dark dark:bg-sage dark:text-forest-deep text-white font-semibold text-xs font-mono transition-colors shadow-sm"
+        >
+          Retake This Quiz
+        </button>
+        <a
+          id="summary-roadmap-btn"
+          href="/roadmaps"
+          class="w-full sm:w-auto py-3 px-6 rounded-xl border border-border-strong text-text-main hover:bg-bg-surface-hover font-semibold text-xs font-mono transition-colors"
+        >
+          Explore Roadmaps →
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ quizzesData }}>
+  let activeTrack = 'All Tracks';
+  let currentQuestions = [];
+  let currentIndex = 0;
+  let score = 0;
+  let userAnswers = [];
+  let answerLocked = false;
+
+  const trackBtns = document.querySelectorAll('.track-select-btn');
+  const arenaCard = document.getElementById('quiz-arena-card');
+  const summaryCard = document.getElementById('quiz-summary-card');
+
+  const trackBadge = document.getElementById('quiz-track-badge');
+  const topicBadge = document.getElementById('quiz-topic-badge');
+  const progressText = document.getElementById('quiz-progress-text');
+  const progressBar = document.getElementById('quiz-progress-bar');
+  const questionText = document.getElementById('quiz-question-text');
+  const codeContainer = document.getElementById('quiz-code-container');
+  const codeText = document.getElementById('quiz-code-text');
+  const optionsContainer = document.getElementById('quiz-options-container');
+  const feedbackBox = document.getElementById('quiz-feedback-box');
+  const feedbackStatus = document.getElementById('quiz-feedback-status');
+  const feedbackExplanation = document.getElementById('quiz-feedback-explanation');
+  const roadmapLinkContainer = document.getElementById('quiz-roadmap-link-container');
+  const nextBtn = document.getElementById('quiz-next-btn');
+
+  function initQuiz(track) {
+    activeTrack = track;
+    if (track === 'All Tracks') {
+      currentQuestions = quizzesData.flatMap((q) => q.questions);
+    } else {
+      const match = quizzesData.find((q) => q.track.toLowerCase() === track.toLowerCase());
+      currentQuestions = match ? match.questions : [];
+    }
+
+    currentIndex = 0;
+    score = 0;
+    userAnswers = [];
+    answerLocked = false;
+
+    if (arenaCard) arenaCard.classList.remove('hidden');
+    if (summaryCard) summaryCard.classList.add('hidden');
+
+    renderCurrentQuestion();
+  }
+
+  function renderCurrentQuestion() {
+    if (!currentQuestions || currentIndex >= currentQuestions.length) {
+      showSummary();
+      return;
+    }
+
+    answerLocked = false;
+    const q = currentQuestions[currentIndex];
+
+    if (trackBadge) trackBadge.textContent = q.track || activeTrack;
+    if (topicBadge) topicBadge.textContent = q.topic;
+    if (progressText) progressText.textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
+    if (progressBar) progressBar.style.width = `${((currentIndex + 1) / currentQuestions.length) * 100}%`;
+    if (questionText) questionText.textContent = q.question;
+
+    if (codeContainer && codeText) {
+      if (q.codeSnippet) {
+        codeContainer.classList.remove('hidden');
+        codeText.querySelector('code').textContent = q.codeSnippet;
+      } else {
+        codeContainer.classList.add('hidden');
+      }
+    }
+
+    feedbackBox?.classList.add('hidden');
+    nextBtn?.classList.add('hidden');
+
+    if (optionsContainer) {
+      optionsContainer.innerHTML = q.options
+        .map(
+          (opt, optIdx) => `
+        <button
+          type="button"
+          data-opt-index="${optIdx}"
+          class="quiz-option-btn w-full text-left p-4 rounded-2xl border border-border-subtle bg-bg-surface hover:border-sage hover:bg-sage/5 transition-all flex items-center justify-between text-xs sm:text-sm font-medium text-text-main"
+        >
+          <div class="flex items-center gap-3">
+            <span class="opt-letter w-6 h-6 rounded-lg bg-bg-surface-hover text-text-muted font-mono text-xs flex items-center justify-center shrink-0">
+              ${optIdx + 1}
+            </span>
+            <span>${opt}</span>
+          </div>
+          <span class="opt-indicator hidden text-sm font-bold"></span>
+        </button>
+      `
+        )
+        .join('');
+
+      document.querySelectorAll('.quiz-option-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const optIdx = parseInt(btn.getAttribute('data-opt-index') || '0', 10);
+          handleSelectOption(optIdx);
+        });
+      });
+    }
+  }
+
+  function handleSelectOption(selectedIndex) {
+    if (answerLocked) return;
+    answerLocked = true;
+
+    const q = currentQuestions[currentIndex];
+    const isCorrect = selectedIndex === q.correctAnswer;
+    if (isCorrect) score++;
+
+    userAnswers.push({
+      question: q,
+      selected: selectedIndex,
+      isCorrect,
+    });
+
+    const allOptBtns = document.querySelectorAll('.quiz-option-btn');
+    allOptBtns.forEach((btn, idx) => {
+      btn.disabled = true;
+      const indicator = btn.querySelector('.opt-indicator');
+      indicator?.classList.remove('hidden');
+
+      if (idx === q.correctAnswer) {
+        btn.classList.add('border-sage', 'bg-sage/15', 'text-forest', 'dark:text-mint');
+        if (indicator) indicator.textContent = '✓';
+      } else if (idx === selectedIndex) {
+        btn.classList.add('border-forest', 'bg-forest/15', 'text-forest', 'dark:text-mint');
+        if (indicator) indicator.textContent = '✕';
+      } else {
+        btn.classList.add('opacity-40');
+      }
+    });
+
+    if (feedbackBox) {
+      feedbackBox.classList.remove('hidden');
+      if (isCorrect) {
+        feedbackBox.className = 'p-5 rounded-2xl border border-sage/40 bg-sage/10 space-y-2';
+        if (feedbackStatus) feedbackStatus.innerHTML = '<span class="text-forest dark:text-mint">✓ Correct! Excellent work.</span>';
+      } else {
+        feedbackBox.className = 'p-5 rounded-2xl border border-forest/30 bg-forest/10 space-y-2';
+        if (feedbackStatus) feedbackStatus.innerHTML = '<span class="text-forest dark:text-mint">✕ Incorrect</span>';
+      }
+
+      if (feedbackExplanation) {
+        feedbackExplanation.textContent = q.explanation;
+      }
+
+      if (roadmapLinkContainer && q.relatedRoadmapSlug) {
+        roadmapLinkContainer.innerHTML = `
+          <a href="/roadmaps/${q.relatedRoadmapSlug}" class="text-xs font-mono text-sage hover:underline">
+            Review topic in ${q.relatedRoadmapSlug.toUpperCase()} Roadmap →
+          </a>
+        `;
+      } else if (roadmapLinkContainer) {
+        roadmapLinkContainer.innerHTML = '';
+      }
+    }
+
+    if (nextBtn) {
+      nextBtn.classList.remove('hidden');
+      if (currentIndex === currentQuestions.length - 1) {
+        nextBtn.textContent = 'View Final Score →';
+      } else {
+        nextBtn.textContent = 'Next Question →';
+      }
+      nextBtn.focus();
+    }
+  }
+
+  function showSummary() {
+    arenaCard?.classList.add('hidden');
+    summaryCard?.classList.remove('hidden');
+
+    const total = currentQuestions.length;
+    const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+
+    const percentEl = document.getElementById('summary-score-percent');
+    const ratioEl = document.getElementById('summary-score-ratio');
+    const trackLabel = document.getElementById('summary-track-label');
+    const tierBadge = document.getElementById('summary-tier-badge');
+    const badgeIcon = document.getElementById('summary-badge-icon');
+    const reviewList = document.getElementById('summary-review-list');
+    const roadmapBtn = document.getElementById('summary-roadmap-btn');
+
+    if (percentEl) percentEl.textContent = `${percentage}%`;
+    if (ratioEl) ratioEl.textContent = `${score} of ${total} answered correctly`;
+    if (trackLabel) trackLabel.textContent = `${activeTrack} Quiz Completed`;
+
+    if (percentage === 100) {
+      if (tierBadge) tierBadge.textContent = 'Mastery: Senior / Staff Grade';
+      if (badgeIcon) badgeIcon.textContent = '👑';
+    } else if (percentage >= 70) {
+      if (tierBadge) tierBadge.textContent = 'Proficient: Production Ready';
+      if (badgeIcon) badgeIcon.textContent = '⭐';
+    } else {
+      if (tierBadge) tierBadge.textContent = 'Foundational: Review Track';
+      if (badgeIcon) badgeIcon.textContent = '📚';
+    }
+
+    if (reviewList) {
+      reviewList.innerHTML = userAnswers
+        .map(
+          (ans, idx) => `
+        <div class="p-4 rounded-xl border ${
+          ans.isCorrect ? 'border-sage/40 bg-sage/10' : 'border-forest/30 bg-forest/10'
+        } space-y-1.5 text-xs">
+          <div class="flex items-center justify-between font-semibold">
+            <span class="text-text-main">Q${idx + 1}: ${ans.question.topic}</span>
+            <span class="${ans.isCorrect ? 'text-forest dark:text-mint' : 'text-slate-sage'} font-mono">
+              ${ans.isCorrect ? 'Correct ✓' : 'Missed ✕'}
+            </span>
+          </div>
+          <div class="text-text-muted">${ans.question.question}</div>
+          <div class="text-[11px] text-text-faint font-mono mt-1">
+            <strong>Correct Answer:</strong> ${ans.question.options[ans.question.correctAnswer]}
+          </div>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    if (roadmapBtn) {
+      const slug = currentQuestions[0]?.relatedRoadmapSlug || 'frontend';
+      roadmapBtn.setAttribute('href', `/roadmaps/${slug}`);
+      roadmapBtn.textContent = `Review ${slug.toUpperCase()} Roadmap →`;
+    }
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (['1', '2', '3', '4'].includes(e.key) && !answerLocked) {
+      const idx = parseInt(e.key, 10) - 1;
+      const optBtns = document.querySelectorAll('.quiz-option-btn');
+      if (optBtns[idx]) optBtns[idx].click();
+    } else if (e.key === 'Enter' && answerLocked && nextBtn && !nextBtn.classList.contains('hidden')) {
+      nextBtn.click();
+    }
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    currentIndex++;
+    renderCurrentQuestion();
+  });
+
+  document.getElementById('summary-retake-btn')?.addEventListener('click', () => {
+    initQuiz(activeTrack);
+  });
+
+  trackBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      trackBtns.forEach((b) => {
+        b.className = 'track-select-btn px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-colors bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong';
+      });
+      btn.className = 'track-select-btn px-3 py-1.5 rounded-xl text-xs font-medium font-mono transition-colors bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm';
+      const track = btn.getAttribute('data-track') || 'All Tracks';
+      initQuiz(track);
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const trackParam = params.get('track');
+    if (trackParam) {
+      const matchingBtn = Array.from(trackBtns).find(
+        (b) => b.getAttribute('data-track')?.toLowerCase() === trackParam.toLowerCase()
+      );
+      if (matchingBtn) {
+        matchingBtn.click();
+        return;
+      }
+    }
+    initQuiz('All Tracks');
+  });
+</script>

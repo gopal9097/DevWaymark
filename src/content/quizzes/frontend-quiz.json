@@ -1,0 +1,69 @@
+{
+  "id": "frontend-quiz",
+  "title": "Frontend Engineering Quiz",
+  "track": "Frontend",
+  "description": "Test your understanding of browser architecture, CSS layout, JavaScript runtime, and Core Web Vitals.",
+  "questions": [
+    {
+      "id": "fe-q1",
+      "question": "In what order will the following console statements execute in a standard browser JavaScript engine?",
+      "codeSnippet": "console.log('1');\nsetTimeout(() => console.log('2'), 0);\nPromise.resolve().then(() => console.log('3'));\nconsole.log('4');",
+      "options": [
+        "1, 2, 3, 4",
+        "1, 4, 2, 3",
+        "1, 4, 3, 2",
+        "3, 1, 4, 2"
+      ],
+      "correctAnswer": 2,
+      "explanation": "'1' and '4' execute synchronously on the call stack. The Promise callback enters the Microtask queue, which is drained immediately after synchronous execution finishes (printing '3'). The setTimeout callback enters the Macrotask queue, which runs on the subsequent event loop tick (printing '2'). Therefore, the output is 1, 4, 3, 2.",
+      "difficulty": "Intermediate",
+      "topic": "Event Loop & Concurrency",
+      "relatedRoadmapSlug": "frontend"
+    },
+    {
+      "id": "fe-q2",
+      "question": "Which Core Web Vital metric measures the overall visual stability of a webpage by tracking unexpected layout shifts during user reading?",
+      "options": [
+        "Largest Contentful Paint (LCP)",
+        "Cumulative Layout Shift (CLS)",
+        "Interaction to Next Paint (INP)",
+        "First Input Delay (FID)"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Cumulative Layout Shift (CLS) quantifies how much visible content shifted within the viewport during the page lifespan. A good CLS score is 0.1 or lower. LCP measures loading performance, and INP measures user input responsiveness.",
+      "difficulty": "Beginner",
+      "topic": "Core Web Vitals",
+      "relatedRoadmapSlug": "frontend"
+    },
+    {
+      "id": "fe-q3",
+      "question": "Why should you avoid reading computed style properties (like element.offsetHeight) immediately after setting styles in JavaScript?",
+      "options": [
+        "It clears the browser's CSSOM cache completely.",
+        "It forces a synchronous layout calculation (layout thrashing) on the main thread.",
+        "It causes an immediate memory leak in the V8 garbage collector.",
+        "It invalidates the DNS prefetch cache."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Normally browsers batch multiple style mutations and compute geometry once before repainting. Reading layout properties like offsetHeight or clientWidth forces the browser to synchronously compute the layout immediately, causing severe layout thrashing.",
+      "difficulty": "Intermediate",
+      "topic": "Browser Rendering Engine",
+      "relatedRoadmapSlug": "frontend"
+    },
+    {
+      "id": "fe-q4",
+      "question": "What is the primary benefit of CSS Container Queries over standard CSS Media Queries?",
+      "options": [
+        "Container Queries execute inside a web worker for 60fps animations.",
+        "Container Queries style an element based on its parent container's dimensions rather than the full viewport.",
+        "Container Queries completely eliminate the need for CSS Grid and Flexbox.",
+        "Container Queries automatically compress font files."
+      ],
+      "correctAnswer": 1,
+      "explanation": "While Media Queries adapt styling based on the entire browser viewport width, Container Queries allow components to adjust their layout based on the size of their containing element (@container), making components truly modular and self-contained.",
+      "difficulty": "Intermediate",
+      "topic": "Modern CSS Layouts",
+      "relatedRoadmapSlug": "frontend"
+    }
+  ]
+}

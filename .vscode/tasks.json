@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Dev Server (DevWaymark)",
+      "type": "shell",
+      "command": "pnpm run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Build Static Site",
+      "type": "shell",
+      "command": "pnpm run build",
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    },
+    {
+      "label": "Typecheck (Astro & TS)",
+      "type": "shell",
+      "command": "pnpm run check",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Preview Built Site",
+      "type": "shell",
+      "command": "pnpm run preview",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

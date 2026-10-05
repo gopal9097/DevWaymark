@@ -1,0 +1,34 @@
+{
+  "id": "git-workflows",
+  "title": "Git Workflows & Trunk-Based Development",
+  "area": "Git Workflows",
+  "summary": "Best practices for atomic commits, short-lived branches, clean rebases, and high-velocity team collaboration.",
+  "readTime": "6 min read",
+  "level": "Fundamental",
+  "icon": "git-branch",
+  "keyPrinciples": [
+    "Short-lived branches: merge into trunk frequently (multiple times daily) to eliminate painful merge conflicts.",
+    "Conventional Commits: write structured commit messages that enable automated changelog generation.",
+    "Atomic commits: each commit represents a single logical change that leaves the test suite green."
+  ],
+  "rules": [
+    {
+      "title": "Write Descriptive Conventional Commit Messages",
+      "description": "Avoid vague commit messages like 'fixed stuff' or 'WIP'. Use standard type prefixes (`feat:`, `fix:`, `refactor:`, `docs:`, `test:`) with clear imperative explanations.",
+      "badExample": {
+        "code": "// Bad: Meaningless commit history\ngit commit -m \"fixes\"\ngit commit -m \"update api\"\ngit commit -m \"wip more changes\"",
+        "explanation": "Impossible to tell what changed, why it changed, or whether it includes a breaking contract alteration."
+      },
+      "goodExample": {
+        "code": "// Good: Conventional Commit standard\ngit commit -m \"feat(auth): add PKCE verification to OAuth authorization code flow\"\ngit commit -m \"fix(billing): prevent double-charge on network timeout with idempotency key\"",
+        "explanation": "Instantly communicates scope, category, and precise business intent."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Trunk branch (`main`) is always deployable to production.",
+    "Feature branches live for less than 48 hours before merging.",
+    "Pull requests include clear screenshots or test proofs.",
+    "Rebase on top of `origin/main` before opening PR to ensure linear history."
+  ]
+}

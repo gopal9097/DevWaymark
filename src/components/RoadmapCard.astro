@@ -1,0 +1,90 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  tagline: string;
+  domain: string;
+  difficulty: string;
+  estimatedWeeks: number;
+  icon: string;
+  badge?: string;
+  stagesCount: number;
+  nodesCount: number;
+}
+
+const {
+  id,
+  title,
+  tagline,
+  domain,
+  difficulty,
+  estimatedWeeks,
+  badge,
+  stagesCount,
+  nodesCount,
+} = Astro.props;
+
+const domainColors: Record<string, string> = {
+  Frontend: 'border-sage/40 text-forest dark:text-mint bg-sage/10',
+  Backend: 'border-slate-sage/40 text-slate-sage-dark dark:text-mint bg-slate-sage/10',
+  'DevOps & Cloud': 'border-forest/30 text-forest dark:text-mint bg-forest/10',
+  Languages: 'border-sage-dark/30 text-forest dark:text-mint bg-sage/15',
+  Architecture: 'border-slate-sage/50 text-forest dark:text-neutral-soft bg-slate-sage/15',
+  'AI & Data': 'border-mint/50 text-forest dark:text-mint bg-mint/15',
+  'Security & Mobile': 'border-slate-sage/40 text-slate-sage-dark dark:text-mint bg-slate-sage/10',
+};
+
+const domainBadgeClass = domainColors[domain] || 'border-border-strong text-text-muted bg-bg-surface-hover';
+---
+
+<a
+  href={`/roadmaps/${id}`}
+  data-roadmap-id={id}
+  data-total-nodes={nodesCount}
+  class="roadmap-card group relative flex flex-col justify-between p-6 rounded-2xl bg-bg-surface border border-border-subtle hover:border-sage shadow-sm hover:shadow-lg transition-all duration-200"
+>
+  <div>
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class={`text-xs px-2.5 py-1 rounded-full font-mono font-medium border ${domainBadgeClass}`}>
+          {domain}
+        </span>
+        <span class="text-[11px] px-2 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted">
+          {difficulty}
+        </span>
+      </div>
+      {badge && (
+        <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-sage/20 text-forest dark:text-mint font-semibold border border-sage/40">
+          {badge}
+        </span>
+      )}
+    </div>
+
+    <h3 class="text-lg font-bold text-text-main group-hover:text-forest dark:group-hover:text-mint transition-colors flex items-center justify-between">
+      <span>{title}</span>
+      <svg class="w-4 h-4 text-text-faint group-hover:text-sage group-hover:translate-x-0.5 transition-all shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </h3>
+    <p class="text-xs text-text-muted mt-2 line-clamp-2 leading-relaxed">
+      {tagline}
+    </p>
+  </div>
+
+  <div class="mt-6 pt-4 border-t border-border-subtle space-y-3">
+    <div class="flex items-center justify-between text-xs text-text-muted font-mono">
+      <span>{stagesCount} stages • {nodesCount} topics</span>
+      <span>{estimatedWeeks} weeks</span>
+    </div>
+
+    <div class="space-y-1">
+      <div class="flex items-center justify-between text-[11px] font-mono text-text-faint">
+        <span class="progress-status-label">Not started</span>
+        <span class="progress-percent-label">0%</span>
+      </div>
+      <div class="h-1.5 w-full bg-border-subtle rounded-full overflow-hidden">
+        <div class="progress-bar-fill h-full bg-gradient-to-r from-slate-sage to-sage rounded-full w-0 transition-all duration-300"></div>
+      </div>
+    </div>
+  </div>
+</a>

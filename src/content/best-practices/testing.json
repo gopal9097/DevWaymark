@@ -1,0 +1,34 @@
+{
+  "id": "testing",
+  "title": "Testing Strategies & The Testing Trophy",
+  "area": "Testing",
+  "summary": "How to balance unit tests, integration tests, and end-to-end flows for maximum confidence and minimal maintenance drag.",
+  "readTime": "7 min read",
+  "level": "Intermediate",
+  "icon": "check-circle",
+  "keyPrinciples": [
+    "Test behavior, not implementation details: refactoring internals should not break valid tests.",
+    "Focus heavily on integration tests: testing units together provides the highest ROI per engineering hour.",
+    "Avoid over-mocking: mocked dependencies drift from real behavior and hide critical contract bugs."
+  ],
+  "rules": [
+    {
+      "title": "Test User-Observable Outputs Rather Than Internal Component State",
+      "description": "Asserting on internal state variables couples tests to private implementation details. Assert on what the user or caller actually perceives.",
+      "badExample": {
+        "code": "// Bad: Testing internal private state\ntest('toggles state', () => {\n  const wrapper = shallow(<Accordion />);\n  expect(wrapper.state('isOpen')).toBe(false);\n  wrapper.instance().handleClick();\n  expect(wrapper.state('isOpen')).toBe(true);\n});",
+        "explanation": "If you refactor the component to use a reducer or context, the test breaks even if the UI still works."
+      },
+      "goodExample": {
+        "code": "// Good: Testing accessible user behavior\ntest('expands content when user clicks header', async () => {\n  render(<Accordion title=\"FAQ\" content=\"Answer\" />);\n  const button = screen.getByRole('button', { name: /FAQ/i });\n  expect(screen.queryByText(/Answer/i)).not.toBeVisible();\n\n  await userEvent.click(button);\n  expect(screen.getByText(/Answer/i)).toBeVisible();\n});",
+        "explanation": "Tests the software exactly the way actual human users and screen readers experience it."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Fast unit tests run in <10 seconds locally before commit.",
+    "Integration tests use real test database containers (Testcontainers) instead of fake in-memory mocks.",
+    "Critical checkout and authentication flows covered by automated E2E tests (Playwright).",
+    "Flaky tests quarantined immediately to preserve CI build trust."
+  ]
+}

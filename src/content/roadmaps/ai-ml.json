@@ -1,0 +1,125 @@
+{
+  "id": "ai-ml",
+  "title": "AI, Machine Learning & LLM Systems",
+  "tagline": "Statistical foundations, deep learning with PyTorch, Transformer architectures, and production RAG pipelines",
+  "description": "From linear algebra and scikit-learn models to deep learning with PyTorch, Transformer self-attention mechanisms, LLM application architecture, vector databases, and fine-tuning.",
+  "domain": "AI & Data",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 22,
+  "icon": "cpu",
+  "badge": "Trending",
+  "featured": true,
+  "prerequisites": [
+    "Python programming proficiency",
+    "Foundations of linear algebra and probability"
+  ],
+  "stages": [
+    {
+      "id": "ai-stage-1",
+      "number": 1,
+      "title": "Stage 1: Mathematical Foundations & Data Stack",
+      "description": "Matrix operations with NumPy, data wrangling with Pandas, linear regression, and classification metrics.",
+      "nodes": [
+        {
+          "id": "ai-math-numpy",
+          "title": "Linear Algebra, Vector Embeddings & NumPy",
+          "description": "Matrix multiplications, dot products, eigenvalues, cosine similarity between high-dimensional vectors, and vectorized operations.",
+          "whyItMatters": "Modern AI models represent text, audio, and images as high-dimensional vectors. Measuring semantic similarity relies on vector dot products and cosine distance.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "3Blue1Brown: Essence of Linear Algebra",
+              "url": "https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+              "type": "video"
+            },
+            {
+              "title": "NumPy Quickstart Tutorial",
+              "url": "https://numpy.org/doc/stable/user/quickstart.html",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Vector embeddings convert discrete symbols into continuous coordinate spaces where semantic meaning equals geometric proximity.",
+            "Avoid Python for-loops over arrays; utilize vectorized NumPy operations computed in C-level SIMD instructions.",
+            "Understand precision and recall tradeoffs using ROC-AUC and F1-score rather than raw accuracy on imbalanced datasets."
+          ],
+          "interviewTips": "Be prepared to explain cosine similarity vs Euclidean distance and compute matrix dimension compatibility for matrix dot products."
+        }
+      ]
+    },
+    {
+      "id": "ai-stage-2",
+      "number": 2,
+      "title": "Stage 2: Deep Learning & Transformers",
+      "description": "Neural network backpropagation, gradient descent, PyTorch tensors, and self-attention mechanisms.",
+      "nodes": [
+        {
+          "id": "ai-transformers-attention",
+          "title": "Transformer Architecture & Self-Attention",
+          "description": "Query, Key, Value (Q, K, V) scaled dot-product attention, multi-head attention, positional encodings, and encoder-decoder vs decoder-only (GPT) architectures.",
+          "whyItMatters": "Transformers revolutionized natural language processing and computer vision, forming the foundation of every modern Large Language Model (GPT-4, Claude, Gemini, LLaMA).",
+          "importance": "essential",
+          "estimatedHours": 24,
+          "resources": [
+            {
+              "title": "Attention Is All You Need (Vaswani et al.)",
+              "url": "https://arxiv.org/abs/1706.03762",
+              "type": "article"
+            },
+            {
+              "title": "The Illustrated Transformer (Jay Alammar)",
+              "url": "https://jalammar.github.io/illustrated-transformer/",
+              "type": "article"
+            },
+            {
+              "title": "Andrej Karpathy: Let's build GPT from scratch",
+              "url": "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+              "type": "video"
+            }
+          ],
+          "keyTakeaways": [
+            "Self-attention calculates attention weights: softmax((Q * K^T) / sqrt(d_k)) * V, enabling parallel token processing across the entire context window.",
+            "Positional encodings inject token sequence order information since self-attention is permutation-invariant.",
+            "Modern LLMs use decoder-only architectures trained to predict the next token via causal language modeling."
+          ],
+          "interviewTips": "Interviewers will ask you to explain why dividing by `sqrt(d_k)` is necessary in scaled dot-product attention (to prevent vanishing gradients in softmax)."
+        }
+      ]
+    },
+    {
+      "id": "ai-stage-3",
+      "number": 3,
+      "title": "Stage 3: Production LLM Systems & RAG",
+      "description": "Retrieval-Augmented Generation (RAG), chunking strategies, vector search (HNSW), prompt engineering, and evaluation.",
+      "nodes": [
+        {
+          "id": "ai-rag-vector-db",
+          "title": "Retrieval-Augmented Generation (RAG) Architecture",
+          "description": "Augmenting LLMs with private proprietary context: document parsing, semantic chunking, vector embedding generation, vector database indexing, and re-ranking.",
+          "whyItMatters": "LLMs hallucinate and lack private organizational knowledge. RAG grounds responses in verified enterprise data without requiring expensive model retraining.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            {
+              "title": "Pinecone: What is Vector Search?",
+              "url": "https://www.pinecone.io/learn/vector-search-basics/",
+              "type": "article"
+            },
+            {
+              "title": "LangChain Architectural Guide",
+              "url": "https://python.langchain.com/docs/get_started/introduction",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Optimal chunking (typically 500-1000 tokens with 10% overlap) preserves context while keeping embeddings focused.",
+            "Use hybrid search combining dense vector semantic retrieval with sparse BM25 keyword search for maximum recall.",
+            "Apply a cross-encoder re-ranker (Cohere, BGE) on top-50 retrieved passages before sending top-5 to the LLM context window."
+          ],
+          "interviewTips": "Expect questions on how to prevent hallucinations in RAG pipelines and measure retrieval quality using Ragas metrics (Faithfulness, Answer Relevance)."
+        }
+      ]
+    }
+  ]
+}

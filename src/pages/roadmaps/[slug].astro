@@ -1,0 +1,447 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TopicModal from '../../components/TopicModal.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const roadmaps = await getCollection('roadmaps');
+  return roadmaps.map((r) => ({
+    params: { slug: r.data.id },
+    props: { roadmap: r.data },
+  }));
+}
+
+const { roadmap } = Astro.props;
+
+const allNodes = roadmap.stages.flatMap((s) =>
+  s.nodes.map((n) => ({
+    ...n,
+    stageTitle: s.title,
+    stageNumber: s.number,
+  }))
+);
+
+const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0);
+---
+
+<BaseLayout
+  title={`${roadmap.title} Roadmap — DevWaymark`}
+  description={roadmap.description}
+  activeTab="roadmaps"
+>
+  <section class="border-b border-border-subtle bg-bg-surface py-10 lg:py-14 bg-grid-pattern">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center gap-2 text-xs font-mono text-text-faint mb-6" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-text-main">Home</a>
+        <span>/</span>
+        <a href="/roadmaps" class="hover:text-text-main">Roadmaps</a>
+        <span>/</span>
+        <span class="text-forest dark:text-mint font-semibold">{roadmap.title}</span>
+      </nav>
+
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div class="max-w-3xl space-y-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-sage/15 text-forest dark:text-mint border border-sage/30">
+              {roadmap.domain}
+            </span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted border border-border-subtle">
+              {roadmap.difficulty}
+            </span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted border border-border-subtle">
+              {roadmap.estimatedWeeks} Weeks (~{totalHours} hrs)
+            </span>
+            {roadmap.badge && (
+              <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-semibold bg-sage/20 text-forest dark:text-mint border border-sage/40">
+                {roadmap.badge}
+              </span>
+            )}
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
+            {roadmap.title}
+          </h1>
+          <p class="text-sm sm:text-base text-text-muted leading-relaxed">
+            {roadmap.description}
+          </p>
+
+          {roadmap.prerequisites && (
+            <div class="pt-2 flex flex-wrap items-center gap-2 text-xs font-mono text-text-faint">
+              <span class="font-semibold text-text-main">Prerequisites:</span>
+              {roadmap.prerequisites.map((p) => (
+                <span class="px-2 py-0.5 rounded bg-bg-surface-hover text-text-muted border border-border-subtle">
+                  {p}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div class="lg:w-72 shrink-0 p-5 rounded-2xl bg-bg-page border border-border-subtle shadow-sm space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-text-muted uppercase tracking-wider font-semibold">Your Progress</span>
+            <span id="page-progress-percent" class="text-forest dark:text-mint font-bold">0%</span>
+          </div>
+
+          <div class="h-2 w-full bg-border-subtle rounded-full overflow-hidden">
+            <div id="page-progress-fill" class="h-full bg-gradient-to-r from-slate-sage to-sage rounded-full w-0 transition-all duration-300"></div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs font-mono text-text-muted">
+            <span id="page-progress-ratio">0 of {allNodes.length} completed</span>
+            <button id="reset-track-progress-btn" type="button" class="text-[11px] hover:text-forest dark:hover:text-mint underline transition-colors">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-sage/10 border border-sage/30 text-xs font-mono">
+      <div class="flex items-center gap-2 text-text-muted">
+        <span class="w-2.5 h-2.5 rounded-full bg-sage"></span>
+        <span>Click any node to view production breakdown, why it matters & curated links.</span>
+      </div>
+      <div class="flex items-center gap-4 text-text-faint">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sage"></span> Done</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-border-strong"></span> Incomplete</span>
+      </div>
+    </div>
+
+    <div class="space-y-16 relative">
+      {roadmap.stages.map((stage) => (
+        <div class="stage-section relative" data-stage-id={stage.id}>
+          <div class="sticky top-20 z-20 mb-6 p-4 rounded-2xl bg-bg-surface/95 backdrop-blur border border-border-subtle shadow-sm flex items-center justify-between">
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-forest text-white dark:bg-sage dark:text-forest-deep font-mono font-bold text-xs flex items-center justify-center">
+                  {stage.number}
+                </span>
+                <h2 class="text-base sm:text-lg font-bold text-text-main">
+                  {stage.title}
+                </h2>
+              </div>
+              <p class="text-xs text-text-muted pl-8">
+                {stage.description}
+              </p>
+            </div>
+            <span class="text-xs font-mono text-text-faint shrink-0 hidden sm:inline">
+              {stage.nodes.length} topics
+            </span>
+          </div>
+
+          <div class="relative pl-6 sm:pl-10 space-y-4">
+            <div class="absolute top-2 bottom-2 left-2.5 sm:left-4 w-0.5 bg-border-strong -translate-x-1/2" aria-hidden="true"></div>
+
+            {stage.nodes.map((node) => (
+              <div
+                class="node-card-item relative group flex items-start gap-4 p-4 rounded-2xl bg-bg-surface border border-border-subtle hover:border-sage shadow-sm hover:shadow-md transition-all cursor-pointer"
+                id={node.id}
+                data-node-id={node.id}
+                data-node-data={JSON.stringify({
+                  ...node,
+                  stageTitle: stage.title,
+                  stageNumber: stage.number,
+                })}
+              >
+                <button
+                  type="button"
+                  data-checkbox-node-id={node.id}
+                  class="node-checkbox-btn shrink-0 mt-0.5 w-6 h-6 rounded-lg border-2 border-border-strong bg-bg-surface flex items-center justify-center text-white transition-colors hover:border-sage focus:outline-none z-10"
+                  aria-label={`Toggle ${node.title} completed`}
+                >
+                  <svg class="check-icon w-3.5 h-3.5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h3 class="text-sm font-semibold text-text-main group-hover:text-forest dark:group-hover:text-mint transition-colors">
+                      {node.title}
+                    </h3>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                      <span class={`text-[10px] font-mono px-2 py-0.5 rounded-full font-medium ${
+                        node.importance === 'essential'
+                          ? 'bg-forest/10 text-forest dark:text-mint border border-forest/30'
+                          : node.importance === 'recommended'
+                          ? 'bg-slate-sage/10 text-slate-sage-dark dark:text-mint border border-slate-sage/30'
+                          : 'bg-bg-surface-hover text-text-muted border border-border-subtle'
+                      }`}>
+                        {node.importance}
+                      </span>
+                      {node.estimatedHours && (
+                        <span class="text-[10px] font-mono text-text-faint">
+                          ~{node.estimatedHours}h
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <p class="text-xs text-text-muted mt-1 line-clamp-2 leading-relaxed">
+                    {node.description}
+                  </p>
+                </div>
+
+                <div class="shrink-0 text-text-faint group-hover:text-sage group-hover:translate-x-1 transition-all mt-1">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <TopicModal />
+</BaseLayout>
+
+<script is:inline define:vars={{ roadmapId: roadmap.id, allNodes }}>
+  const STORAGE_KEY = 'devwaymark_progress_v1';
+  let currentNodeIndex = -1;
+
+  function getStoredProgress() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { completedNodes: [], activeRoadmaps: [], lastUpdated: Date.now() };
+  }
+
+  function saveStoredProgress(data) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      window.dispatchEvent(new CustomEvent('waymark-progress-updated'));
+    } catch (e) {}
+  }
+
+  function isNodeCompleted(nodeId) {
+    const data = getStoredProgress();
+    return data.completedNodes.includes(nodeId);
+  }
+
+  function toggleNodeCompleted(nodeId) {
+    const data = getStoredProgress();
+    const idx = data.completedNodes.indexOf(nodeId);
+    if (idx >= 0) {
+      data.completedNodes.splice(idx, 1);
+    } else {
+      data.completedNodes.push(nodeId);
+      if (!data.activeRoadmaps.includes(roadmapId)) {
+        data.activeRoadmaps.push(roadmapId);
+      }
+    }
+    data.lastUpdated = Date.now();
+    saveStoredProgress(data);
+    updateUIProgress();
+  }
+
+  function updateUIProgress() {
+    const data = getStoredProgress();
+    const completedSet = new Set(data.completedNodes);
+
+    document.querySelectorAll('.node-card-item').forEach((item) => {
+      const nodeId = item.getAttribute('data-node-id');
+      const isDone = completedSet.has(nodeId);
+      const checkboxBtn = item.querySelector('.node-checkbox-btn');
+      const checkIcon = item.querySelector('.check-icon');
+
+      if (isDone) {
+        item.classList.add('border-sage/50', 'bg-sage/5');
+        checkboxBtn?.classList.add('bg-sage', 'border-sage');
+        checkboxBtn?.classList.remove('bg-bg-surface', 'border-border-strong');
+        checkIcon?.classList.remove('hidden');
+      } else {
+        item.classList.remove('border-sage/50', 'bg-sage/5');
+        checkboxBtn?.classList.remove('bg-sage', 'border-sage');
+        checkboxBtn?.classList.add('bg-bg-surface', 'border-border-strong');
+        checkIcon?.classList.add('hidden');
+      }
+    });
+
+    const thisRoadmapCompleted = allNodes.filter((n) => completedSet.has(n.id)).length;
+    const total = allNodes.length;
+    const percentage = total > 0 ? Math.round((thisRoadmapCompleted / total) * 100) : 0;
+
+    const percentEl = document.getElementById('page-progress-percent');
+    const fillEl = document.getElementById('page-progress-fill');
+    const ratioEl = document.getElementById('page-progress-ratio');
+
+    if (percentEl) percentEl.textContent = `${percentage}%`;
+    if (fillEl) fillEl.style.width = `${percentage}%`;
+    if (ratioEl) ratioEl.textContent = `${thisRoadmapCompleted} of ${total} completed`;
+
+    if (currentNodeIndex >= 0 && currentNodeIndex < allNodes.length) {
+      updateModalDoneState(allNodes[currentNodeIndex].id);
+    }
+  }
+
+  const backdrop = document.getElementById('topic-drawer-backdrop');
+  const closeBtn = document.getElementById('topic-close-btn');
+  const titleEl = document.getElementById('topic-modal-title');
+  const stageBadge = document.getElementById('topic-stage-badge');
+  const importanceBadge = document.getElementById('topic-importance-badge');
+  const timeEstimate = document.getElementById('topic-time-estimate');
+  const descEl = document.getElementById('topic-description');
+  const whyEl = document.getElementById('topic-why-it-matters');
+  const takeawaysList = document.getElementById('topic-takeaways-list');
+  const takeawaysContainer = document.getElementById('topic-takeaways-container');
+  const resourcesList = document.getElementById('topic-resources-list');
+  const interviewTip = document.getElementById('topic-interview-tip');
+  const interviewContainer = document.getElementById('topic-interview-container');
+  const doneBtn = document.getElementById('topic-toggle-completed-btn');
+  const doneBtnLabel = document.getElementById('topic-toggle-btn-label');
+  const prevBtn = document.getElementById('topic-prev-btn');
+  const nextBtn = document.getElementById('topic-next-btn');
+
+  function openNodeModal(index) {
+    if (index < 0 || index >= allNodes.length) return;
+    currentNodeIndex = index;
+    const node = allNodes[index];
+
+    if (titleEl) titleEl.textContent = node.title;
+    if (stageBadge) stageBadge.textContent = `Stage ${node.stageNumber}: ${node.stageTitle}`;
+    if (importanceBadge) importanceBadge.textContent = node.importance.toUpperCase();
+    if (timeEstimate) timeEstimate.textContent = `~${node.estimatedHours || 10} hours estimated study`;
+    if (descEl) descEl.textContent = node.description;
+    if (whyEl) whyEl.textContent = node.whyItMatters;
+
+    if (takeawaysList && takeawaysContainer) {
+      if (node.keyTakeaways && node.keyTakeaways.length > 0) {
+        takeawaysContainer.classList.remove('hidden');
+        takeawaysList.innerHTML = node.keyTakeaways.map((t) => `<li>${t}</li>`).join('');
+      } else {
+        takeawaysContainer.classList.add('hidden');
+      }
+    }
+
+    if (resourcesList) {
+      resourcesList.innerHTML = node.resources
+        .map(
+          (r) => `
+        <a
+          href="${r.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center justify-between p-3 rounded-xl border border-border-subtle hover:border-sage bg-bg-surface-hover hover:bg-sage/10 transition-colors text-xs"
+        >
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded font-mono uppercase text-[10px] bg-sage/15 text-forest dark:text-mint border border-sage/30">
+              ${r.type}
+            </span>
+            <span class="font-medium text-text-main">${r.title}</span>
+          </div>
+          <svg class="w-4 h-4 text-text-faint shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      `
+        )
+        .join('');
+    }
+
+    if (interviewTip && interviewContainer) {
+      if (node.interviewTips) {
+        interviewContainer.classList.remove('hidden');
+        interviewTip.textContent = node.interviewTips;
+      } else {
+        interviewContainer.classList.add('hidden');
+      }
+    }
+
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === allNodes.length - 1;
+
+    updateModalDoneState(node.id);
+
+    backdrop?.classList.remove('hidden');
+    backdrop?.setAttribute('aria-hidden', 'false');
+
+    history.replaceState(null, '', `#${node.id}`);
+  }
+
+  function updateModalDoneState(nodeId) {
+    const isDone = isNodeCompleted(nodeId);
+    if (!doneBtn || !doneBtnLabel) return;
+    if (isDone) {
+      doneBtn.className =
+        'flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-forest text-white hover:bg-forest-dark dark:bg-sage dark:text-forest-deep';
+      doneBtnLabel.textContent = 'Completed ✓';
+    } else {
+      doneBtn.className =
+        'flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-sage text-white hover:bg-sage-hover';
+      doneBtnLabel.textContent = 'Mark as Done';
+    }
+  }
+
+  function closeModal() {
+    backdrop?.classList.add('hidden');
+    backdrop?.setAttribute('aria-hidden', 'true');
+    currentNodeIndex = -1;
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  document.querySelectorAll('.node-card-item').forEach((item, index) => {
+    item.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.closest('.node-checkbox-btn')) {
+        e.stopPropagation();
+        const nodeId = item.getAttribute('data-node-id');
+        if (nodeId) toggleNodeCompleted(nodeId);
+        return;
+      }
+      openNodeModal(index);
+    });
+  });
+
+  doneBtn?.addEventListener('click', () => {
+    if (currentNodeIndex >= 0 && currentNodeIndex < allNodes.length) {
+      toggleNodeCompleted(allNodes[currentNodeIndex].id);
+    }
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    if (currentNodeIndex > 0) openNodeModal(currentNodeIndex - 1);
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    if (currentNodeIndex < allNodes.length - 1) openNodeModal(currentNodeIndex + 1);
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop && !backdrop.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  document.getElementById('reset-track-progress-btn')?.addEventListener('click', () => {
+    if (confirm('Are you sure you want to reset your progress on this roadmap?')) {
+      const data = getStoredProgress();
+      const nodeIds = new Set(allNodes.map((n) => n.id));
+      data.completedNodes = data.completedNodes.filter((id) => !nodeIds.has(id));
+      saveStoredProgress(data);
+      updateUIProgress();
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    updateUIProgress();
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const idx = allNodes.findIndex((n) => n.id === hash);
+      if (idx >= 0) openNodeModal(idx);
+    }
+  });
+
+  window.addEventListener('waymark-progress-updated', updateUIProgress);
+</script>

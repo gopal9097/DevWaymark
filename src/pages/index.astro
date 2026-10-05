@@ -1,0 +1,339 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RoadmapCard from '../components/RoadmapCard.astro';
+import { getCollection } from 'astro:content';
+
+const allRoadmaps = await getCollection('roadmaps');
+const featuredRoadmaps = allRoadmaps.filter((r) => r.data.featured).slice(0, 6);
+const totalRoadmapsCount = allRoadmaps.length;
+const totalTopicsCount = allRoadmaps.reduce(
+  (acc, r) => acc + r.data.stages.reduce((sAcc, s) => sAcc + s.nodes.length, 0),
+  0
+);
+---
+
+<BaseLayout
+  title="DevWaymark — Free, Open Career Roadmaps for Developers"
+  description="Free, open learning hub for software developers. Pick a career track and follow a visual, milestone-driven path with curated resources, production insights, and local progress tracking."
+  activeTab="home"
+>
+  <section class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-grid-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center space-y-6 max-w-4xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono font-medium shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-sage animate-pulse"></span>
+          <span>100% Free Forever • Local-First • {totalTopicsCount} Milestones</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-text-main tracking-tight leading-[1.08]">
+          Step-by-Step Career Roadmaps for <span class="text-sage dark:text-mint">Developers.</span>
+        </h1>
+
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-text-muted leading-relaxed">
+          Skip tutorial hell. Follow visual, stage-by-stage roadmaps with production insights, curated docs, and persistent in-browser progress.
+        </p>
+
+        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            href="/roadmaps"
+            class="w-full sm:w-auto py-3.5 px-8 rounded-2xl bg-forest hover:bg-forest-dark dark:bg-sage dark:hover:bg-sage-hover text-white dark:text-forest-deep font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
+          >
+            <span>Explore All {totalRoadmapsCount} Roadmaps</span>
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+
+          <a
+            href="/start"
+            class="w-full sm:w-auto py-3.5 px-6 rounded-2xl border border-border-strong bg-bg-surface text-text-main hover:bg-bg-surface-hover font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
+          >
+            <span>Where do I start? (60s Guide)</span>
+            <span class="font-mono text-xs text-sage">🧭</span>
+          </a>
+        </div>
+
+        <div class="pt-2 max-w-lg mx-auto">
+          <button
+            type="button"
+            onclick="window.dispatchEvent(new CustomEvent('open-devwaymark-search'))"
+            class="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-bg-surface border border-border-subtle text-text-muted hover:border-border-strong shadow-sm text-xs font-mono transition-colors group"
+          >
+            <div class="flex items-center gap-2.5">
+              <svg class="w-4 h-4 text-text-faint group-hover:text-sage transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span>Search tracks or topics (e.g. React, Docker, ACID)...</span>
+            </div>
+            <kbd class="hidden sm:inline px-2 py-0.5 rounded bg-bg-surface-hover text-text-muted border border-border-subtle text-[10px]">⌘K</kbd>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-border-subtle bg-bg-surface py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-10">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-text-main tracking-tight">
+          How Every Roadmap Works
+        </h2>
+        <p class="text-xs sm:text-sm text-text-muted">
+          Topics are arranged into visual stages. Click a milestone to read why it matters in production, inspect curated links, and toggle your completion status in your browser.
+        </p>
+      </div>
+
+      <div class="max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl bg-bg-page border border-border-subtle shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-border-subtle pb-4">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-forest text-white font-mono text-xs font-bold flex items-center justify-center">1</span>
+            <span class="font-bold text-sm text-text-main">Sample Stage: Frontend Foundations</span>
+          </div>
+          <span class="text-xs font-mono text-forest dark:text-mint font-semibold" id="demo-counter-label">
+            Try clicking the checkboxes below!
+          </span>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex items-center justify-between p-4 rounded-2xl bg-bg-surface border border-border-subtle shadow-sm">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="demo-check-1" class="demo-checkbox w-5 h-5 rounded border-border-strong text-sage focus:ring-sage cursor-pointer accent-[#7B9669]" />
+              <div>
+                <label for="demo-check-1" class="text-sm font-semibold text-text-main cursor-pointer">
+                  Semantic HTML & Accessibility Landmarks
+                </label>
+                <div class="text-xs text-text-muted mt-0.5">
+                  Screen readers and search engines navigate through the accessibility tree.
+                </div>
+              </div>
+            </div>
+            <a href="/roadmaps/frontend#fe-html-semantics" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+              View Node →
+            </a>
+          </div>
+
+          <div class="flex items-center justify-between p-4 rounded-2xl bg-bg-surface border border-border-subtle shadow-sm">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="demo-check-2" class="demo-checkbox w-5 h-5 rounded border-border-strong text-sage focus:ring-sage cursor-pointer accent-[#7B9669]" />
+              <div>
+                <label for="demo-check-2" class="text-sm font-semibold text-text-main cursor-pointer">
+                  Modern CSS: Grid, Flexbox & Container Queries
+                </label>
+                <div class="text-xs text-text-muted mt-0.5">
+                  Intrinsic responsive layouts eliminate brittle breakpoint hacks.
+                </div>
+              </div>
+            </div>
+            <a href="/roadmaps/frontend#fe-css-modern" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+              View Node →
+            </a>
+          </div>
+
+          <div class="flex items-center justify-between p-4 rounded-2xl bg-bg-surface border border-border-subtle shadow-sm">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="demo-check-3" class="demo-checkbox w-5 h-5 rounded border-border-strong text-sage focus:ring-sage cursor-pointer accent-[#7B9669]" />
+              <div>
+                <label for="demo-check-3" class="text-sm font-semibold text-text-main cursor-pointer">
+                  Critical Rendering Path & DOM Optimization
+                </label>
+                <div class="text-xs text-text-muted mt-0.5">
+                  Avoid layout thrashing and maintain consistent 60fps rendering.
+                </div>
+              </div>
+            </div>
+            <a href="/roadmaps/frontend#fe-browser-apis" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+              View Node →
+            </a>
+          </div>
+        </div>
+
+        <div class="text-center pt-2">
+          <a href="/roadmaps/frontend" class="text-xs font-mono text-forest dark:text-mint font-semibold hover:underline">
+            Experience the full interactive Frontend roadmap →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div class="space-y-1">
+        <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">
+          Featured Tracks
+        </span>
+        <h2 class="text-3xl font-extrabold text-text-main tracking-tight">
+          Featured Roadmaps
+        </h2>
+        <p class="text-sm text-text-muted">
+          Hand-crafted learning paths designed for modern tech stacks.
+        </p>
+      </div>
+
+      <a
+        href="/roadmaps"
+        class="text-xs font-mono font-semibold text-sage hover:underline flex items-center gap-1 shrink-0"
+      >
+        <span>View all {totalRoadmapsCount} tracks</span>
+        <span>→</span>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredRoadmaps.map((rm) => {
+        const totalNodes = rm.data.stages.reduce((acc, s) => acc + s.nodes.length, 0);
+        return (
+          <RoadmapCard
+            id={rm.data.id}
+            title={rm.data.title}
+            tagline={rm.data.tagline}
+            domain={rm.data.domain}
+            difficulty={rm.data.difficulty}
+            estimatedWeeks={rm.data.estimatedWeeks}
+            icon={rm.data.icon}
+            badge={rm.data.badge}
+            stagesCount={rm.data.stages.length}
+            nodesCount={totalNodes}
+          />
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="border-t border-border-subtle bg-bg-surface py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-16">
+        <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">
+          Core Architecture
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
+          Engineered for Real Learning
+        </h2>
+        <p class="text-sm text-text-muted">
+          Why DevWaymark is built differently from generic video playlists or bloated online bootcamps.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="p-8 rounded-3xl bg-bg-page border border-border-subtle space-y-3 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-sage/15 text-forest dark:text-mint flex items-center justify-center font-mono font-bold text-lg border border-sage/30">
+            01
+          </div>
+          <h3 class="text-lg font-bold text-text-main">
+            Visual Roadmaps
+          </h3>
+          <p class="text-xs text-text-muted leading-relaxed">
+            No endless unranked link dumps. Topics are organized into sequential stages with clear prerequisites, preventing you from learning advanced caching before mastering HTTP.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-bg-page border border-border-subtle space-y-3 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-slate-sage/15 text-slate-sage-dark dark:text-mint flex items-center justify-center font-mono font-bold text-lg border border-slate-sage/30">
+            02
+          </div>
+          <h3 class="text-lg font-bold text-text-main">
+            Production Reality
+          </h3>
+          <p class="text-xs text-text-muted leading-relaxed">
+            Every topic explicitly answers "Why It Matters in Production": outages prevented, scalability bottlenecks avoided, and actual interview talking points.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-bg-page border border-border-subtle space-y-3 shadow-sm">
+          <div class="w-12 h-12 rounded-2xl bg-forest/15 text-forest dark:text-mint flex items-center justify-center font-mono font-bold text-lg border border-forest/30">
+            03
+          </div>
+          <h3 class="text-lg font-bold text-text-main">
+            100% Local-First
+          </h3>
+          <p class="text-xs text-text-muted leading-relaxed">
+            No forced user accounts, no spam newsletters, no tracking cookies. All your progress stays in your browser's local storage with instant export and backup.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <a
+        href="/best-practices"
+        class="group p-8 rounded-3xl bg-sage/10 border border-sage/30 hover:border-sage transition-all shadow-sm space-y-4"
+      >
+        <span class="text-xs font-mono uppercase font-semibold text-forest dark:text-mint">
+          Architecture & Standards
+        </span>
+        <h3 class="text-2xl font-bold text-text-main group-hover:text-forest dark:group-hover:text-mint transition-colors">
+          Production Best Practices →
+        </h3>
+        <p class="text-xs text-text-muted leading-relaxed">
+          Deep-dive guides on code quality, security defenses, performance optimization, testing strategies, and Git trunk-based workflows.
+        </p>
+        <div class="text-xs font-mono text-forest dark:text-mint font-semibold pt-2">
+          7 In-Depth Guides Available →
+        </div>
+      </a>
+
+      <a
+        href="/practice"
+        class="group p-8 rounded-3xl bg-slate-sage/10 border border-slate-sage/30 hover:border-slate-sage transition-all shadow-sm space-y-4"
+      >
+        <span class="text-xs font-mono uppercase font-semibold text-slate-sage-dark dark:text-mint">
+          Interactive Knowledge Checks
+        </span>
+        <h3 class="text-2xl font-bold text-text-main group-hover:text-forest dark:group-hover:text-mint transition-colors">
+          Topic-Based Practice Quizzes →
+        </h3>
+        <p class="text-xs text-text-muted leading-relaxed">
+          Test your production understanding with scenario-based questions. Instant feedback, code explanations, and score summaries.
+        </p>
+        <div class="text-xs font-mono text-slate-sage-dark dark:text-mint font-semibold pt-2">
+          Frontend, Backend, DevOps, AI & Security Quizzes →
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="p-8 sm:p-12 rounded-3xl bg-forest text-neutral-soft border border-forest-dark text-center space-y-5 relative overflow-hidden">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-forest-dark text-mint text-xs font-mono border border-forest">
+        <span>🤝</span> Open-Source & Community-Driven
+      </div>
+      <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+        Add Your Own Roadmap or Questions
+      </h2>
+      <p class="max-w-xl mx-auto text-xs sm:text-sm text-mint/90 leading-relaxed">
+        DevWaymark is designed to be fully extensible. All roadmaps, topics, resources, and quiz questions live in typed content files. Adding a new roadmap requires zero component code changes.
+      </p>
+      <div class="pt-2">
+        <a
+          href="/contributing"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sage hover:bg-sage-hover text-white font-bold text-xs font-mono transition-colors shadow-sm"
+        >
+          <span>Read the Contributing & Schema Guide</span>
+          <span>→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  const demoBoxes = document.querySelectorAll('.demo-checkbox');
+  const demoLabel = document.getElementById('demo-counter-label');
+
+  demoBoxes.forEach((box) => {
+    box.addEventListener('change', () => {
+      const checked = Array.from(demoBoxes).filter((b) => b.checked).length;
+      if (demoLabel) {
+        if (checked === 3) {
+          demoLabel.textContent = '🎉 All 3 sample waymarks completed!';
+        } else if (checked > 0) {
+          demoLabel.textContent = `Nice! ${checked} of 3 completed.`;
+        } else {
+          demoLabel.textContent = 'Try clicking the checkboxes below!';
+        }
+      }
+    });
+  });
+</script>

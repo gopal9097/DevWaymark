@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sampleRoadmapJson = `{
+  "id": "game-dev",
+  "title": "Game Engine Engineering",
+  "tagline": "C++, computer graphics, shaders, physics, and game engine architecture",
+  "description": "Learning path from linear algebra and OpenGL/Vulkan to ECS architectures and GPU pipelines.",
+  "domain": "Languages",
+  "difficulty": "Advanced",
+  "estimatedWeeks": 24,
+  "icon": "cpu",
+  "stages": [
+    {
+      "id": "gd-stage-1",
+      "number": 1,
+      "title": "Stage 1: Mathematics & Rendering Primitives",
+      "description": "Vectors, quaternions, matrices, rasterization, and shaders.",
+      "nodes": [
+        {
+          "id": "gd-linear-algebra",
+          "title": "3D Transformations & Quaternions",
+          "description": "Euler angles, gimbal lock, and quaternion rotation interpolation.",
+          "whyItMatters": "Eliminates gimbal lock and provides smooth camera slerp in 3D engines.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            { "title": "LearnOpenGL Transformations", "url": "https://learnopengl.com/", "type": "interactive" }
+          ],
+          "keyTakeaways": ["Quaternions avoid gimbal lock and interpolate smoothly."]
+        }
+      ]
+    }
+  ]
+}`;
+
+const sampleQuizJson = `{
+  "id": "fe-q5",
+  "question": "What is the primary difference between debounce and throttle?",
+  "options": [
+    "Debounce delays execution until after a pause in events; throttle limits execution to once every interval.",
+    "Debounce runs on a web worker; throttle runs on the main thread.",
+    "They are identical synonyms in JavaScript.",
+    "Throttle cancels promises; debounce handles exceptions."
+  ],
+  "correctAnswer": 0,
+  "explanation": "Debouncing groups sudden spikes of events and fires only after calm; throttling ensures a constant rate of execution.",
+  "difficulty": "Intermediate",
+  "topic": "Event Optimization",
+  "relatedRoadmapSlug": "frontend"
+}`;
+---
+
+<BaseLayout
+  title="Contributing to DevWaymark — Extensibility & Schema Guide"
+  description="Learn how to add new roadmaps, topics, curated resources, and practice quiz questions using DevWaymark's typed schema with zero component code changes."
+  activeTab="contributing"
+>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-10">
+    <header class="space-y-4 pb-8 border-b border-border-subtle">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono">
+        <span>🤝</span> Open Contribution Guide
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-text-main tracking-tight">
+        Extending DevWaymark
+      </h1>
+      <p class="text-base text-text-muted leading-relaxed">
+        DevWaymark is designed to be 100% schema-driven. You can introduce a completely new career track, milestone stage, or quiz simply by adding a typed JSON file. No component code modifications required.
+      </p>
+    </header>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-text-main flex items-center gap-2">
+        <span>📁</span> Directory Structure
+      </h2>
+      <div class="rounded-2xl bg-forest-deep p-5 border border-forest text-xs font-mono text-neutral-soft leading-relaxed overflow-x-auto">
+<pre><code>src/content/
+├── roadmaps/           # All 12+ career tracks (frontend.json, backend.json, etc.)
+├── best-practices/     # Engineering standards (code-quality.json, security.json, etc.)
+└── quizzes/            # Multiple choice questions (frontend-quiz.json, etc.)</code></pre>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-text-main flex items-center gap-2">
+        <span>🗺️</span> 1. Adding a New Roadmap
+      </h2>
+      <p class="text-sm text-text-muted leading-relaxed">
+        To add a track, create <code class="font-mono bg-bg-surface-hover px-1.5 py-0.5 rounded text-xs border border-border-subtle text-text-main">src/content/roadmaps/&lt;id&gt;.json</code>. It is validated against the Zod schema in <code class="font-mono bg-bg-surface-hover px-1.5 py-0.5 rounded text-xs border border-border-subtle text-text-main">src/content.config.ts</code>.
+      </p>
+
+      <div class="rounded-2xl bg-forest-deep p-5 border border-forest text-xs font-mono text-neutral-soft leading-relaxed overflow-x-auto">
+<pre><code>{sampleRoadmapJson}</code></pre>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-text-main flex items-center gap-2">
+        <span>⚡</span> 2. Adding Practice Quiz Questions
+      </h2>
+      <p class="text-sm text-text-muted leading-relaxed">
+        Add questions to <code class="font-mono bg-bg-surface-hover px-1.5 py-0.5 rounded text-xs border border-border-subtle text-text-main">src/content/quizzes/&lt;track&gt;-quiz.json</code>. Each question must include an explanation and 0-indexed correct answer.
+      </p>
+      <div class="rounded-2xl bg-forest-deep p-5 border border-forest text-xs font-mono text-neutral-soft leading-relaxed overflow-x-auto">
+<pre><code>{sampleQuizJson}</code></pre>
+      </div>
+    </section>
+
+    <section class="p-6 rounded-2xl bg-bg-page border border-border-subtle space-y-3">
+      <h2 class="text-base font-bold text-text-main">
+        Verifying Your Changes Locally
+      </h2>
+      <div class="text-xs font-mono text-text-muted space-y-1">
+        <p>1. Run <code class="text-forest dark:text-mint font-bold">pnpm check</code> to validate TypeScript schemas.</p>
+        <p>2. Run <code class="text-forest dark:text-mint font-bold">pnpm build</code> to verify static generation of all pages.</p>
+        <p>3. Submit a pull request on GitHub with your new content!</p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

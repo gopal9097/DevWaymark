@@ -1,0 +1,86 @@
+{
+  "id": "databases",
+  "title": "Database Engineering & Internals",
+  "tagline": "Storage engines, B-trees, LSM trees, query planners, and vector databases",
+  "description": "Deep dive into database architecture: write-ahead logs (WAL), page buffers, B-tree vs LSM-tree indexing, query optimization, vector similarity search, and multi-model data storage.",
+  "domain": "Backend",
+  "difficulty": "Advanced",
+  "estimatedWeeks": 18,
+  "icon": "database",
+  "badge": "Core Infrastructure",
+  "featured": false,
+  "prerequisites": [
+    "Basic SQL query knowledge",
+    "Understanding of operating system I/O"
+  ],
+  "stages": [
+    {
+      "id": "db-stage-1",
+      "number": 1,
+      "title": "Stage 1: Storage Engines & Indexing Mechanics",
+      "description": "How databases persist data: pages, WAL, buffer pools, and index trees.",
+      "nodes": [
+        {
+          "id": "db-storage-engines",
+          "title": "B-Trees vs LSM-Trees (Log-Structured Merge)",
+          "description": "Contrasting read-optimized B-Trees (PostgreSQL, MySQL InnoDB) with write-optimized LSM-Trees (RocksDB, Cassandra, ScyllaDB).",
+          "whyItMatters": "High-velocity telemetry and logging workloads can overwhelm B-Tree random-write I/O. LSM-trees convert random writes into sequential disk flushes.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "Database Internals (Alex Petrov)",
+              "url": "https://www.databass.dev/",
+              "type": "article"
+            },
+            {
+              "title": "Log-Structured Merge-Trees Explained",
+              "url": "https://www.cs.umb.edu/~poneil/lsmt.pdf",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "B-Trees update pages in-place on disk, requiring Write-Ahead Logs (WAL) for crash recovery.",
+            "LSM-trees append all writes sequentially to an in-memory MemTable, periodically flushing to immutable SSTables on disk, which are compacted in the background.",
+            "LSM-trees provide superior write throughput but suffer from read amplification and compaction I/O spikes."
+          ],
+          "interviewTips": "Explain write amplification and how Bloom Filters prevent unnecessary disk reads in LSM-tree databases."
+        }
+      ]
+    },
+    {
+      "id": "db-stage-2",
+      "number": 2,
+      "title": "Stage 2: Vector Databases & HNSW Indexing",
+      "description": "Approximate Nearest Neighbor (ANN) search, Hierarchical Navigable Small World (HNSW) graphs, and vector storage engines.",
+      "nodes": [
+        {
+          "id": "db-vector-hnsw",
+          "title": "Vector Search Internals & HNSW Graph Indexing",
+          "description": "How vector databases (pgvector, Milvus, Qdrant) index million-dimension vectors for sub-10ms nearest neighbor search using HNSW graphs.",
+          "whyItMatters": "Exhaustive flat vector search is O(N) and stalls with millions of embeddings. HNSW provides logarithmic O(log N) approximate nearest neighbor lookups.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "pgvector Documentation",
+              "url": "https://github.com/pgvector/pgvector",
+              "type": "docs"
+            },
+            {
+              "title": "HNSW Algorithm Explained (Pinecone)",
+              "url": "https://www.pinecone.io/learn/series/faiss/hnsw/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "HNSW constructs multi-layer geometric graphs inspired by skip-lists: sparse top layers for coarse jumps, dense bottom layers for fine search.",
+            "Tune `m` (number of bi-directional links per node) and `ef_construction` to balance build speed vs recall accuracy.",
+            "Use pgvector when you already run PostgreSQL to eliminate the complexity of running a standalone vector database cluster."
+          ],
+          "interviewTips": "Be prepared to compare IVFFlat (inverted file clustering) vs HNSW indexing tradeoffs regarding indexing speed, memory usage, and query recall."
+        }
+      ]
+    }
+  ]
+}

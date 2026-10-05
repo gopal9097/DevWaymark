@@ -1,0 +1,86 @@
+{
+  "id": "cloud",
+  "title": "Cloud Architecture & Engineering",
+  "tagline": "Cloud computing primitives, multi-tenant VPC networking, IAM security, and serverless architectures",
+  "description": "Design fault-tolerant, cost-effective cloud architectures across AWS, GCP, and Azure: compute primitives, object storage, VPC subnets, IAM policy engineering, and serverless backends.",
+  "domain": "DevOps & Cloud",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 16,
+  "icon": "cloud",
+  "badge": "Cloud Certified",
+  "featured": false,
+  "prerequisites": [
+    "Networking fundamentals (TCP/IP, DNS)",
+    "Basic Linux commands"
+  ],
+  "stages": [
+    {
+      "id": "cloud-stage-1",
+      "number": 1,
+      "title": "Stage 1: Core Compute & Storage Primitives",
+      "description": "Virtual machines, auto-scaling groups, object storage (S3), and block storage (EBS).",
+      "nodes": [
+        {
+          "id": "cloud-storage-s3",
+          "title": "Object Storage Architecture & S3 Internals",
+          "description": "Scalable object storage, eventual consistency models, bucket policies, pre-signed URLs, multipart uploads, and lifecycle policies.",
+          "whyItMatters": "Serving media uploads directly through application servers exhausts memory and bandwidth. Offloading storage to S3 with pre-signed direct uploads is the gold standard.",
+          "importance": "essential",
+          "estimatedHours": 12,
+          "resources": [
+            {
+              "title": "AWS S3 Official Developer Guide",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+              "type": "docs"
+            },
+            {
+              "title": "Pre-Signed URLs for Direct Uploads",
+              "url": "https://aws.amazon.com/blogs/compute/uploading-to-amazon-s3-directly-from-a-web-or-mobile-application/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Use pre-signed URLs to let clients upload files directly to S3 without proxying data through backend servers.",
+            "Enable versioning and object locks on critical buckets to prevent accidental deletion or ransomware encryption.",
+            "Set lifecycle transition rules to move cold data from Standard to Glacier Instant Retrieval to reduce storage costs by up to 80%."
+          ],
+          "interviewTips": "Be prepared to design a secure, high-throughput file upload service that handles multi-gigabyte video files with resume capability."
+        }
+      ]
+    },
+    {
+      "id": "cloud-stage-2",
+      "number": 2,
+      "title": "Stage 2: VPC Networking & Zero Trust Security",
+      "description": "Virtual Private Clouds, CIDR blocks, public vs private subnets, NAT Gateways, and IAM role least-privilege.",
+      "nodes": [
+        {
+          "id": "cloud-vpc-networking",
+          "title": "VPC Subnets, Route Tables & NAT Gateways",
+          "description": "Architecting multi-tier cloud network topologies: internet-facing public subnets, isolated private subnets for compute, and air-gapped database subnets.",
+          "whyItMatters": "Exposing database servers or backend services directly to public IPs invites automated botnet attacks and vulnerability exploits.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "AWS VPC Architecture Guide",
+              "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
+              "type": "docs"
+            },
+            {
+              "title": "IAM Best Practices",
+              "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Place all databases and backend workers in private subnets with no route to an Internet Gateway.",
+            "Use NAT Gateways only for instances that require outbound internet connectivity (such as third-party API webhooks).",
+            "Enforce the Principle of Least Privilege in IAM policies: avoid wildcards (`Action: '*'`), and bind permissions to IAM roles rather than user credentials."
+          ],
+          "interviewTips": "Interviewers will ask how traffic travels from a client on the internet through an ALB in a public subnet to an EC2 instance in a private subnet."
+        }
+      ]
+    }
+  ]
+}

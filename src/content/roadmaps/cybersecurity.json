@@ -1,0 +1,111 @@
+{
+  "id": "cybersecurity",
+  "title": "Cybersecurity & Application Defense",
+  "tagline": "Threat modeling, web exploits, cryptographic standards, zero trust, and secure code review",
+  "description": "From OWASP Top 10 web vulnerabilities and cryptographic primitives to identity protocols (OAuth/SAML), security headers, pen testing methodologies, and DevSecOps pipelines.",
+  "domain": "Security & Mobile",
+  "difficulty": "Advanced",
+  "estimatedWeeks": 18,
+  "icon": "shield",
+  "badge": "Critical Skill",
+  "featured": false,
+  "prerequisites": [
+    "Understanding of web architecture, HTTP, and basic networking"
+  ],
+  "stages": [
+    {
+      "id": "sec-stage-1",
+      "number": 1,
+      "title": "Stage 1: Web Application Defense & OWASP Top 10",
+      "description": "Injection attacks, Broken Object Level Authorization (BOLA), SSRF, and security misconfigurations.",
+      "nodes": [
+        {
+          "id": "sec-owasp-bola",
+          "title": "BOLA / IDOR & Broken Access Controls",
+          "description": "Insecure Direct Object References where attackers alter record IDs in API requests to access data belonging to other tenants or users.",
+          "whyItMatters": "BOLA is currently the #1 most common and devastating API vulnerability, responsible for major enterprise data breaches.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "OWASP API Security Top 10",
+              "url": "https://owasp.org/www-project-api-security/",
+              "type": "docs"
+            },
+            {
+              "title": "PortSwigger Web Security Academy: Access Control",
+              "url": "https://portswigger.net/web-security/access-control",
+              "type": "interactive"
+            }
+          ],
+          "keyTakeaways": [
+            "Never trust client-supplied user IDs or tenant IDs in request bodies or URL parameters.",
+            "Always verify object ownership against the authenticated session context inside the database query (e.g., `WHERE id = :id AND user_id = :current_user_id`).",
+            "Use random UUIDv4 or KSUID instead of sequential auto-incrementing integer IDs to prevent easy enumeration attacks."
+          ],
+          "interviewTips": "Interviewers will ask how you structure multi-tenant authorization middleware to systematically eliminate IDOR bugs."
+        },
+        {
+          "id": "sec-ssrf-prevention",
+          "title": "Server-Side Request Forgery (SSRF) Defense",
+          "description": "When an attacker coerces the server to send unauthorized HTTP requests to internal services (such as cloud metadata endpoints at 169.254.169.254).",
+          "whyItMatters": "Capital One's historic AWS breach was caused by an SSRF vulnerability that allowed an attacker to query the metadata service and steal IAM credentials.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "OWASP SSRF Prevention Cheat Sheet",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
+              "type": "docs"
+            },
+            {
+              "title": "AWS IMDSv2 Guide",
+              "url": "https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Enforce strict URL whitelisting and resolve domain IP addresses before fetching, disallowing private IP ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.1).",
+            "Require IMDSv2 on AWS EC2, which mandates a session token via PUT and disables hop-counts to block reverse proxy SSRF.",
+            "Isolate webhook fetching services into a separate network DMZ with no access to internal corporate services."
+          ],
+          "interviewTips": "Explain the difference between IMDSv1 and IMDSv2 and how DNS rebinding can bypass naive SSRF IP filters."
+        }
+      ]
+    },
+    {
+      "id": "sec-stage-2",
+      "number": 2,
+      "title": "Stage 2: Cryptography & Secrets Management",
+      "description": "Symmetric vs asymmetric encryption, password hashing, key rotation, and automated secret scanning.",
+      "nodes": [
+        {
+          "id": "sec-crypto-hashing",
+          "title": "Cryptographic Primitives & Secret Management",
+          "description": "AES-256-GCM authenticated encryption, SHA-256 vs Argon2id/Bcrypt for passwords, and HashiCorp Vault for dynamic secret injection.",
+          "whyItMatters": "Hardcoding secrets into Git repositories or using weak hashing algorithms (MD5, SHA1) guarantees data compromise during security audits.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "Cryptography I (Dan Boneh, Stanford)",
+              "url": "https://www.coursera.org/learn/crypto",
+              "type": "article"
+            },
+            {
+              "title": "OWASP Password Storage Cheat Sheet",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Always use memory-hard, slow password hashing algorithms (Argon2id or Bcrypt) with unique cryptographic salts.",
+            "Use authenticated encryption modes (AES-GCM or ChaCha20-Poly1305) to ensure both privacy and tamper detection.",
+            "Run automated pre-commit secret scanners (TruffleHog, Gitleaks) in CI to block accidental commits of API keys."
+          ],
+          "interviewTips": "Be prepared to explain why fast cryptographic hashes like SHA-256 are unsuitable for passwords, and how salt protects against rainbow table attacks."
+        }
+      ]
+    }
+  ]
+}

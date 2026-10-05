@@ -1,0 +1,325 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RoadmapCard from '../../components/RoadmapCard.astro';
+import { getCollection } from 'astro:content';
+
+const allRoadmaps = await getCollection('roadmaps');
+const sortedRoadmaps = allRoadmaps.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return a.data.title.localeCompare(b.data.title);
+});
+
+const domains = [
+  'All',
+  'Frontend',
+  'Backend',
+  'DevOps & Cloud',
+  'Languages',
+  'Architecture',
+  'AI & Data',
+  'Security & Mobile',
+];
+---
+
+<BaseLayout
+  title="All Career Roadmaps — DevWaymark"
+  description="Explore searchable and filterable career roadmaps for software engineers: Frontend, Backend, DevOps, System Design, AI/ML, Cloud, Databases, and more."
+  activeTab="roadmaps"
+>
+  <section class="border-b border-border-subtle bg-bg-surface py-12 lg:py-16 bg-grid-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono">
+        <span>🧭</span> 12 Production Tracks Available
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-text-main tracking-tight">
+        Developer Career Roadmaps
+      </h1>
+      <p class="max-w-2xl mx-auto text-sm sm:text-base text-text-muted">
+        Pick a track below and embark on a visual, milestone-driven journey. Every roadmap is curated, validated, and tracks your progress directly in your browser.
+      </p>
+
+      <div class="pt-2">
+        <a
+          href="/start"
+          class="inline-flex items-center gap-2 text-xs font-mono font-medium text-sage hover:underline"
+        >
+          <span>Not sure where to begin? Take the 60-second guided quiz →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="space-y-6">
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        <div class="relative flex-1 max-w-md">
+          <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-text-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            id="roadmaps-filter-search"
+            type="search"
+            placeholder="Search roadmaps by title, skill, or keyword..."
+            class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-border-subtle bg-bg-surface text-sm text-text-main placeholder-text-faint focus:outline-none focus:border-sage shadow-sm"
+          />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <select
+            id="difficulty-filter"
+            class="px-3 py-2 rounded-xl border border-border-subtle bg-bg-surface text-xs font-mono text-text-main focus:outline-none focus:border-sage"
+            aria-label="Filter by difficulty"
+          >
+            <option value="all">All Difficulties</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+
+          <select
+            id="status-filter"
+            class="px-3 py-2 rounded-xl border border-border-subtle bg-bg-surface text-xs font-mono text-text-main focus:outline-none focus:border-sage"
+            aria-label="Filter by learning progress"
+          >
+            <option value="all">All Statuses</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="not-started">Not Started</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="domain-pills-container">
+        {domains.map((domain, index) => (
+          <button
+            type="button"
+            data-domain-filter={domain}
+            class={`domain-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors ${
+              index === 0
+                ? 'bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm'
+                : 'bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong'
+            }`}
+          >
+            {domain}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-8 mb-6 flex items-center justify-between text-xs font-mono text-text-faint">
+      <span id="results-count">Showing {sortedRoadmaps.length} roadmaps</span>
+      <span id="completed-tracks-stat">0 tracks completed</span>
+    </div>
+
+    <div
+      id="roadmaps-grid"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      {sortedRoadmaps.map((rm) => {
+        const totalNodes = rm.data.stages.reduce((acc, s) => acc + s.nodes.length, 0);
+        return (
+          <div
+            class="roadmap-grid-item"
+            data-domain={rm.data.domain}
+            data-difficulty={rm.data.difficulty}
+            data-title={rm.data.title.toLowerCase()}
+            data-tagline={rm.data.tagline.toLowerCase()}
+            data-description={rm.data.description.toLowerCase()}
+            data-roadmap-id={rm.data.id}
+          >
+            <RoadmapCard
+              id={rm.data.id}
+              title={rm.data.title}
+              tagline={rm.data.tagline}
+              domain={rm.data.domain}
+              difficulty={rm.data.difficulty}
+              estimatedWeeks={rm.data.estimatedWeeks}
+              icon={rm.data.icon}
+              badge={rm.data.badge}
+              stagesCount={rm.data.stages.length}
+              nodesCount={totalNodes}
+            />
+          </div>
+        );
+      })}
+    </div>
+
+    <div id="no-results-view" class="hidden text-center py-16 space-y-3">
+      <div class="text-4xl">🔍</div>
+      <h3 class="text-base font-bold text-text-main">No roadmaps matched your filters</h3>
+      <p class="text-xs text-text-muted max-w-sm mx-auto">
+        Try adjusting your search query, or clear the category and difficulty filters to browse all 12 tracks.
+      </p>
+      <button
+        id="reset-all-filters-btn"
+        type="button"
+        class="mt-2 px-4 py-2 rounded-xl bg-sage/15 text-forest dark:text-mint text-xs font-mono font-medium border border-sage/30"
+      >
+        Reset all filters
+      </button>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  const STORAGE_KEY = 'devwaymark_progress_v1';
+  let activeDomain = 'All';
+  let activeDifficulty = 'all';
+  let activeStatus = 'all';
+  let searchQuery = '';
+
+  const searchInput = document.getElementById('roadmaps-filter-search');
+  const difficultySelect = document.getElementById('difficulty-filter');
+  const statusSelect = document.getElementById('status-filter');
+  const domainPills = document.querySelectorAll('.domain-pill');
+  const items = document.querySelectorAll('.roadmap-grid-item');
+  const resultsCount = document.getElementById('results-count');
+  const noResultsView = document.getElementById('no-results-view');
+  const resetBtn = document.getElementById('reset-all-filters-btn');
+
+  function getStoredProgress() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return { completedNodes: [], activeRoadmaps: [], lastUpdated: Date.now() };
+  }
+
+  function hydrateCardProgressBars() {
+    const data = getStoredProgress();
+    const completedSet = new Set(data.completedNodes);
+    let fullyCompletedCount = 0;
+
+    document.querySelectorAll('.roadmap-card').forEach((card) => {
+      const rmId = card.getAttribute('data-roadmap-id');
+      const totalNodes = parseInt(card.getAttribute('data-total-nodes') || '1', 10);
+      
+      const doneNodes = Array.from(completedSet).filter((id) => {
+        if (rmId === 'frontend') return id.startsWith('fe-');
+        if (rmId === 'backend') return id.startsWith('be-');
+        if (rmId === 'devops') return id.startsWith('devops-');
+        if (rmId === 'javascript') return id.startsWith('js-');
+        if (rmId === 'react') return id.startsWith('react-');
+        if (rmId === 'python') return id.startsWith('py-');
+        if (rmId === 'system-design') return id.startsWith('sd-');
+        if (rmId === 'ai-ml') return id.startsWith('ai-');
+        if (rmId === 'cloud') return id.startsWith('cloud-');
+        if (rmId === 'databases') return id.startsWith('db-');
+        if (rmId === 'mobile') return id.startsWith('mobile-');
+        if (rmId === 'cybersecurity') return id.startsWith('sec-');
+        return false;
+      }).length;
+
+      const percentage = totalNodes > 0 ? Math.min(100, Math.round((doneNodes / totalNodes) * 100)) : 0;
+      if (percentage === 100) fullyCompletedCount++;
+
+      const fill = card.querySelector('.progress-bar-fill');
+      const percentLabel = card.querySelector('.progress-percent-label');
+      const statusLabel = card.querySelector('.progress-status-label');
+
+      if (fill) fill.style.width = `${percentage}%`;
+      if (percentLabel) percentLabel.textContent = `${percentage}%`;
+      if (statusLabel) {
+        if (percentage === 100) statusLabel.textContent = 'Completed ✓';
+        else if (percentage > 0) statusLabel.textContent = `${doneNodes}/${totalNodes} done`;
+        else statusLabel.textContent = 'Not started';
+      }
+
+      const gridItem = card.closest('.roadmap-grid-item');
+      if (gridItem) {
+        if (percentage === 100) gridItem.setAttribute('data-status', 'completed');
+        else if (percentage > 0) gridItem.setAttribute('data-status', 'in-progress');
+        else gridItem.setAttribute('data-status', 'not-started');
+      }
+    });
+
+    const completedStatsEl = document.getElementById('completed-tracks-stat');
+    if (completedStatsEl) {
+      completedStatsEl.textContent = `${fullyCompletedCount} of ${items.length} tracks completed`;
+    }
+  }
+
+  function filterRoadmaps() {
+    let visibleCount = 0;
+    const query = searchQuery.toLowerCase().trim();
+
+    items.forEach((item) => {
+      const itemDomain = item.getAttribute('data-domain');
+      const itemDifficulty = item.getAttribute('data-difficulty');
+      const itemStatus = item.getAttribute('data-status') || 'not-started';
+      const itemTitle = item.getAttribute('data-title') || '';
+      const itemTagline = item.getAttribute('data-tagline') || '';
+      const itemDesc = item.getAttribute('data-description') || '';
+
+      const matchesDomain = activeDomain === 'All' || itemDomain === activeDomain;
+      const matchesDifficulty = activeDifficulty === 'all' || itemDifficulty === activeDifficulty;
+      const matchesStatus = activeStatus === 'all' || itemStatus === activeStatus;
+      const matchesSearch =
+        !query ||
+        itemTitle.includes(query) ||
+        itemTagline.includes(query) ||
+        itemDesc.includes(query);
+
+      if (matchesDomain && matchesDifficulty && matchesStatus && matchesSearch) {
+        item.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    if (resultsCount) {
+      resultsCount.textContent = `Showing ${visibleCount} of ${items.length} roadmaps`;
+    }
+
+    if (noResultsView) {
+      if (visibleCount === 0) noResultsView.classList.remove('hidden');
+      else noResultsView.classList.add('hidden');
+    }
+  }
+
+  domainPills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      domainPills.forEach((p) => {
+        p.className = 'domain-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong';
+      });
+      pill.className = 'domain-pill shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm';
+      activeDomain = pill.getAttribute('data-domain-filter') || 'All';
+      filterRoadmaps();
+    });
+  });
+
+  searchInput?.addEventListener('input', (e) => {
+    searchQuery = e.target.value;
+    filterRoadmaps();
+  });
+
+  difficultySelect?.addEventListener('change', (e) => {
+    activeDifficulty = e.target.value;
+    filterRoadmaps();
+  });
+
+  statusSelect?.addEventListener('change', (e) => {
+    activeStatus = e.target.value;
+    filterRoadmaps();
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    searchQuery = '';
+    if (difficultySelect) difficultySelect.value = 'all';
+    activeDifficulty = 'all';
+    if (statusSelect) statusSelect.value = 'all';
+    activeStatus = 'all';
+    activeDomain = 'All';
+    domainPills[0]?.click();
+    filterRoadmaps();
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    hydrateCardProgressBars();
+    filterRoadmaps();
+  });
+  window.addEventListener('waymark-progress-updated', hydrateCardProgressBars);
+</script>

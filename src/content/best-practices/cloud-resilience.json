@@ -1,0 +1,34 @@
+{
+  "id": "cloud-resilience",
+  "title": "Cloud Resilience & Distributed Fault Tolerance",
+  "area": "Cloud Resilience",
+  "summary": "Architecting backend systems that withstand network drops, node crashes, and unexpected traffic surges.",
+  "readTime": "9 min read",
+  "level": "Advanced",
+  "icon": "shield-alert",
+  "keyPrinciples": [
+    "Assume failure will happen: networks partition, disks fail, dependencies time out.",
+    "Fail fast with timeouts: never let a request wait indefinitely for a downstream dependency.",
+    "Graceful degradation: serve cached or partial data when non-critical services go offline."
+  ],
+  "rules": [
+    {
+      "title": "Apply Exponential Backoff with Jitter to Network Retries",
+      "description": "Retrying failed requests at fixed intervals causes all clients to retry simultaneously, hitting the recovering server with synchronized traffic waves (thundering herd).",
+      "badExample": {
+        "code": "// Bad: Fixed retry interval locks servers into overload\nasync function retryRequest(fn, retries = 3) {\n  for (let i = 0; i < retries; i++) {\n    try { return await fn(); }\n    catch (err) {\n      await sleep(1000); // Fixed 1-second delay\n    }\n  }\n}",
+        "explanation": "Synchronized retries hammer the recovering service and knock it back offline."
+      },
+      "goodExample": {
+        "code": "// Good: Exponential backoff with random full jitter\nasync function retryWithJitter(fn, retries = 4, baseMs = 200, maxMs = 5000) {\n  for (let attempt = 0; attempt < retries; attempt++) {\n    try {\n      return await fn();\n    } catch (err) {\n      if (attempt === retries - 1) throw err;\n      const backoff = Math.min(maxMs, baseMs * Math.pow(2, attempt));\n      const jitter = Math.random() * backoff;\n      await sleep(jitter);\n    }\n  }\n}",
+        "explanation": "Randomizes retry timing, spreading load evenly across the recovery timeline."
+      }
+    }
+  ],
+  "productionChecklist": [
+    "Strict timeouts defined on all external HTTP, gRPC, and database clients.",
+    "Circuit breakers (Resilience4j / Opossum) configured around fragile third-party APIs.",
+    "Health probes distinguish between `/healthz/live` (process alive) and `/healthz/ready` (ready for traffic).",
+    "Chaos engineering drills executed regularly in staging environments."
+  ]
+}

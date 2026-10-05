@@ -1,0 +1,38 @@
+{
+  "id": "cloud-quiz",
+  "title": "Cloud & Infrastructure Quiz",
+  "track": "Cloud",
+  "description": "Test your skills on AWS/GCP cloud primitives, VPC networking, IAM security, and object storage.",
+  "questions": [
+    {
+      "id": "cloud-q1",
+      "question": "What is the recommended architecture pattern for allowing mobile and web clients to upload 500MB video files without overloading backend application servers?",
+      "options": [
+        "Stream the video through backend WebSocket connections directly into an RDS database column.",
+        "Generate pre-signed S3 upload URLs from the backend and let the client upload the file directly to object storage via HTTP PUT.",
+        "Encode the entire video file as a Base64 string in a JSON REST body.",
+        "SSH directly into an EC2 server instance from the mobile client."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Pre-signed URLs allow the backend to authenticate and authorize the upload without having the heavy binary data flow through the application servers. The client sends the payload straight to the cloud object storage provider, saving immense server memory and bandwidth.",
+      "difficulty": "Intermediate",
+      "topic": "Cloud Object Storage",
+      "relatedRoadmapSlug": "cloud"
+    },
+    {
+      "id": "cloud-q2",
+      "question": "In AWS VPC networking, why should database instances be placed strictly in Private Subnets rather than Public Subnets?",
+      "options": [
+        "Private subnets have lower network latency than public subnets.",
+        "Instances in private subnets have no public IP addresses and no direct route to the Internet Gateway, shielding them from external internet attacks.",
+        "PostgreSQL and MySQL can only bind to 10.0.0.0/16 private IP addresses.",
+        "AWS bills double for databases located in public subnets."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Instances in private subnets cannot be reached directly from the public internet because they lack public IP addresses and have route tables that do not route 0.0.0.0/0 to an Internet Gateway. Only authorized application instances within the VPC (or via VPN/bastion) can communicate with them.",
+      "difficulty": "Beginner",
+      "topic": "Cloud VPC Networking",
+      "relatedRoadmapSlug": "cloud"
+    }
+  ]
+}

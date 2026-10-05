@@ -1,0 +1,68 @@
+{
+  "id": "backend-quiz",
+  "title": "Backend & Systems Quiz",
+  "track": "Backend",
+  "description": "Validate your knowledge of HTTP semantics, database transactions, caching strategies, and API architectures.",
+  "questions": [
+    {
+      "id": "be-q1",
+      "question": "According to the HTTP/1.1 specification (RFC 7231), which of the following HTTP methods is NOT idempotent?",
+      "options": [
+        "GET",
+        "PUT",
+        "DELETE",
+        "POST"
+      ],
+      "correctAnswer": 3,
+      "explanation": "An HTTP method is idempotent if the intended effect on the server of making multiple identical requests is the same as a single request. GET, PUT, and DELETE are idempotent; POST is non-idempotent because making multiple requests typically creates multiple distinct records.",
+      "difficulty": "Beginner",
+      "topic": "HTTP Protocols",
+      "relatedRoadmapSlug": "backend"
+    },
+    {
+      "id": "be-q2",
+      "question": "What phenomenon occurs when a heavily requested cache key expires, causing hundreds of concurrent incoming requests to miss the cache and simultaneously bombard the underlying database?",
+      "options": [
+        "Cache Penetration",
+        "Cache Stampede (Thundering Herd)",
+        "Split-Brain Condition",
+        "Phantom Read"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A Cache Stampede (or Thundering Herd) happens when a hot cache key expires and massive concurrent client requests experience a cache miss at the exact same moment, overwhelming the primary database. It is mitigated using mutex locks or probabilistic early expiration.",
+      "difficulty": "Intermediate",
+      "topic": "Distributed Caching",
+      "relatedRoadmapSlug": "backend"
+    },
+    {
+      "id": "be-q3",
+      "question": "In PostgreSQL or MySQL relational databases, what is the 'Leftmost Prefix' rule regarding composite B-Tree indexes on columns (A, B, C)?",
+      "options": [
+        "Queries can only sort by column C if columns A and B are omitted.",
+        "The index can only optimize queries whose WHERE clauses filter on column A, or (A, B), or (A, B, C).",
+        "The leftmost column must always be a unique primary key integer.",
+        "Column A must contain only lowercase ASCII text."
+      ],
+      "correctAnswer": 1,
+      "explanation": "B-Tree composite indexes are sorted in telephone-directory order: first by column A, then by B within matching A, and by C within matching B. A query filtering only on column B or C cannot utilize the composite index effectively because the root sorting is governed by column A.",
+      "difficulty": "Advanced",
+      "topic": "Database Indexing",
+      "relatedRoadmapSlug": "backend"
+    },
+    {
+      "id": "be-q4",
+      "question": "Which transaction isolation level prevents dirty reads and non-repeatable reads, but still permits phantom reads in traditional relational database engines?",
+      "options": [
+        "Read Uncommitted",
+        "Read Committed",
+        "Repeatable Read",
+        "Serializable"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Repeatable Read guarantees that any row read during a transaction will retain the same values throughout that transaction. However, another concurrent transaction might insert new matching rows that appear in subsequent range queries (phantom reads), which only Serializable isolation fully prevents.",
+      "difficulty": "Intermediate",
+      "topic": "ACID Transactions",
+      "relatedRoadmapSlug": "backend"
+    }
+  ]
+}

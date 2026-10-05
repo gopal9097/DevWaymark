@@ -1,0 +1,88 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-border-subtle bg-bg-surface">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
+      <div class="md:col-span-1 space-y-4">
+        <a href="/" class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-forest p-1 flex items-center justify-center border border-slate-sage/60">
+            <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
+              <path d="M21 19 L11 32 L21 45" stroke="#6C8480" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M43 19 L53 32 L43 45" stroke="#BAC8B1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M32 14 L25 32 L32 50 Z" fill="#58714A" />
+              <path d="M32 14 L39 32 L32 50 Z" fill="#7B9669" />
+              <polygon points="32,23 36,32 32,41 28,32" fill="#F4F7F2" />
+            </svg>
+          </div>
+          <span class="font-bold text-base tracking-tight text-text-main">
+            DevWaymark
+          </span>
+        </a>
+        <p class="text-xs text-text-muted leading-relaxed">
+          Free, open-source roadmaps for developer careers. Visual step-by-step guides, curated resources, and production best practices.
+        </p>
+        <div class="pt-2 text-xs font-mono text-text-faint">
+          Built with Astro & TypeScript • 100% Local-First
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-text-main">
+          Career Tracks
+        </h3>
+        <ul class="space-y-2 text-xs text-text-muted font-medium">
+          <li><a href="/roadmaps/frontend" class="hover:text-sage transition-colors">Frontend Engineering</a></li>
+          <li><a href="/roadmaps/backend" class="hover:text-sage transition-colors">Backend Engineering</a></li>
+          <li><a href="/roadmaps/devops" class="hover:text-sage transition-colors">DevOps & Site Reliability</a></li>
+          <li><a href="/roadmaps/system-design" class="hover:text-sage transition-colors">System Design & Architecture</a></li>
+          <li><a href="/roadmaps/ai-ml" class="hover:text-sage transition-colors">AI & LLM Applications</a></li>
+          <li><a href="/roadmaps" class="text-sage dark:text-mint font-semibold hover:underline">View all 12 tracks →</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-text-main">
+          Learning Tools
+        </h3>
+        <ul class="space-y-2 text-xs text-text-muted font-medium">
+          <li><a href="/start" class="hover:text-sage transition-colors">Where do I start? (Guide)</a></li>
+          <li><a href="/best-practices" class="hover:text-sage transition-colors">Production Best Practices</a></li>
+          <li><a href="/practice" class="hover:text-sage transition-colors">Topic Practice Quizzes</a></li>
+          <li><a href="/contributing" class="hover:text-sage transition-colors">Contributing & Schema</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h3 class="text-xs font-mono font-semibold uppercase tracking-wider text-text-main">
+          Core Tenets
+        </h3>
+        <div class="space-y-2 text-xs text-text-muted leading-relaxed">
+          <p>
+            <strong class="text-text-main">100% Free:</strong> No hidden paywalls, no login barriers, no subscriptions.
+          </p>
+          <p>
+            <strong class="text-text-main">Local-First:</strong> All progress stays safe in your browser's <code class="font-mono bg-bg-surface-hover px-1 py-0.5 rounded text-[11px]">localStorage</code>.
+          </p>
+          <p>
+            <strong class="text-text-main">Community Owned:</strong> Open contribution via structured JSON schemas.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between text-xs text-text-faint font-mono gap-4">
+      <div>
+        © {currentYear} DevWaymark. MIT Licensed. Open to the world.
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/contributing" class="hover:text-text-main transition-colors">Add a Roadmap</a>
+        <span>•</span>
+        <a href="/practice" class="hover:text-text-main transition-colors">Take a Quiz</a>
+        <span>•</span>
+        <a href="/start" class="hover:text-text-main transition-colors">Start Flow</a>
+      </div>
+    </div>
+  </div>
+</footer>

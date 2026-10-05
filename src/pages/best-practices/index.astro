@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const practices = await getCollection('best-practices');
+const areas = [
+  'All',
+  'Code Quality',
+  'Security',
+  'Performance',
+  'Testing',
+  'Git Workflows',
+  'API Design',
+  'Cloud Resilience',
+];
+---
+
+<BaseLayout
+  title="Production Best Practices — DevWaymark"
+  description="Readable, opinionated, production-grade engineering guides: code quality, security, performance, testing, git workflows, API design, and cloud resilience."
+  activeTab="best-practices"
+>
+  <section class="border-b border-border-subtle bg-bg-surface py-12 lg:py-16 bg-grid-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono">
+        <span>🛡️</span> Production Standards
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-text-main tracking-tight">
+        Engineering Best Practices
+      </h1>
+      <p class="max-w-2xl mx-auto text-sm sm:text-base text-text-muted">
+        Practical, opinionated guides on writing resilient software. Real anti-patterns to avoid, production-tested patterns to adopt, and checklists for every engineering domain.
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none mb-8" id="practices-pills">
+      {areas.map((area, idx) => (
+        <button
+          type="button"
+          data-filter-area={area}
+          class={`area-filter-btn shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors ${
+            idx === 0
+              ? 'bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm'
+              : 'bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong'
+          }`}
+        >
+          {area}
+        </button>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="practices-grid">
+      {practices.map((p) => (
+        <a
+          href={`/best-practices/${p.data.id}`}
+          data-area={p.data.area}
+          class="practice-card group flex flex-col justify-between p-6 rounded-2xl bg-bg-surface border border-border-subtle hover:border-sage shadow-sm hover:shadow-lg transition-all duration-200"
+        >
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-xs px-2.5 py-1 rounded-full font-mono font-medium bg-sage/10 text-forest dark:text-mint border border-sage/30">
+                {p.data.area}
+              </span>
+              <span class="text-xs font-mono text-text-faint">
+                {p.data.readTime}
+              </span>
+            </div>
+
+            <h2 class="text-lg font-bold text-text-main group-hover:text-forest dark:group-hover:text-mint transition-colors flex items-center justify-between">
+              <span>{p.data.title}</span>
+              <svg class="w-4 h-4 text-text-faint group-hover:text-sage group-hover:translate-x-0.5 transition-all shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </h2>
+
+            <p class="text-xs text-text-muted mt-2 line-clamp-3 leading-relaxed">
+              {p.data.summary}
+            </p>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-border-subtle flex items-center justify-between text-xs font-mono text-text-muted">
+            <span>{p.data.rules.length} core rules</span>
+            <span class="text-forest dark:text-mint font-semibold group-hover:underline">Read guide →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  const filterBtns = document.querySelectorAll('.area-filter-btn');
+  const cards = document.querySelectorAll('.practice-card');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const selected = btn.getAttribute('data-filter-area') || 'All';
+
+      filterBtns.forEach((b) => {
+        b.className = 'area-filter-btn shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors bg-bg-surface text-text-muted border border-border-subtle hover:border-border-strong';
+      });
+      btn.className = 'area-filter-btn shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors bg-forest dark:bg-sage text-white dark:text-forest-deep shadow-sm';
+
+      cards.forEach((card) => {
+        const area = card.getAttribute('data-area');
+        if (selected === 'All' || area === selected) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

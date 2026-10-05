@@ -1,0 +1,86 @@
+{
+  "id": "mobile",
+  "title": "Mobile App Engineering",
+  "tagline": "Cross-platform mobile apps, native device APIs, offline synchronization, and release engineering",
+  "description": "From mobile UI composition in React Native / Flutter to native bridge architecture, background tasks, local SQLite/WatermelonDB offline-first sync, and App Store automation.",
+  "domain": "Security & Mobile",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 16,
+  "icon": "smartphone",
+  "badge": "Cross-Platform",
+  "featured": false,
+  "prerequisites": [
+    "Solid JavaScript/TypeScript or Dart foundations",
+    "Basic understanding of mobile user interaction"
+  ],
+  "stages": [
+    {
+      "id": "mobile-stage-1",
+      "number": 1,
+      "title": "Stage 1: Mobile UI & Navigation Paradigms",
+      "description": "Mobile lifecycle, safe areas, touch gesture responders, and native stack navigation.",
+      "nodes": [
+        {
+          "id": "mobile-native-navigation",
+          "title": "Native Navigation & Screen Stacks",
+          "description": "Deep linking, tab bars, modal presentations, and hardware back button handling.",
+          "whyItMatters": "Web-style URL navigation feels sluggish on mobile if not backed by native OS screen primitives (UINavigationController, Android FragmentManager).",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "React Navigation Docs",
+              "url": "https://reactnavigation.org/",
+              "type": "docs"
+            },
+            {
+              "title": "Flutter Navigation & Routing",
+              "url": "https://docs.flutter.dev/ui/navigation",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Always wrap screens in SafeAreaView to prevent notch and home-indicator overlap.",
+            "Support universal deep links (Apple Universal Links, Android App Links) for seamless onboarding.",
+            "Unmount heavy hidden screens or preserve state using memory-efficient stack configurations."
+          ],
+          "interviewTips": "Expect questions on handling state during backgrounding and memory eviction by the mobile OS."
+        }
+      ]
+    },
+    {
+      "id": "mobile-stage-2",
+      "number": 2,
+      "title": "Stage 2: Offline-First Architecture & Sync",
+      "description": "Local databases (SQLite, Realm), conflict resolution (CRDTs), and optimistic background sync.",
+      "nodes": [
+        {
+          "id": "mobile-offline-sync",
+          "title": "Offline-First Data Sync with Local SQLite",
+          "description": "Caching mutations locally in an offline queue, optimistic UI updates, and synchronization when connectivity is restored.",
+          "whyItMatters": "Mobile users frequently lose network connectivity (subways, elevators, rural areas). An offline-first app remains completely functional and responsive.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "WatermelonDB: High Performance React Native Database",
+              "url": "https://watermelondb.dev/docs",
+              "type": "docs"
+            },
+            {
+              "title": "Offline First Design Guide",
+              "url": "https://offlinefirst.org/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Write changes to local SQLite first, update UI optimistically, and enqueue a sync mutation job.",
+            "Implement deterministic conflict resolution strategies (e.g., Last-Write-Wins with timestamps or CRDTs).",
+            "Monitor network status using NetInfo and trigger background sync tasks when online."
+          ],
+          "interviewTips": "Interviewers will ask how you handle clock skew across devices in offline sync conflict resolution."
+        }
+      ]
+    }
+  ]
+}

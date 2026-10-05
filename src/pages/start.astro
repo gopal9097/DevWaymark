@@ -1,0 +1,429 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allRoadmaps = await getCollection('roadmaps');
+const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.data]));
+---
+
+<BaseLayout
+  title="Where Do I Start? Career Guide — DevWaymark"
+  description="Take a quick 60-second guided flow to receive a personalized developer roadmap recommendation based on your career goals, background, and learning style."
+  activeTab="start"
+>
+  <section class="min-h-[85vh] py-12 lg:py-16 bg-grid-pattern flex items-center justify-center">
+    <div class="max-w-3xl w-full mx-auto px-4 sm:px-6">
+      <div class="rounded-3xl bg-bg-surface border border-border-subtle shadow-xl overflow-hidden">
+        <div class="p-6 sm:p-8 border-b border-border-subtle bg-bg-surface-hover">
+          <div class="flex items-center justify-between text-xs font-mono text-text-muted mb-2">
+            <span class="inline-flex items-center gap-1.5 font-semibold text-forest dark:text-mint">
+              <span>🧭</span> Track Navigator
+            </span>
+            <span id="step-counter">Step 1 of 4</span>
+          </div>
+          <div class="h-1.5 w-full bg-border-subtle rounded-full overflow-hidden">
+            <div id="wizard-progress-bar" class="h-full bg-sage rounded-full w-1/4 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <div class="p-6 sm:p-8">
+          <div id="step-1" class="wizard-step space-y-6">
+            <div class="space-y-1">
+              <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">Question 1</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-text-main">
+                What is your primary career goal?
+              </h2>
+              <p class="text-xs sm:text-sm text-text-muted">
+                Choose the statement that most closely aligns with the role you want to work in.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <button type="button" data-score="frontend:3,react:2,javascript:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-sage/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">A</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Build modern web interfaces and user-facing applications</div>
+                  <div class="text-xs text-text-muted mt-0.5">I want to craft responsive layouts, reactive components, and snappy browser experiences.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="backend:3,python:2,databases:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-slate-sage/15 text-slate-sage-dark dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">B</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Design high-performance servers, databases, and APIs</div>
+                  <div class="text-xs text-text-muted mt-0.5">I want to manage data transactions, authentication, caching, and server business logic.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="devops:3,cloud:3" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-forest/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">C</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Automate infrastructure, CI/CD pipelines, and cloud clusters</div>
+                  <div class="text-xs text-text-muted mt-0.5">I want to manage Docker containers, Kubernetes, Terraform IaC, and 99.99% uptime.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="ai-ml:4,python:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-mint/30 text-forest dark:text-neutral-soft font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">D</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Build AI-powered apps, LLM workflows, and data models</div>
+                  <div class="text-xs text-text-muted mt-0.5">I want to understand vector databases, RAG systems, PyTorch neural nets, and AI engineering.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="system-design:4,backend:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-sage/20 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">E</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Level up to Senior / Staff Architect & Distributed Systems</div>
+                  <div class="text-xs text-text-muted mt-0.5">I already write code; I want to conquer system design interviews and scale to 10M+ users.</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div id="step-2" class="wizard-step hidden space-y-6">
+            <div class="space-y-1">
+              <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">Question 2</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-text-main">
+                What is your current programming experience?
+              </h2>
+              <p class="text-xs sm:text-sm text-text-muted">
+                This helps us recommend the right entry point so you are neither bored nor overwhelmed.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <button type="button" data-score="frontend:2,python:2,javascript:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-sage/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">A</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Beginner: Learning my first programming language</div>
+                  <div class="text-xs text-text-muted mt-0.5">Need clear step-by-step foundations without assuming prior terminal knowledge.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="backend:2,react:2,devops:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-slate-sage/15 text-slate-sage-dark dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">B</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Junior / Early Career: Know syntax, need production practices</div>
+                  <div class="text-xs text-text-muted mt-0.5">Can build basic apps, but want to learn industry standards, clean code, and architectural patterns.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="system-design:3,devops:2,cybersecurity:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-forest/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">C</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Mid / Senior: Looking to pivot stack or master architecture</div>
+                  <div class="text-xs text-text-muted mt-0.5">Ready for deep dives into distributed systems, security, Kubernetes, or AI internals.</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div id="step-3" class="wizard-step hidden space-y-6">
+            <div class="space-y-1">
+              <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">Question 3</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-text-main">
+                What type of problems energize you most?
+              </h2>
+              <p class="text-xs sm:text-sm text-text-muted">
+                Sustainable career growth happens when you genuinely enjoy the daily craft.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <button type="button" data-score="frontend:3,react:3" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-sage/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">A</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Visual feedback, human-computer interaction, and design systems</div>
+                  <div class="text-xs text-text-muted mt-0.5">I love seeing the direct pixel result of code and making interfaces intuitive.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="backend:3,databases:2,system-design:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-slate-sage/15 text-slate-sage-dark dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">B</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Relational data models, concurrency, and API contracts</div>
+                  <div class="text-xs text-text-muted mt-0.5">I love data integrity, query optimization, and reliable backend services.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="devops:3,cloud:2" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-forest/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">C</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Automation, server terminals, cloud plumbing, and reliability</div>
+                  <div class="text-xs text-text-muted mt-0.5">I enjoy scripting, automated deploys, and building resilient platforms.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="cybersecurity:3" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-mint/30 text-forest dark:text-neutral-soft font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">D</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Defensive engineering, finding vulnerabilities, and cryptography</div>
+                  <div class="text-xs text-text-muted mt-0.5">I want to break systems ethically and build impenetrable defenses.</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div id="step-4" class="wizard-step hidden space-y-6">
+            <div class="space-y-1">
+              <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold">Question 4</span>
+              <h2 class="text-xl sm:text-2xl font-bold text-text-main">
+                How much time can you commit each week?
+              </h2>
+              <p class="text-xs sm:text-sm text-text-muted">
+                Pacing yourself with realistic milestones ensures consistency.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <button type="button" data-score="frontend:1,python:1" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-sage/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">A</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Casual: 2–5 hours / week</div>
+                  <div class="text-xs text-text-muted mt-0.5">Steady progress on evenings or weekends alongside a full-time job.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="backend:1,react:1,devops:1" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-slate-sage/15 text-slate-sage-dark dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">B</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Focused: 6–12 hours / week</div>
+                  <div class="text-xs text-text-muted mt-0.5">Dedicated 1–2 hours daily for continuous growth.</div>
+                </div>
+              </button>
+
+              <button type="button" data-score="ai-ml:1,system-design:1" class="option-btn w-full text-left p-4 rounded-2xl border border-border-subtle hover:border-sage hover:bg-sage/5 transition-all flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-forest/15 text-forest dark:text-mint font-mono text-xs flex items-center justify-center shrink-0 mt-0.5 font-bold">C</span>
+                <div>
+                  <div class="font-semibold text-sm text-text-main">Intensive: 15+ hours / week</div>
+                  <div class="text-xs text-text-muted mt-0.5">Bootcamp / full career pivot mode targeting rapid career advancement.</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div id="result-view" class="hidden space-y-8">
+            <div class="text-center space-y-2">
+              <span class="text-xs font-mono uppercase tracking-wider text-forest dark:text-mint font-semibold flex items-center justify-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sage animate-ping"></span>
+                Recommendation Ready
+              </span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-text-main">
+                Your Recommended Roadmap
+              </h2>
+              <p class="text-xs sm:text-sm text-text-muted max-w-md mx-auto">
+                Based on your goals and background, here is the roadmap that best matches your learning goals.
+              </p>
+            </div>
+
+            <div class="p-6 sm:p-8 rounded-3xl bg-sage/10 border-2 border-sage/40 shadow-sm space-y-6">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <span id="result-match-percentage" class="text-xs px-3 py-1 rounded-full font-mono font-bold bg-sage text-white shadow-sm">
+                  96% Match
+                </span>
+                <span id="result-difficulty-badge" class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface text-text-muted border border-border-subtle">
+                  Intermediate
+                </span>
+              </div>
+
+              <div>
+                <h3 id="result-title" class="text-2xl sm:text-3xl font-extrabold text-text-main"></h3>
+                <p id="result-tagline" class="text-sm text-text-muted mt-1.5 leading-relaxed"></p>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-bg-surface border border-border-subtle space-y-1">
+                <span class="text-xs font-mono uppercase font-semibold text-forest dark:text-mint">Why This Fits You</span>
+                <p id="result-rationale" class="text-xs text-text-muted leading-relaxed"></p>
+              </div>
+
+              <div class="space-y-3">
+                <span class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold">
+                  Suggested Week 1 Waymarks
+                </span>
+                <div id="result-milestones" class="space-y-2"></div>
+              </div>
+
+              <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                <a
+                  id="result-primary-link"
+                  href="/roadmaps/frontend"
+                  class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-xl bg-forest hover:bg-forest-dark dark:bg-sage dark:text-forest-deep text-white font-semibold text-sm text-center shadow-md transition-all flex items-center justify-center gap-2"
+                >
+                  <span>Start This Roadmap</span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+
+                <button
+                  id="retake-quiz-btn"
+                  type="button"
+                  class="w-full sm:w-auto py-3 px-5 rounded-xl border border-border-strong text-text-muted hover:bg-bg-surface-hover text-xs font-mono transition-colors"
+                >
+                  Retake Flow
+                </button>
+              </div>
+            </div>
+
+            <div id="runner-up-card" class="p-4 sm:p-5 rounded-2xl bg-bg-page border border-border-subtle flex items-center justify-between gap-4">
+              <div class="space-y-0.5">
+                <span class="text-[10px] font-mono uppercase font-semibold text-text-faint">Secondary Match</span>
+                <div id="runner-up-title" class="text-sm font-bold text-text-main"></div>
+                <div id="runner-up-tagline" class="text-xs text-text-muted truncate max-w-sm"></div>
+              </div>
+              <a
+                id="runner-up-link"
+                href="/roadmaps"
+                class="shrink-0 px-3 py-1.5 rounded-lg border border-border-subtle text-xs font-mono hover:border-sage transition-colors"
+              >
+                View Track →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="wizard-nav-footer" class="p-4 sm:px-8 border-t border-border-subtle bg-bg-surface-hover flex items-center justify-between text-xs font-mono text-text-faint">
+          <button id="wizard-back-btn" type="button" class="hidden hover:text-text-main transition-colors">
+            ← Back to Previous Question
+          </button>
+          <span class="ml-auto text-[11px]">Free & Anonymous • No Account Required</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline define:vars={{ roadmapIndex }}>
+  let currentStep = 1;
+  const totalSteps = 4;
+  const scores = {};
+
+  const stepEls = [
+    document.getElementById('step-1'),
+    document.getElementById('step-2'),
+    document.getElementById('step-3'),
+    document.getElementById('step-4'),
+  ];
+  const stepCounter = document.getElementById('step-counter');
+  const progressBar = document.getElementById('wizard-progress-bar');
+  const backBtn = document.getElementById('wizard-back-btn');
+  const resultView = document.getElementById('result-view');
+  const wizardNavFooter = document.getElementById('wizard-nav-footer');
+  const retakeBtn = document.getElementById('retake-quiz-btn');
+
+  function updateWizardUI() {
+    stepEls.forEach((el, idx) => {
+      if (idx + 1 === currentStep) {
+        el?.classList.remove('hidden');
+      } else {
+        el?.classList.add('hidden');
+      }
+    });
+
+    if (currentStep <= totalSteps) {
+      if (stepCounter) stepCounter.textContent = `Step ${currentStep} of ${totalSteps}`;
+      if (progressBar) progressBar.style.width = `${(currentStep / totalSteps) * 100}%`;
+      if (backBtn) {
+        if (currentStep > 1) backBtn.classList.remove('hidden');
+        else backBtn.classList.add('hidden');
+      }
+      resultView?.classList.add('hidden');
+    }
+  }
+
+  function handleOptionClick(scoreStr) {
+    const pairs = scoreStr.split(',');
+    pairs.forEach((pair) => {
+      const [track, pts] = pair.split(':');
+      scores[track] = (scores[track] || 0) + parseInt(pts, 10);
+    });
+
+    if (currentStep < totalSteps) {
+      currentStep++;
+      updateWizardUI();
+    } else {
+      showRecommendation();
+    }
+  }
+
+  function showRecommendation() {
+    stepEls.forEach((el) => el?.classList.add('hidden'));
+    resultView?.classList.remove('hidden');
+    wizardNavFooter?.classList.add('hidden');
+    if (progressBar) progressBar.style.width = '100%';
+    if (stepCounter) stepCounter.textContent = 'Recommendation Generated';
+
+    const sortedTracks = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const topTrackId = sortedTracks[0] ? sortedTracks[0][0] : 'frontend';
+    const runnerUpTrackId = sortedTracks[1] ? sortedTracks[1][0] : 'backend';
+
+    const topRoadmap = roadmapIndex[topTrackId] || roadmapIndex['frontend'];
+    const runnerUp = roadmapIndex[runnerUpTrackId] || roadmapIndex['backend'];
+
+    const titleEl = document.getElementById('result-title');
+    const taglineEl = document.getElementById('result-tagline');
+    const difficultyEl = document.getElementById('result-difficulty-badge');
+    const primaryLink = document.getElementById('result-primary-link');
+    const rationaleEl = document.getElementById('result-rationale');
+    const milestonesContainer = document.getElementById('result-milestones');
+
+    if (titleEl) titleEl.textContent = topRoadmap.title;
+    if (taglineEl) taglineEl.textContent = topRoadmap.tagline;
+    if (difficultyEl) difficultyEl.textContent = `${topRoadmap.difficulty} • ~${topRoadmap.estimatedWeeks} Weeks`;
+    if (primaryLink) primaryLink.setAttribute('href', `/roadmaps/${topRoadmap.id}`);
+
+    if (rationaleEl) {
+      rationaleEl.textContent = `Your goals focus on ${topRoadmap.domain}. The ${topRoadmap.title} roadmap gives you a practical, step-by-step path based on what modern tech teams expect.`;
+    }
+
+    if (milestonesContainer && topRoadmap.stages[0]) {
+      const stage1 = topRoadmap.stages[0];
+      milestonesContainer.innerHTML = stage1.nodes
+        .slice(0, 3)
+        .map(
+          (node, idx) => `
+        <div class="flex items-center justify-between p-3 rounded-xl bg-bg-surface border border-border-subtle text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-sage/15 text-forest dark:text-mint font-mono text-[11px] font-bold flex items-center justify-center">${idx + 1}</span>
+            <span class="font-medium text-text-main">${node.title}</span>
+          </div>
+          <span class="text-[10px] font-mono text-text-faint">~${node.estimatedHours || 10}h</span>
+        </div>
+      `
+        )
+        .join('');
+    }
+
+    const runnerTitle = document.getElementById('runner-up-title');
+    const runnerTagline = document.getElementById('runner-up-tagline');
+    const runnerLink = document.getElementById('runner-up-link');
+
+    if (runnerTitle) runnerTitle.textContent = runnerUp.title;
+    if (runnerTagline) runnerTagline.textContent = runnerUp.tagline;
+    if (runnerLink) runnerLink.setAttribute('href', `/roadmaps/${runnerUp.id}`);
+  }
+
+  document.querySelectorAll('.option-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const scoreStr = btn.getAttribute('data-score') || '';
+      handleOptionClick(scoreStr);
+    });
+  });
+
+  backBtn?.addEventListener('click', () => {
+    if (currentStep > 1) {
+      currentStep--;
+      updateWizardUI();
+    }
+  });
+
+  retakeBtn?.addEventListener('click', () => {
+    for (const key in scores) delete scores[key];
+    currentStep = 1;
+    wizardNavFooter?.classList.remove('hidden');
+    updateWizardUI();
+  });
+
+  updateWizardUI();
+</script>

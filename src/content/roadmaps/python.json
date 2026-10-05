@@ -1,0 +1,119 @@
+{
+  "id": "python",
+  "title": "Python for Backend & Systems",
+  "tagline": "Pythonic architecture, async concurrency, type hinting, and modern production APIs",
+  "description": "From Python data structures and generator mechanics to asyncio event loops, FastAPI microservices, Pydantic data validation, and GIL concurrency tradeoffs.",
+  "domain": "Languages",
+  "difficulty": "Beginner",
+  "estimatedWeeks": 16,
+  "icon": "terminal",
+  "badge": "Versatile",
+  "featured": false,
+  "prerequisites": [
+    "Basic logic and programming foundations"
+  ],
+  "stages": [
+    {
+      "id": "py-stage-1",
+      "number": 1,
+      "title": "Stage 1: Pythonic Idioms & Data Structures",
+      "description": "List comprehensions, generators, dunder methods, decorators, and context managers.",
+      "nodes": [
+        {
+          "id": "py-generators-decorators",
+          "title": "Generators, Iterators & Custom Decorators",
+          "description": "Lazy evaluation with `yield`, implementing `__iter__` and `__next__`, creating higher-order function decorators, and `functools.wraps`.",
+          "whyItMatters": "Loading 10GB CSV files into memory crashes the server. Generators process streams row-by-row in constant O(1) memory space.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "Fluent Python (Luciano Ramalho)",
+              "url": "https://www.oreilly.com/library/view/fluent-python-2nd/9781492056348/",
+              "type": "article"
+            },
+            {
+              "title": "Real Python: Primer on Python Decorators",
+              "url": "https://realpython.com/primer-on-python-decorators/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Generators evaluate lazily on-demand, saving vast amounts of RAM when streaming large datasets.",
+            "Decorators wrap functions to add cross-cutting concerns (logging, timing, auth) without mutating the target function.",
+            "Use contextlib.contextmanager for clean resource management (database connections, file locks)."
+          ],
+          "interviewTips": "Interviewers often ask you to write a retry decorator with exponential backoff or implement an infinite Fibonacci generator."
+        }
+      ]
+    },
+    {
+      "id": "py-stage-2",
+      "number": 2,
+      "title": "Stage 2: Concurrency & The GIL",
+      "description": "Global Interpreter Lock (GIL), threading vs multiprocessing, and asynchronous I/O with asyncio.",
+      "nodes": [
+        {
+          "id": "py-asyncio-concurrency",
+          "title": "asyncio, ThreadPoolExecutor & Multi-Processing",
+          "description": "How Python handles I/O-bound tasks with cooperative multitasking (`async`/`await`) vs CPU-bound tasks with `multiprocessing.Process`.",
+          "whyItMatters": "Because of Python's GIL, multithreading cannot speed up CPU-heavy tasks. Understanding when to use asyncio vs multiprocessing prevents performance bottlenecks.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "Python Official Docs: asyncio",
+              "url": "https://docs.python.org/3/library/asyncio.html",
+              "type": "docs"
+            },
+            {
+              "title": "Real Python: Speed Up Your Python Program With Concurrency",
+              "url": "https://realpython.com/python-concurrency/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Use asyncio for high-concurrency I/O operations (HTTP APIs, database calls).",
+            "Use multiprocessing to bypass the GIL and utilize multiple CPU cores for heavy mathematical calculations.",
+            "Never execute blocking synchronous calls (like `time.sleep` or synchronous requests) inside an async event loop."
+          ],
+          "interviewTips": "Explain why the GIL exists, what changed with free-threaded Python 3.13, and how asyncio differs from OS threads."
+        }
+      ]
+    },
+    {
+      "id": "py-stage-3",
+      "number": 3,
+      "title": "Stage 3: Production Web APIs with FastAPI",
+      "description": "FastAPI framework, Pydantic type validation, dependency injection, and SQLAlchemy 2.0 async ORM.",
+      "nodes": [
+        {
+          "id": "py-fastapi-pydantic",
+          "title": "FastAPI Architecture, Pydantic & Async DB",
+          "description": "Building production REST APIs with automatic OpenAPI schema generation, request payload validation, and connection pooling.",
+          "whyItMatters": "FastAPI is among the fastest Python web frameworks, offering automated documentation and type-enforced safety that catches invalid API requests early.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "FastAPI Official Documentation",
+              "url": "https://fastapi.tiangolo.com/",
+              "type": "docs"
+            },
+            {
+              "title": "Pydantic v2 Documentation",
+              "url": "https://docs.pydantic.dev/latest/",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Leverage FastAPI's `Depends` system for modular database session lifecycle and authentication token extraction.",
+            "Use Pydantic models for both request validation and response serialization filtering.",
+            "Deploy with ASGI servers like Uvicorn behind Gunicorn process managers."
+          ],
+          "interviewTips": "Be prepared to design a token-authenticated endpoint with database connection injection and custom error handling."
+        }
+      ]
+    }
+  ]
+}

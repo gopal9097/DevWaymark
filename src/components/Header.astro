@@ -1,0 +1,213 @@
+---
+interface Props {
+  activeTab?: 'roadmaps' | 'start' | 'best-practices' | 'practice' | 'contributing' | 'home';
+}
+
+const { activeTab = 'home' } = Astro.props;
+---
+
+<header class="sticky top-0 z-40 w-full glass-nav border-b border-border-subtle">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3 group focus:outline-none" aria-label="DevWaymark Home">
+      <div class="w-10 h-10 rounded-xl bg-forest p-1.5 flex items-center justify-center border border-slate-sage/60 shadow-sm transition-transform group-hover:scale-105">
+        <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
+          <path d="M21 19 L11 32 L21 45" stroke="#6C8480" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M43 19 L53 32 L43 45" stroke="#BAC8B1" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M32 14 L25 32 L32 50 Z" fill="#58714A" />
+          <path d="M32 14 L39 32 L32 50 Z" fill="#7B9669" />
+          <polygon points="32,23 36,32 32,41 28,32" fill="#F4F7F2" />
+        </svg>
+      </div>
+      <div>
+        <span class="font-bold text-lg tracking-tight text-text-main flex items-center gap-1.5">
+          DevWaymark
+          <span class="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-sage/15 text-forest dark:text-mint border border-sage/30 font-semibold tracking-wider">
+            Open Hub
+          </span>
+        </span>
+      </div>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1 text-sm font-medium" aria-label="Main navigation">
+      <a
+        href="/roadmaps"
+        class={`px-3.5 py-2 rounded-lg transition-colors ${
+          activeTab === 'roadmaps'
+            ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
+            : 'text-text-muted hover:text-text-main hover:bg-bg-surface-hover'
+        }`}
+      >
+        Roadmaps
+      </a>
+      <a
+        href="/start"
+        class={`px-3.5 py-2 rounded-lg transition-colors ${
+          activeTab === 'start'
+            ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
+            : 'text-text-muted hover:text-text-main hover:bg-bg-surface-hover'
+        }`}
+      >
+        Where do I start?
+      </a>
+      <a
+        href="/best-practices"
+        class={`px-3.5 py-2 rounded-lg transition-colors ${
+          activeTab === 'best-practices'
+            ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
+            : 'text-text-muted hover:text-text-main hover:bg-bg-surface-hover'
+        }`}
+      >
+        Best Practices
+      </a>
+      <a
+        href="/practice"
+        class={`px-3.5 py-2 rounded-lg transition-colors ${
+          activeTab === 'practice'
+            ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
+            : 'text-text-muted hover:text-text-main hover:bg-bg-surface-hover'
+        }`}
+      >
+        Practice Quizzes
+      </a>
+    </nav>
+
+    <div class="flex items-center gap-2.5">
+      <button
+        id="header-search-trigger"
+        type="button"
+        class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted hover:border-border-strong hover:bg-bg-surface-hover transition-colors text-xs font-mono"
+        aria-label="Quick search (Cmd+K)"
+      >
+        <svg class="w-3.5 h-3.5 text-text-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <span>Search</span>
+        <kbd class="px-1.5 py-0.5 rounded bg-bg-surface-hover text-text-muted text-[10px] border border-border-subtle">⌘K</kbd>
+      </button>
+
+      <a
+        href="/roadmaps"
+        id="global-progress-badge"
+        class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono font-medium"
+        title="Your local progress across all roadmaps"
+      >
+        <span class="w-2 h-2 rounded-full bg-sage animate-pulse"></span>
+        <span id="global-completed-count">0</span> done
+      </a>
+
+      <button
+        id="theme-toggle-btn"
+        type="button"
+        class="p-2 rounded-lg text-text-muted hover:bg-bg-surface-hover transition-colors"
+        aria-label="Toggle dark/light theme"
+      >
+        <svg id="theme-sun-icon" class="w-5 h-5 hidden dark:block text-mint" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="theme-moon-icon" class="w-5 h-5 block dark:hidden text-forest" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="md:hidden p-2 rounded-lg text-text-muted hover:bg-bg-surface-hover transition-colors"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-nav-drawer" class="hidden md:hidden border-b border-border-subtle bg-bg-surface px-4 pt-2 pb-4 space-y-1">
+    <a
+      href="/roadmaps"
+      class={`block px-3 py-2 rounded-lg text-base font-medium ${
+        activeTab === 'roadmaps' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
+      }`}
+    >
+      Roadmaps
+    </a>
+    <a
+      href="/start"
+      class={`block px-3 py-2 rounded-lg text-base font-medium ${
+        activeTab === 'start' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
+      }`}
+    >
+      Where do I start?
+    </a>
+    <a
+      href="/best-practices"
+      class={`block px-3 py-2 rounded-lg text-base font-medium ${
+        activeTab === 'best-practices' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
+      }`}
+    >
+      Best Practices
+    </a>
+    <a
+      href="/practice"
+      class={`block px-3 py-2 rounded-lg text-base font-medium ${
+        activeTab === 'practice' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
+      }`}
+    >
+      Practice Quizzes
+    </a>
+    <a
+      href="/contributing"
+      class="block px-3 py-2 rounded-lg text-base font-medium text-text-muted"
+    >
+      Contributing
+    </a>
+  </div>
+</header>
+
+<script is:inline>
+  const themeToggle = document.getElementById('theme-toggle-btn');
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.style.colorScheme = 'light';
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.style.colorScheme = 'dark';
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  const searchTrigger = document.getElementById('header-search-trigger');
+  searchTrigger?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('open-devwaymark-search'));
+  });
+
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileDrawer = document.getElementById('mobile-nav-drawer');
+  mobileBtn?.addEventListener('click', () => {
+    const isExpanded = mobileDrawer?.classList.toggle('hidden');
+    mobileBtn.setAttribute('aria-expanded', String(!isExpanded));
+  });
+
+  function updateGlobalProgressBadge() {
+    try {
+      const stored = localStorage.getItem('devwaymark_progress_v1');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const countEl = document.getElementById('global-completed-count');
+        if (countEl && Array.isArray(parsed.completedNodes)) {
+          countEl.textContent = String(parsed.completedNodes.length);
+        }
+      }
+    } catch (e) {}
+  }
+
+  window.addEventListener('waymark-progress-updated', updateGlobalProgressBadge);
+  document.addEventListener('DOMContentLoaded', updateGlobalProgressBadge);
+  updateGlobalProgressBadge();
+</script>

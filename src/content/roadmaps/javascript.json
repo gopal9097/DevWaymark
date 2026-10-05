@@ -1,0 +1,111 @@
+{
+  "id": "javascript",
+  "title": "JavaScript Deep Dive",
+  "tagline": "V8 engine internals, prototype chains, memory profiling, and modern ESNext standards",
+  "description": "From call stack execution contexts and event loop phases to prototype delegation, typed arrays, memory leaks, and high-performance JavaScript engines.",
+  "domain": "Languages",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 14,
+  "icon": "code",
+  "badge": "Core Language",
+  "featured": true,
+  "prerequisites": [
+    "Basic coding syntax knowledge"
+  ],
+  "stages": [
+    {
+      "id": "js-stage-1",
+      "number": 1,
+      "title": "Stage 1: Engine Internals & Memory Model",
+      "description": "How V8 parses, compiles (Ignition & TurboFan), manages memory, and executes code.",
+      "nodes": [
+        {
+          "id": "js-v8-internals",
+          "title": "V8 JIT Compilation, Hidden Classes & Inline Caching",
+          "description": "How V8 compiles JS to bytecode with Ignition, optimizes hot code with TurboFan, and uses hidden classes (Shapes) for fast property access.",
+          "whyItMatters": "Writing monomorphic functions with consistent object shapes allows the JIT compiler to inline properties and achieve C++-like performance.",
+          "importance": "recommended",
+          "estimatedHours": 12,
+          "resources": [
+            {
+              "title": "V8 Dev Blog: Fast Properties in V8",
+              "url": "https://v8.dev/blog/fast-properties",
+              "type": "article"
+            },
+            {
+              "title": "JavaScript Visualized: The JavaScript Engine",
+              "url": "https://dev.to/lydiahallie/javascript-visualized-the-javascript-engine-4d9q",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Avoid adding or deleting properties dynamically on objects after instantiation to preserve hidden classes.",
+            "Initialize all fields in constructor functions in the same order.",
+            "Understand deoptimizations (deopts) caused by polymorphic argument types."
+          ],
+          "interviewTips": "Senior roles love questions on how V8 optimizes object property lookup and what causes JIT deoptimization."
+        },
+        {
+          "id": "js-memory-leaks",
+          "title": "Garbage Collection & Memory Leak Diagnostics",
+          "description": "Mark-and-sweep GC algorithm, heap snapshots in Chrome DevTools, retained memory trees, closures, and detached DOM nodes.",
+          "whyItMatters": "Single-page applications that run for hours or days without reloading crash the browser tab if event listeners or caches leak memory.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "Chrome DevTools Memory Panel",
+              "url": "https://developer.chrome.com/docs/devtools/memory-problems/",
+              "type": "docs"
+            },
+            {
+              "title": "MDN Memory Management",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Uncleaned setInterval timers and forgotten event listeners hold references to outer scopes.",
+            "Use WeakMap and WeakSet when associating metadata with objects without preventing garbage collection.",
+            "Compare before-and-after heap snapshots to identify detached DOM elements."
+          ],
+          "interviewTips": "Be prepared to diagnose a simulated memory leak and explain the difference between Shallow Size and Retained Size."
+        }
+      ]
+    },
+    {
+      "id": "js-stage-2",
+      "number": 2,
+      "title": "Stage 2: Closures, Prototypes & Object Delegation",
+      "description": "Lexical scoping, closure memory costs, prototype inheritance, and modern ES classes.",
+      "nodes": [
+        {
+          "id": "js-prototypes-closures",
+          "title": "Prototypes & Lexical Scope Closures",
+          "description": "How the prototype chain delegation (__proto__, Object.getPrototypeOf) works and how functions retain lexical scope environments.",
+          "whyItMatters": "Misunderstanding closures leads to unexpected variable capture in loops. Prototypes are the fundamental inheritance model of JavaScript.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "You Don't Know JS: Scope & Closures",
+              "url": "https://github.com/getify/You-Dont-Know-JS",
+              "type": "article"
+            },
+            {
+              "title": "MDN Inheritance and the prototype chain",
+              "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "A closure is formed whenever a function accesses variables outside its immediate lexical scope.",
+            "JavaScript objects do not copy parent methods; they delegate lookups up the prototype chain until null is reached.",
+            "Modern `class` syntax is syntactic sugar over prototypal inheritance."
+          ],
+          "interviewTips": "You will almost certainly be asked to implement a debounce or throttle function using closures, or explain `this` binding in arrow vs regular functions."
+        }
+      ]
+    }
+  ]
+}

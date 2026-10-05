@@ -1,0 +1,122 @@
+---
+---
+
+<div
+  id="topic-drawer-backdrop"
+  class="fixed inset-0 z-50 hidden bg-forest-deep/70 backdrop-blur-sm transition-opacity duration-200"
+  aria-hidden="true"
+>
+  <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+    <div
+      id="topic-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="topic-modal-title"
+      class="w-screen max-w-xl bg-bg-surface border-l border-border-subtle shadow-2xl flex flex-col justify-between overflow-y-auto"
+    >
+      <div class="p-6 border-b border-border-subtle flex items-center justify-between sticky top-0 bg-bg-surface/95 backdrop-blur z-10">
+        <div class="flex items-center gap-2">
+          <span id="topic-stage-badge" class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-sage/15 text-forest dark:text-mint border border-sage/30">
+            Stage 1
+          </span>
+          <span id="topic-importance-badge" class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted">
+            Essential
+          </span>
+        </div>
+        <button
+          id="topic-close-btn"
+          type="button"
+          class="p-2 rounded-xl text-text-muted hover:text-text-main hover:bg-bg-surface-hover transition-colors"
+          aria-label="Close topic panel"
+        >
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-6 flex-1">
+        <div>
+          <div class="flex items-center gap-2 text-xs text-text-faint font-mono mb-1">
+            <span id="topic-time-estimate">12 hours estimated</span>
+          </div>
+          <h2 id="topic-modal-title" class="text-2xl font-bold text-text-main leading-tight"></h2>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold">
+            Overview
+          </h3>
+          <p id="topic-description" class="text-sm text-text-muted leading-relaxed"></p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-sage/10 dark:bg-sage/15 border border-sage/30 space-y-1.5">
+          <div class="flex items-center gap-2 text-forest dark:text-mint text-xs font-semibold font-mono uppercase">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Why It Matters in Production
+          </div>
+          <p id="topic-why-it-matters" class="text-xs text-text-main leading-relaxed"></p>
+        </div>
+
+        <div id="topic-takeaways-container" class="space-y-2">
+          <h3 class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold">
+            Core Takeaways
+          </h3>
+          <ul id="topic-takeaways-list" class="space-y-1.5 text-xs text-text-muted list-disc list-inside"></ul>
+        </div>
+
+        <div class="space-y-3">
+          <h3 class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold">
+            Curated Resources (Free & Verified)
+          </h3>
+          <div id="topic-resources-list" class="space-y-2"></div>
+        </div>
+
+        <div id="topic-interview-container" class="p-4 rounded-xl bg-slate-sage/10 dark:bg-slate-sage/15 border border-slate-sage/30 space-y-1">
+          <div class="flex items-center gap-1.5 text-forest dark:text-mint text-xs font-semibold font-mono uppercase">
+            <span>💡</span> Interview Insight
+          </div>
+          <p id="topic-interview-tip" class="text-xs text-text-muted leading-relaxed"></p>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-border-subtle bg-bg-surface sticky bottom-0 flex items-center justify-between gap-4">
+        <button
+          id="topic-toggle-completed-btn"
+          type="button"
+          class="flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span id="topic-toggle-btn-label">Mark as Done</span>
+        </button>
+
+        <div class="flex items-center gap-1 shrink-0">
+          <button
+            id="topic-prev-btn"
+            type="button"
+            class="p-2.5 rounded-xl border border-border-subtle text-text-muted hover:bg-bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed"
+            title="Previous topic"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            id="topic-next-btn"
+            type="button"
+            class="p-2.5 rounded-xl border border-border-subtle text-text-muted hover:bg-bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed"
+            title="Next topic"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

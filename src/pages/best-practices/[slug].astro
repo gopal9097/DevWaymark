@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const practices = await getCollection('best-practices');
+  return practices.map((p) => ({
+    params: { slug: p.data.id },
+    props: { practice: p.data },
+  }));
+}
+
+const { practice } = Astro.props;
+---
+
+<BaseLayout
+  title={`${practice.title} — DevWaymark Best Practices`}
+  description={practice.summary}
+  activeTab="best-practices"
+>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+    <nav class="flex items-center gap-2 text-xs font-mono text-text-faint mb-6" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-text-main">Home</a>
+      <span>/</span>
+      <a href="/best-practices" class="hover:text-text-main">Best Practices</a>
+      <span>/</span>
+      <span class="text-forest dark:text-mint font-semibold">{practice.title}</span>
+    </nav>
+
+    <header class="space-y-4 pb-8 border-b border-border-subtle">
+      <div class="flex items-center gap-2">
+        <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-sage/15 text-forest dark:text-mint border border-sage/30">
+          {practice.area}
+        </span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted border border-border-subtle">
+          {practice.readTime}
+        </span>
+        <span class="text-xs px-2.5 py-0.5 rounded-full font-mono font-medium bg-bg-surface-hover text-text-muted border border-border-subtle">
+          {practice.level}
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
+        {practice.title}
+      </h1>
+      <p class="text-base text-text-muted leading-relaxed">
+        {practice.summary}
+      </p>
+    </header>
+
+    <section class="my-8 p-6 rounded-2xl bg-bg-page border border-border-subtle space-y-3">
+      <h2 class="text-xs font-mono uppercase tracking-wider text-text-faint font-semibold flex items-center gap-2">
+        <span>⭐</span> Non-Negotiable Core Principles
+      </h2>
+      <ul class="space-y-2 text-sm text-text-main">
+        {practice.keyPrinciples.map((principle) => (
+          <li class="flex items-start gap-2.5">
+            <span class="text-sage font-bold shrink-0 mt-0.5">✓</span>
+            <span>{principle}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="space-y-12 my-12">
+      {practice.rules.map((rule, idx) => (
+        <div class="space-y-6">
+          <div class="space-y-1">
+            <span class="text-xs font-mono text-forest dark:text-mint font-bold">Rule {idx + 1}</span>
+            <h3 class="text-xl font-bold text-text-main">
+              {rule.title}
+            </h3>
+            <p class="text-sm text-text-muted leading-relaxed">
+              {rule.description}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {rule.badExample && (
+              <div class="rounded-xl border border-forest/30 bg-forest/5 overflow-hidden">
+                <div class="px-4 py-2 bg-forest/15 border-b border-forest/20 flex items-center justify-between text-xs font-mono font-semibold text-forest dark:text-mint">
+                  <span>❌ Anti-Pattern (Don't do this)</span>
+                </div>
+                <pre class="p-4 text-xs font-mono text-text-main overflow-x-auto leading-relaxed whitespace-pre"><code>{rule.badExample.code}</code></pre>
+                <div class="p-3 bg-bg-surface/80 border-t border-forest/20 text-xs text-text-muted italic">
+                  {rule.badExample.explanation}
+                </div>
+              </div>
+            )}
+
+            {rule.goodExample && (
+              <div class="rounded-xl border border-sage/40 bg-sage/5 overflow-hidden">
+                <div class="px-4 py-2 bg-sage/15 border-b border-sage/30 flex items-center justify-between text-xs font-mono font-semibold text-forest dark:text-mint">
+                  <span>✓ Production Pattern (Do this instead)</span>
+                </div>
+                <pre class="p-4 text-xs font-mono text-text-main overflow-x-auto leading-relaxed whitespace-pre"><code>{rule.goodExample.code}</code></pre>
+                <div class="p-3 bg-bg-surface/80 border-t border-sage/30 text-xs text-text-muted italic">
+                  {rule.goodExample.explanation}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <section class="my-12 p-6 sm:p-8 rounded-2xl bg-bg-surface border border-border-subtle shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-bold text-text-main flex items-center gap-2">
+          <span>📋</span> Production Engineering Checklist
+        </h2>
+        <span class="text-xs font-mono text-text-faint">Interactive</span>
+      </div>
+      <p class="text-xs text-text-muted">
+        Review your team's code review and deployment process against these standards:
+      </p>
+
+      <div class="space-y-2.5 pt-2">
+        {practice.productionChecklist.map((item, itemIdx) => (
+          <label class="flex items-start gap-3 p-3 rounded-xl border border-border-subtle hover:bg-bg-surface-hover transition-colors cursor-pointer text-xs sm:text-sm text-text-main">
+            <input
+              type="checkbox"
+              class="checklist-checkbox mt-0.5 rounded border-border-strong text-sage focus:ring-sage accent-[#7B9669]"
+              data-item-key={`${practice.id}-check-${itemIdx}`}
+            />
+            <span class="leading-relaxed">{item}</span>
+          </label>
+        ))}
+      </div>
+    </section>
+
+    <div class="pt-8 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
+      <a href="/best-practices" class="text-text-muted hover:text-text-main transition-colors">
+        ← Back to All Guides
+      </a>
+      <a href="/practice" class="text-forest dark:text-mint font-semibold hover:underline">
+        Test knowledge with quizzes →
+      </a>
+    </div>
+  </article>
+</BaseLayout>
+
+<script is:inline define:vars={{ practiceId: practice.id }}>
+  const STORAGE_KEY = `devwaymark_checklist_${practiceId}`;
+
+  function loadChecklist() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const checkedMap = JSON.parse(raw);
+        document.querySelectorAll('.checklist-checkbox').forEach((box) => {
+          const key = box.getAttribute('data-item-key');
+          if (key && checkedMap[key]) {
+            box.checked = true;
+          }
+        });
+      }
+    } catch (e) {}
+  }
+
+  function saveChecklist() {
+    try {
+      const checkedMap = {};
+      document.querySelectorAll('.checklist-checkbox').forEach((box) => {
+        const key = box.getAttribute('data-item-key');
+        if (key) checkedMap[key] = box.checked;
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedMap));
+    } catch (e) {}
+  }
+
+  document.querySelectorAll('.checklist-checkbox').forEach((box) => {
+    box.addEventListener('change', saveChecklist);
+  });
+
+  document.addEventListener('DOMContentLoaded', loadChecklist);
+</script>

@@ -1,0 +1,180 @@
+{
+  "id": "devops",
+  "title": "DevOps & Site Reliability",
+  "tagline": "Infrastructure automation, CI/CD pipelines, container orchestration, and system observability",
+  "description": "Build robust, repeatable production infrastructure from Linux kernel tuning and Docker containerization to multi-cluster Kubernetes, Terraform IaC, and full-stack OpenTelemetry observability.",
+  "domain": "DevOps & Cloud",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 22,
+  "icon": "terminal",
+  "badge": "Industry Standard",
+  "featured": true,
+  "prerequisites": [
+    "Familiarity with at least one scripting language (Bash, Python, Go)",
+    "Basic command line fluency"
+  ],
+  "stages": [
+    {
+      "id": "devops-stage-1",
+      "number": 1,
+      "title": "Stage 1: Linux Fundamentals & Shell Automation",
+      "description": "Operating system internals, processes, signals, permissions, and automated scripting.",
+      "nodes": [
+        {
+          "id": "devops-linux-processes",
+          "title": "Linux Processes, Signals & Systemd",
+          "description": "Process lifecycle (PID, fork/exec), signals (SIGTERM, SIGKILL), resource limits (cgroups), and service management via systemd unit files.",
+          "whyItMatters": "Containers run as isolated Linux processes. Understanding how signals propagate is required for zero-downtime rolling deploys and graceful shutdown.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            {
+              "title": "Linux Journey (Interactive Course)",
+              "url": "https://linuxjourney.com/",
+              "type": "interactive"
+            },
+            {
+              "title": "systemd Service Management Guide",
+              "url": "https://www.freedesktop.org/software/systemd/man/systemd.service.html",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Always handle SIGTERM gracefully by completing in-flight requests within a grace period before exiting.",
+            "Use systemctl and journalctl for debugging daemon lifecycle and log streaming.",
+            "Inspect top/htop, lsof, and netstat/ss to diagnose port collisions and socket exhaustion."
+          ],
+          "interviewTips": "Interviewers will ask what happens when a process receives SIGKILL vs SIGTERM, and how PID 1 reaps zombie processes."
+        },
+        {
+          "id": "devops-networking",
+          "title": "Linux Networking, DNS & Firewalls",
+          "description": "Routing tables, DNS resolution order (/etc/resolv.conf), iptables/nftables, and network diagnostic utilities (curl, dig, traceroute, tcpdump).",
+          "whyItMatters": "Over 70% of production infrastructure outages trace back to DNS misconfigurations or routing/firewall drops between microservices.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "Julia Evans: Networking Zines",
+              "url": "https://jvns.ca/networking-cards/",
+              "type": "article"
+            },
+            {
+              "title": "Cloudflare: How DNS Works",
+              "url": "https://www.cloudflare.com/learning/dns/what-is-dns/",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Understand DNS record types: A, AAAA, CNAME, ALIAS, and TTL caching implications.",
+            "Use tcpdump and Wireshark to inspect packet flow when TCP handshakes time out.",
+            "Configure ulimit file descriptor and socket limits to support high concurrent connections."
+          ],
+          "interviewTips": "Be prepared to walk through step-by-step how a server resolves a domain name through recursive and authoritative DNS servers."
+        }
+      ]
+    },
+    {
+      "id": "devops-stage-2",
+      "number": 2,
+      "title": "Stage 2: Containers & Docker Internals",
+      "description": "Linux namespaces, cgroups, layered union filesystems, multi-stage Docker builds, and container security.",
+      "nodes": [
+        {
+          "id": "devops-docker-optimization",
+          "title": "Multi-Stage Docker Builds & Layer Caching",
+          "description": "Crafting lightweight, minimal container images using distroless/alpine bases, ordering Dockerfile directives for optimal cache reuse, and non-root execution.",
+          "whyItMatters": "Bloated 1GB+ container images slow down CI/CD deployments and increase vulnerability attack surfaces. Multi-stage builds yield slim 50MB production images.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            {
+              "title": "Docker Official Docs: Multi-stage builds",
+              "url": "https://docs.docker.com/build/building/multi-stage/",
+              "type": "docs"
+            },
+            {
+              "title": "OWASP Docker Security Cheat Sheet",
+              "url": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Order Dockerfile commands from least-frequently changed (dependencies) to most-frequently changed (application source).",
+            "Never run containers as root in production; declare USER nonroot.",
+            "Use .dockerignore to avoid copying node_modules or secret credentials into image layers."
+          ],
+          "interviewTips": "Expect questions on how Linux namespaces (PID, NET, MNT) and cgroups isolate containers without a virtual machine hypervisor."
+        }
+      ]
+    },
+    {
+      "id": "devops-stage-3",
+      "number": 3,
+      "title": "Stage 3: CI/CD & Automated Pipelines",
+      "description": "Automated linting, testing, artifact signing, matrix builds, and continuous deployment workflows.",
+      "nodes": [
+        {
+          "id": "devops-cicd-github-actions",
+          "title": "GitHub Actions & Pipeline Automation",
+          "description": "Writing declarative workflows, reusable composite actions, secret management with OIDC, and staging/production promotion gates.",
+          "whyItMatters": "Manual deployments are error-prone and slow. Automated pipelines ensure every pull request is tested, scanned for CVEs, and securely deployed.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            {
+              "title": "GitHub Actions Documentation",
+              "url": "https://docs.github.com/en/actions",
+              "type": "docs"
+            },
+            {
+              "title": "Google Cloud OIDC with GitHub Actions",
+              "url": "https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions",
+              "type": "article"
+            }
+          ],
+          "keyTakeaways": [
+            "Use OpenID Connect (OIDC) instead of static long-lived cloud credentials in CI runners.",
+            "Implement pipeline caching for dependency packages to cut build times by 75%.",
+            "Enforce branch protection rules requiring passing CI checks and mandatory peer approvals."
+          ],
+          "interviewTips": "Be prepared to design a complete CI/CD pipeline from PR creation to canary release in Kubernetes."
+        }
+      ]
+    },
+    {
+      "id": "devops-stage-4",
+      "number": 4,
+      "title": "Stage 4: Kubernetes Orchestration & GitOps",
+      "description": "Pods, Deployments, Services, Ingress, ConfigMaps/Secrets, Helm charts, and declarative GitOps with ArgoCD.",
+      "nodes": [
+        {
+          "id": "devops-kubernetes-architecture",
+          "title": "Kubernetes Control Plane & Workload Primitives",
+          "description": "Control plane components (API Server, etcd, Scheduler, Controller Manager), kubelet, kube-proxy, and workload reconciliation loops.",
+          "whyItMatters": "Kubernetes provides self-healing, automatic rolling updates, horizontal autoscaling (HPA), and workload portability across cloud providers.",
+          "importance": "essential",
+          "estimatedHours": 24,
+          "resources": [
+            {
+              "title": "Kubernetes Official Docs",
+              "url": "https://kubernetes.io/docs/home/",
+              "type": "docs"
+            },
+            {
+              "title": "ArgoCD GitOps Overview",
+              "url": "https://argo-cd.readthedocs.io/en/stable/",
+              "type": "docs"
+            }
+          ],
+          "keyTakeaways": [
+            "Always define CPU and memory resource requests and limits to prevent noisy neighbor evictions.",
+            "Configure liveness and readiness probes properly to avoid routing traffic to unready pods.",
+            "Use GitOps (ArgoCD or Flux) to ensure cluster state reconciles directly with Git commits."
+          ],
+          "interviewTips": "Interviewers will ask about the difference between readiness and liveness probes, and what happens when an etcd node fails."
+        }
+      ]
+    }
+  ]
+}

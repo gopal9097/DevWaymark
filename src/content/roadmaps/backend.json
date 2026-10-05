@@ -1,0 +1,175 @@
+{
+  "id": "backend",
+  "title": "Backend Engineering",
+  "tagline": "Server runtimes, distributed systems, resilient APIs, and data architecture",
+  "description": "Master server-side architectures from low-level networking and HTTP protocols to transactional databases, caching layers, authentication protocols, and high-throughput event queues.",
+  "domain": "Backend",
+  "difficulty": "Intermediate",
+  "estimatedWeeks": 20,
+  "icon": "server",
+  "badge": "High Demand",
+  "featured": true,
+  "prerequisites": ["Programming foundations in one language (JS/TS, Go, Python, Java)", "Basic CLI familiarity"],
+  "stages": [
+    {
+      "id": "be-stage-1",
+      "number": 1,
+      "title": "Stage 1: Networking & API Protocols",
+      "description": "Deep dive into OSI model, TCP/UDP, TLS handshakes, HTTP/1.1 vs HTTP/2 vs HTTP/3, and modern API protocols.",
+      "nodes": [
+        {
+          "id": "be-http-protocols",
+          "title": "HTTP Internals, Status Codes & Idempotency",
+          "description": "How client-server communication functions over TCP/TLS: request headers, response codes, connection pooling, and idempotent method semantics.",
+          "whyItMatters": "Non-idempotent endpoints cause duplicate payments or inventory deductions on network retries. Correct status codes allow CDNs and clients to handle caching and errors properly.",
+          "importance": "essential",
+          "estimatedHours": 14,
+          "resources": [
+            { "title": "MDN HTTP Overview", "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview", "type": "docs" },
+            { "title": "High Performance Browser Networking (Ilya Grigorik)", "url": "https://hpbn.co/", "type": "article" },
+            { "title": "Designing Idempotent APIs (Stripe Engineering)", "url": "https://stripe.com/blog/idempotency", "type": "article" }
+          ],
+          "keyTakeaways": [
+            "GET, PUT, and DELETE methods must be idempotent; POST is non-idempotent.",
+            "Use Idempotency-Key headers in payment and mutation APIs to safely deduplicate retries.",
+            "Choose between 401 Unauthorized (unauthenticated) and 403 Forbidden (authenticated but not permitted)."
+          ],
+          "interviewTips": "Be ready to explain what happens at the network layer during an HTTPS TLS 1.3 handshake and TCP 3-way handshake."
+        },
+        {
+          "id": "be-rest-grpc",
+          "title": "API Architectures: REST vs gRPC vs GraphQL",
+          "description": "Evaluating API communication paradigms: JSON-over-HTTP REST, binary Protocol Buffers over HTTP/2 with gRPC, and client-specified GraphQL queries.",
+          "whyItMatters": "Internal microservices communicating via heavy JSON text create substantial serialization overhead. gRPC provides compact binary serialization and bi-directional streaming.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            { "title": "gRPC Official Documentation", "url": "https://grpc.io/docs/", "type": "docs" },
+            { "title": "Google Cloud API Design Guide", "url": "https://cloud.google.com/apis/design", "type": "docs" },
+            { "title": "GraphQL Foundation Specs", "url": "https://graphql.org/learn/", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Use REST/JSON for public-facing developer APIs where universal tooling and human readability matter.",
+            "Use gRPC for high-throughput, low-latency east-west internal microservice communication.",
+            "Use Protocol Buffers schema definitions as the single source of truth for cross-language contracts."
+          ],
+          "interviewTips": "Interviewers frequently ask you to design an API schema and discuss tradeoffs between REST over-fetching and GraphQL query-complexity Denial of Service risks."
+        }
+      ]
+    },
+    {
+      "id": "be-stage-2",
+      "number": 2,
+      "title": "Stage 2: Database Storage & Query Optimization",
+      "description": "Relational data modeling, ACID transaction guarantees, isolation levels, indexing strategies, and connection pooling.",
+      "nodes": [
+        {
+          "id": "be-sql-indexing",
+          "title": "PostgreSQL Internals, B-Trees & Indexing",
+          "description": "How relational storage engines store pages on disk, navigate B-Tree indexes, and execute query plans via EXPLAIN ANALYZE.",
+          "whyItMatters": "Unindexed table scans degrade from milliseconds to minutes as tables grow to millions of rows, locking database CPU and crashing applications.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            { "title": "Use The Index, Luke (SQL Indexing Guide)", "url": "https://use-the-index-luke.com/", "type": "article" },
+            { "title": "PostgreSQL Documentation on Index Types", "url": "https://www.postgresql.org/docs/current/indexes-types.html", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Composite indexes must follow the Leftmost Prefix rule to match query WHERE clauses.",
+            "Avoid indexing columns with low selectivity (like boolean flags) unless using partial indexes.",
+            "Always inspect EXPLAIN (ANALYZE, BUFFERS) to verify if an index scan or sequential scan is used."
+          ],
+          "interviewTips": "You will be asked to explain how a B-Tree operates, what a covering index is, and why `SELECT *` hurts performance."
+        },
+        {
+          "id": "be-transactions-acid",
+          "title": "ACID Transactions & Isolation Levels",
+          "description": "Atomicity, Consistency, Isolation, and Durability: Dirty reads, non-repeatable reads, phantom reads, and Serializable isolation.",
+          "whyItMatters": "Concurrent balance updates or seat reservations without proper transaction isolation cause race conditions and financial double-spending.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            { "title": "Designing Data-Intensive Applications (Martin Kleppmann)", "url": "https://dataintensive.net/", "type": "article" },
+            { "title": "PostgreSQL Transaction Isolation", "url": "https://www.postgresql.org/docs/current/transaction-iso.html", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Default isolation in PostgreSQL is Read Committed; it prevents dirty reads but allows non-repeatable reads.",
+            "Use optimistic locking (version column) or `SELECT ... FOR UPDATE` (pessimistic locking) to prevent lost updates.",
+            "Keep transactions as short as possible to prevent connection pool exhaustion and lock contention."
+          ],
+          "interviewTips": "Be prepared to explain the difference between Read Committed and Serializable isolation levels and write a deadlock-free concurrent update."
+        }
+      ]
+    },
+    {
+      "id": "be-stage-3",
+      "number": 3,
+      "title": "Stage 3: Caching, Queues & Asynchronous Jobs",
+      "description": "Redis data structures, caching topologies, cache invalidation, and asynchronous job processing with message brokers.",
+      "nodes": [
+        {
+          "id": "be-caching-redis",
+          "title": "Distributed Caching Strategies with Redis",
+          "description": "Cache-aside, write-through, write-behind patterns, TTL expiration, cache stampede prevention, and Redis data primitives.",
+          "whyItMatters": "Sub-millisecond in-memory caches protect primary databases from overwhelming read spikes during traffic surges.",
+          "importance": "essential",
+          "estimatedHours": 16,
+          "resources": [
+            { "title": "Redis Documentation", "url": "https://redis.io/docs/latest/", "type": "docs" },
+            { "title": "Cache-Aside Pattern (Microsoft Architecture)", "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Cache-aside pattern: application reads from cache; on miss, reads from DB and writes to cache with TTL.",
+            "Prevent cache stampedes (thundering herd) with distributed mutex locks or probabilistic early expiration.",
+            "Add jitter (random offset) to cache expiration times so thousands of keys don't expire in the same second."
+          ],
+          "interviewTips": "Classic interview topic: how to handle cache penetration, cache breakdown, and cache avalanche."
+        },
+        {
+          "id": "be-message-queues",
+          "title": "Event-Driven Queues & Kafka/RabbitMQ",
+          "description": "Decoupling workloads with asynchronous message queues: point-to-point brokers (RabbitMQ) vs distributed commit logs (Apache Kafka).",
+          "whyItMatters": "Synchronous HTTP calls between services create cascading failures. Message queues provide backpressure and reliable delivery.",
+          "importance": "essential",
+          "estimatedHours": 20,
+          "resources": [
+            { "title": "Confluent Kafka Architecture Guide", "url": "https://docs.confluent.io/platform/current/kafka/architecture.html", "type": "docs" },
+            { "title": "RabbitMQ Tutorials", "url": "https://www.rabbitmq.com/tutorials", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "RabbitMQ pushes messages to consumers and deletes upon ack; Kafka is an append-only distributed log with consumer offsets.",
+            "Design consumers to be idempotent to safely handle at-least-once message delivery guarantees.",
+            "Implement Dead Letter Queues (DLQ) to quarantine unprocessable messages without halting the pipeline."
+          ],
+          "interviewTips": "Expect questions comparing push vs pull queue models and explaining how Kafka consumer groups distribute partition reading."
+        }
+      ]
+    },
+    {
+      "id": "be-stage-4",
+      "number": 4,
+      "title": "Stage 4: Auth, Resilience & Production Operations",
+      "description": "OAuth 2.1, OIDC, JWT security, circuit breakers, rate limiting, and observability.",
+      "nodes": [
+        {
+          "id": "be-auth-security",
+          "title": "Authentication, OAuth2 & JWT Security",
+          "description": "Password hashing with Argon2/Bcrypt, session cookies vs stateless JWTs, OAuth 2.1 Authorization Code with PKCE, and RBAC.",
+          "whyItMatters": "Flawed authentication architecture leads to token forgery, broken access controls (IDOR), and catastrophic data breaches.",
+          "importance": "essential",
+          "estimatedHours": 18,
+          "resources": [
+            { "title": "OAuth 2.1 Draft Spec", "url": "https://oauth.net/2.1/", "type": "docs" },
+            { "title": "OWASP Authentication Cheat Sheet", "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html", "type": "docs" }
+          ],
+          "keyTakeaways": [
+            "Never roll custom cryptographic algorithms; use Argon2id for password hashing.",
+            "Short-lived access tokens (15m) paired with rotating refresh tokens mitigate stolen token replay risks.",
+            "Always enforce authorization checks on the server by verifying resource ownership against the authenticated subject."
+          ],
+          "interviewTips": "Be prepared to explain how to safely revoke JWTs and how OAuth 2.0 PKCE flow works for single-page apps and mobile clients."
+        }
+      ]
+    }
+  ]
+}

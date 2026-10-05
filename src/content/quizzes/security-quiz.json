@@ -1,0 +1,38 @@
+{
+  "id": "security-quiz",
+  "title": "Cybersecurity & Web Defense Quiz",
+  "track": "Security",
+  "description": "Validate your ability to identify and eliminate web vulnerabilities, authentication flaws, and API exploits.",
+  "questions": [
+    {
+      "id": "sec-q1",
+      "question": "What makes Broken Object Level Authorization (BOLA/IDOR) the most dangerous API vulnerability according to OWASP?",
+      "options": [
+        "It forces the client browser to download unauthorized cryptocurrency miners.",
+        "The API authenticates the user, but fails to check whether the authenticated user actually has permission to read or modify the specific requested resource ID.",
+        "It overflows the CPU registers on the server, causing a physical hardware crash.",
+        "It disables HTTPS encryption for all users on the domain."
+      ],
+      "correctAnswer": 1,
+      "explanation": "With BOLA/IDOR, an attacker is legitimately logged in, but by simply changing `/api/documents/100` to `/api/documents/101`, they gain access to another customer's private data because the backend failed to verify resource ownership against the session subject.",
+      "difficulty": "Intermediate",
+      "topic": "OWASP Top 10 & API Security",
+      "relatedRoadmapSlug": "cybersecurity"
+    },
+    {
+      "id": "sec-q2",
+      "question": "Why should passwords NEVER be hashed using fast cryptographic hash functions like SHA-256 or MD5 in production?",
+      "options": [
+        "Because SHA-256 and MD5 produce non-alphanumeric characters that crash SQL databases.",
+        "Because modern GPUs and ASIC rigs can calculate billions of SHA-256 hashes per second, allowing attackers to crack password databases via brute-force and rainbow tables.",
+        "Because SHA-256 is deprecated by the W3C consortium.",
+        "Because SHA-256 passwords can be decrypted using an SSL private key."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Fast hash functions are engineered for high-throughput checksum verification. Passwords require computationally expensive, memory-hard algorithms like Argon2id or Bcrypt with deliberate work factors (costs) and salts, which dramatically slows down offline GPU cracking attacks.",
+      "difficulty": "Intermediate",
+      "topic": "Password Hashing & Cryptography",
+      "relatedRoadmapSlug": "cybersecurity"
+    }
+  ]
+}

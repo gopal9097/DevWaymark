@@ -1,0 +1,14 @@
+{
+  "terminal.integrated.env.osx": {
+    "PATH": "/Users/gopalkumarsingh/Library/pnpm:/Users/gopalkumarsingh/.local/bin:${env:PATH}"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.astro": "astro"
+  },
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "astro-build.astro-vscode"
+}
