@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { url, BASE_URL } from '../lib/paths';
 
 const allRoadmaps = await getCollection('roadmaps');
 const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.data]));
@@ -247,7 +248,7 @@ const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.dat
               <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
                 <a
                   id="result-primary-link"
-                  href="/roadmaps/frontend"
+                  href={url('/roadmaps/frontend')}
                   class="w-full sm:w-auto flex-1 py-3.5 px-6 rounded-xl bg-forest hover:bg-forest-dark dark:bg-sage dark:text-forest-deep text-white font-semibold text-sm text-center shadow-md transition-all flex items-center justify-center gap-2"
                 >
                   <span>Start This Roadmap</span>
@@ -274,7 +275,7 @@ const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.dat
               </div>
               <a
                 id="runner-up-link"
-                href="/roadmaps"
+                href={url('/roadmaps')}
                 class="shrink-0 px-3 py-1.5 rounded-lg border border-border-subtle text-xs font-mono hover:border-sage transition-colors"
               >
                 View Track →
@@ -294,7 +295,7 @@ const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.dat
   </section>
 </BaseLayout>
 
-<script is:inline define:vars={{ roadmapIndex }}>
+<script is:inline define:vars={{ roadmapIndex, BASE_URL }}>
   let currentStep = 1;
   const totalSteps = 4;
   const scores = {};
@@ -371,7 +372,7 @@ const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.dat
     if (titleEl) titleEl.textContent = topRoadmap.title;
     if (taglineEl) taglineEl.textContent = topRoadmap.tagline;
     if (difficultyEl) difficultyEl.textContent = `${topRoadmap.difficulty} • ~${topRoadmap.estimatedWeeks} Weeks`;
-    if (primaryLink) primaryLink.setAttribute('href', `/roadmaps/${topRoadmap.id}`);
+    if (primaryLink) primaryLink.setAttribute('href', `${BASE_URL}/roadmaps/${topRoadmap.id}`);
 
     if (rationaleEl) {
       rationaleEl.textContent = `Your goals focus on ${topRoadmap.domain}. The ${topRoadmap.title} roadmap gives you a practical, step-by-step path based on what modern tech teams expect.`;
@@ -401,7 +402,7 @@ const roadmapIndex = Object.fromEntries(allRoadmaps.map((r) => [r.data.id, r.dat
 
     if (runnerTitle) runnerTitle.textContent = runnerUp.title;
     if (runnerTagline) runnerTagline.textContent = runnerUp.tagline;
-    if (runnerLink) runnerLink.setAttribute('href', `/roadmaps/${runnerUp.id}`);
+    if (runnerLink) runnerLink.setAttribute('href', `${BASE_URL}/roadmaps/${runnerUp.id}`);
   }
 
   document.querySelectorAll('.option-btn').forEach((btn) => {

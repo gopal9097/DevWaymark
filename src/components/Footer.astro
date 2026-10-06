@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/paths';
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -6,7 +8,7 @@ const currentYear = new Date().getFullYear();
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
       <div class="md:col-span-1 space-y-4">
-        <a href="/" class="flex items-center gap-2.5">
+        <a href={url('/')} class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-forest p-1 flex items-center justify-center border border-slate-sage/60">
             <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
               <path d="M21 19 L11 32 L21 45" stroke="#6C8480" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -33,12 +35,12 @@ const currentYear = new Date().getFullYear();
           Career Tracks
         </h3>
         <ul class="space-y-2 text-xs text-text-muted font-medium">
-          <li><a href="/roadmaps/frontend" class="hover:text-sage transition-colors">Frontend Engineering</a></li>
-          <li><a href="/roadmaps/backend" class="hover:text-sage transition-colors">Backend Engineering</a></li>
-          <li><a href="/roadmaps/devops" class="hover:text-sage transition-colors">DevOps & Site Reliability</a></li>
-          <li><a href="/roadmaps/system-design" class="hover:text-sage transition-colors">System Design & Architecture</a></li>
-          <li><a href="/roadmaps/ai-ml" class="hover:text-sage transition-colors">AI & LLM Applications</a></li>
-          <li><a href="/roadmaps" class="text-sage dark:text-mint font-semibold hover:underline">View all 12 tracks →</a></li>
+          <li><a href={url('/roadmaps/frontend')} class="hover:text-sage transition-colors">Frontend Engineering</a></li>
+          <li><a href={url('/roadmaps/backend')} class="hover:text-sage transition-colors">Backend Engineering</a></li>
+          <li><a href={url('/roadmaps/devops')} class="hover:text-sage transition-colors">DevOps & Site Reliability</a></li>
+          <li><a href={url('/roadmaps/system-design')} class="hover:text-sage transition-colors">System Design & Architecture</a></li>
+          <li><a href={url('/roadmaps/ai-ml')} class="hover:text-sage transition-colors">AI & LLM Applications</a></li>
+          <li><a href={url('/roadmaps')} class="text-sage dark:text-mint font-semibold hover:underline">View all 12 tracks →</a></li>
         </ul>
       </div>
 
@@ -47,10 +49,10 @@ const currentYear = new Date().getFullYear();
           Learning Tools
         </h3>
         <ul class="space-y-2 text-xs text-text-muted font-medium">
-          <li><a href="/start" class="hover:text-sage transition-colors">Where do I start? (Guide)</a></li>
-          <li><a href="/best-practices" class="hover:text-sage transition-colors">Production Best Practices</a></li>
-          <li><a href="/practice" class="hover:text-sage transition-colors">Topic Practice Quizzes</a></li>
-          <li><a href="/contributing" class="hover:text-sage transition-colors">Contributing & Schema</a></li>
+          <li><a href={url('/start')} class="hover:text-sage transition-colors">Where do I start? (Guide)</a></li>
+          <li><a href={url('/best-practices')} class="hover:text-sage transition-colors">Production Best Practices</a></li>
+          <li><a href={url('/practice')} class="hover:text-sage transition-colors">Topic Practice Quizzes</a></li>
+          <li><a href={url('/contributing')} class="hover:text-sage transition-colors">Contributing & Schema</a></li>
         </ul>
       </div>
 
@@ -77,11 +79,11 @@ const currentYear = new Date().getFullYear();
         © {currentYear} DevWaymark. MIT Licensed. Open to the world.
       </div>
       <div class="flex items-center gap-4">
-        <a href="/contributing" class="hover:text-text-main transition-colors">Add a Roadmap</a>
+        <a href={url('/contributing')} class="hover:text-text-main transition-colors">Add a Roadmap</a>
         <span>•</span>
-        <a href="/practice" class="hover:text-text-main transition-colors">Take a Quiz</a>
+        <a href={url('/practice')} class="hover:text-text-main transition-colors">Take a Quiz</a>
         <span>•</span>
-        <a href="/start" class="hover:text-text-main transition-colors">Start Flow</a>
+        <a href={url('/start')} class="hover:text-text-main transition-colors">Start Flow</a>
       </div>
     </div>
   </div>

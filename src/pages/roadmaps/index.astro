@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RoadmapCard from '../../components/RoadmapCard.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../../lib/paths';
 
 const allRoadmaps = await getCollection('roadmaps');
 const sortedRoadmaps = allRoadmaps.sort((a, b) => {
@@ -41,7 +42,7 @@ const domains = [
 
       <div class="pt-2">
         <a
-          href="/start"
+          href={url('/start')}
           class="inline-flex items-center gap-2 text-xs font-mono font-medium text-sage hover:underline"
         >
           <span>Not sure where to begin? Take the 60-second guided quiz →</span>

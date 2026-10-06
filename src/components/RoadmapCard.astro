@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/paths';
+
 interface Props {
   id: string;
   title: string;
@@ -38,7 +40,7 @@ const domainBadgeClass = domainColors[domain] || 'border-border-strong text-text
 ---
 
 <a
-  href={`/roadmaps/${id}`}
+  href={url(`/roadmaps/${id}`)}
   data-roadmap-id={id}
   data-total-nodes={nodesCount}
   class="roadmap-card group relative flex flex-col justify-between p-6 rounded-2xl bg-bg-surface border border-border-subtle hover:border-sage shadow-sm hover:shadow-lg transition-all duration-200"

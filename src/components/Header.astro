@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/paths';
+
 interface Props {
   activeTab?: 'roadmaps' | 'start' | 'best-practices' | 'practice' | 'contributing' | 'home';
 }
@@ -8,7 +10,7 @@ const { activeTab = 'home' } = Astro.props;
 
 <header class="sticky top-0 z-40 w-full glass-nav border-b border-border-subtle">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-3 group focus:outline-none" aria-label="DevWaymark Home">
+    <a href={url('/')} class="flex items-center gap-3 group focus:outline-none" aria-label="DevWaymark Home">
       <div class="w-10 h-10 rounded-xl bg-forest p-1.5 flex items-center justify-center border border-slate-sage/60 shadow-sm transition-transform group-hover:scale-105">
         <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
           <path d="M21 19 L11 32 L21 45" stroke="#6C8480" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -30,7 +32,7 @@ const { activeTab = 'home' } = Astro.props;
 
     <nav class="hidden md:flex items-center gap-1 text-sm font-medium" aria-label="Main navigation">
       <a
-        href="/roadmaps"
+        href={url('/roadmaps')}
         class={`px-3.5 py-2 rounded-lg transition-colors ${
           activeTab === 'roadmaps'
             ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
@@ -40,7 +42,7 @@ const { activeTab = 'home' } = Astro.props;
         Roadmaps
       </a>
       <a
-        href="/start"
+        href={url('/start')}
         class={`px-3.5 py-2 rounded-lg transition-colors ${
           activeTab === 'start'
             ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
@@ -50,7 +52,7 @@ const { activeTab = 'home' } = Astro.props;
         Where do I start?
       </a>
       <a
-        href="/best-practices"
+        href={url('/best-practices')}
         class={`px-3.5 py-2 rounded-lg transition-colors ${
           activeTab === 'best-practices'
             ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
@@ -60,7 +62,7 @@ const { activeTab = 'home' } = Astro.props;
         Best Practices
       </a>
       <a
-        href="/practice"
+        href={url('/practice')}
         class={`px-3.5 py-2 rounded-lg transition-colors ${
           activeTab === 'practice'
             ? 'text-forest dark:text-mint bg-sage/15 dark:bg-sage/20 font-semibold border border-sage/30 dark:border-sage/40'
@@ -86,7 +88,7 @@ const { activeTab = 'home' } = Astro.props;
       </button>
 
       <a
-        href="/roadmaps"
+        href={url('/roadmaps')}
         id="global-progress-badge"
         class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sage/15 border border-sage/30 text-forest dark:text-mint text-xs font-mono font-medium"
         title="Your local progress across all roadmaps"
@@ -125,7 +127,7 @@ const { activeTab = 'home' } = Astro.props;
 
   <div id="mobile-nav-drawer" class="hidden md:hidden border-b border-border-subtle bg-bg-surface px-4 pt-2 pb-4 space-y-1">
     <a
-      href="/roadmaps"
+      href={url('/roadmaps')}
       class={`block px-3 py-2 rounded-lg text-base font-medium ${
         activeTab === 'roadmaps' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
       }`}
@@ -133,7 +135,7 @@ const { activeTab = 'home' } = Astro.props;
       Roadmaps
     </a>
     <a
-      href="/start"
+      href={url('/start')}
       class={`block px-3 py-2 rounded-lg text-base font-medium ${
         activeTab === 'start' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
       }`}
@@ -141,7 +143,7 @@ const { activeTab = 'home' } = Astro.props;
       Where do I start?
     </a>
     <a
-      href="/best-practices"
+      href={url('/best-practices')}
       class={`block px-3 py-2 rounded-lg text-base font-medium ${
         activeTab === 'best-practices' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
       }`}
@@ -149,7 +151,7 @@ const { activeTab = 'home' } = Astro.props;
       Best Practices
     </a>
     <a
-      href="/practice"
+      href={url('/practice')}
       class={`block px-3 py-2 rounded-lg text-base font-medium ${
         activeTab === 'practice' ? 'bg-sage/15 text-forest dark:text-mint' : 'text-text-muted'
       }`}
@@ -157,7 +159,7 @@ const { activeTab = 'home' } = Astro.props;
       Practice Quizzes
     </a>
     <a
-      href="/contributing"
+      href={url('/contributing')}
       class="block px-3 py-2 rounded-lg text-base font-medium text-text-muted"
     >
       Contributing

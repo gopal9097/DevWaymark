@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/paths';
+---
+
+<BaseLayout
+  title="Page Not Found (404) — DevWaymark"
+  description="The page you are looking for does not exist or has been moved."
+>
+  <main class="min-h-[60vh] flex items-center justify-center px-4 py-16">
+    <div class="max-w-md w-full text-center space-y-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-sage/15 border border-sage/30 text-forest dark:text-mint font-mono text-2xl font-bold">
+        404
+      </div>
+      <div class="space-y-2">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-text-main tracking-tight">
+          Waymark Lost
+        </h1>
+        <p class="text-sm text-text-muted">
+          We couldn't find the track or milestone you were looking for. It may have moved or the link was mistyped.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <a
+          href={url('/')}
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-forest hover:bg-forest-dark dark:bg-sage dark:text-forest-deep text-white font-semibold text-xs font-mono transition-colors shadow-sm"
+        >
+          Return to Home
+        </a>
+        <a
+          href={url('/roadmaps')}
+          class="w-full sm:w-auto px-6 py-3 rounded-xl border border-border-strong text-text-main hover:bg-bg-surface-hover font-semibold text-xs font-mono transition-colors"
+        >
+          Explore Roadmaps →
+        </a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

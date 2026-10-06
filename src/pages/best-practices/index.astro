@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../../lib/paths';
 
 const practices = await getCollection('best-practices');
 const areas = [
@@ -54,7 +55,7 @@ const areas = [
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="practices-grid">
       {practices.map((p) => (
         <a
-          href={`/best-practices/${p.data.id}`}
+          href={url(`/best-practices/${p.data.id}`)}
           data-area={p.data.area}
           class="practice-card group flex flex-col justify-between p-6 rounded-2xl bg-bg-surface border border-border-subtle hover:border-sage shadow-sm hover:shadow-lg transition-all duration-200"
         >

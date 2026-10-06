@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { url } from '../lib/paths';
 
 const roadmaps = await getCollection('roadmaps');
 const practices = await getCollection('best-practices');
@@ -9,7 +10,7 @@ const searchItems = [
   ...roadmaps.map((r) => ({
     title: r.data.title,
     subtitle: `${r.data.domain} • ${r.data.difficulty} • ${r.data.estimatedWeeks}w`,
-    url: `/roadmaps/${r.data.id}`,
+    url: url(`/roadmaps/${r.data.id}`),
     category: 'Roadmap Track',
     badge: r.data.domain,
   })),
@@ -18,7 +19,7 @@ const searchItems = [
       s.nodes.map((n) => ({
         title: n.title,
         subtitle: `In ${r.data.title} > ${s.title}`,
-        url: `/roadmaps/${r.data.id}#${n.id}`,
+        url: url(`/roadmaps/${r.data.id}#${n.id}`),
         category: 'Milestone Node',
         badge: n.importance,
       }))
@@ -27,14 +28,14 @@ const searchItems = [
   ...practices.map((p) => ({
     title: p.data.title,
     subtitle: `${p.data.area} • ${p.data.readTime}`,
-    url: `/best-practices/${p.data.id}`,
+    url: url(`/best-practices/${p.data.id}`),
     category: 'Best Practice',
     badge: p.data.area,
   })),
   ...quizzes.map((q) => ({
     title: q.data.title,
     subtitle: `${q.data.track} • ${q.data.questions.length} questions`,
-    url: `/practice?track=${encodeURIComponent(q.data.track)}`,
+    url: url(`/practice?track=${encodeURIComponent(q.data.track)}`),
     category: 'Practice Quiz',
     badge: q.data.track,
   })),

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RoadmapCard from '../components/RoadmapCard.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../lib/paths';
 
 const allRoadmaps = await getCollection('roadmaps');
 const featuredRoadmaps = allRoadmaps.filter((r) => r.data.featured).slice(0, 6);
@@ -35,7 +36,7 @@ const totalTopicsCount = allRoadmaps.reduce(
 
         <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href="/roadmaps"
+            href={url('/roadmaps')}
             class="w-full sm:w-auto py-3.5 px-8 rounded-2xl bg-forest hover:bg-forest-dark dark:bg-sage dark:hover:bg-sage-hover text-white dark:text-forest-deep font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 group"
           >
             <span>Explore All {totalRoadmapsCount} Roadmaps</span>
@@ -45,7 +46,7 @@ const totalTopicsCount = allRoadmaps.reduce(
           </a>
 
           <a
-            href="/start"
+            href={url('/start')}
             class="w-full sm:w-auto py-3.5 px-6 rounded-2xl border border-border-strong bg-bg-surface text-text-main hover:bg-bg-surface-hover font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2"
           >
             <span>Where do I start? (60s Guide)</span>
@@ -107,7 +108,7 @@ const totalTopicsCount = allRoadmaps.reduce(
                 </div>
               </div>
             </div>
-            <a href="/roadmaps/frontend#fe-html-semantics" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+            <a href={url('/roadmaps/frontend#fe-html-semantics')} class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
               View Node →
             </a>
           </div>
@@ -124,7 +125,7 @@ const totalTopicsCount = allRoadmaps.reduce(
                 </div>
               </div>
             </div>
-            <a href="/roadmaps/frontend#fe-css-modern" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+            <a href={url('/roadmaps/frontend#fe-css-modern')} class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
               View Node →
             </a>
           </div>
@@ -141,14 +142,14 @@ const totalTopicsCount = allRoadmaps.reduce(
                 </div>
               </div>
             </div>
-            <a href="/roadmaps/frontend#fe-browser-apis" class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
+            <a href={url('/roadmaps/frontend#fe-browser-apis')} class="text-xs font-mono text-sage hover:underline shrink-0 ml-4 hidden sm:inline">
               View Node →
             </a>
           </div>
         </div>
 
         <div class="text-center pt-2">
-          <a href="/roadmaps/frontend" class="text-xs font-mono text-forest dark:text-mint font-semibold hover:underline">
+          <a href={url('/roadmaps/frontend')} class="text-xs font-mono text-forest dark:text-mint font-semibold hover:underline">
             Experience the full interactive Frontend roadmap →
           </a>
         </div>
@@ -171,7 +172,7 @@ const totalTopicsCount = allRoadmaps.reduce(
       </div>
 
       <a
-        href="/roadmaps"
+        href={url('/roadmaps')}
         class="text-xs font-mono font-semibold text-sage hover:underline flex items-center gap-1 shrink-0"
       >
         <span>View all {totalRoadmapsCount} tracks</span>
@@ -257,7 +258,7 @@ const totalTopicsCount = allRoadmaps.reduce(
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <a
-        href="/best-practices"
+        href={url('/best-practices')}
         class="group p-8 rounded-3xl bg-sage/10 border border-sage/30 hover:border-sage transition-all shadow-sm space-y-4"
       >
         <span class="text-xs font-mono uppercase font-semibold text-forest dark:text-mint">
@@ -275,7 +276,7 @@ const totalTopicsCount = allRoadmaps.reduce(
       </a>
 
       <a
-        href="/practice"
+        href={url('/practice')}
         class="group p-8 rounded-3xl bg-slate-sage/10 border border-slate-sage/30 hover:border-slate-sage transition-all shadow-sm space-y-4"
       >
         <span class="text-xs font-mono uppercase font-semibold text-slate-sage-dark dark:text-mint">
@@ -307,7 +308,7 @@ const totalTopicsCount = allRoadmaps.reduce(
       </p>
       <div class="pt-2">
         <a
-          href="/contributing"
+          href={url('/contributing')}
           class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-sage hover:bg-sage-hover text-white font-bold text-xs font-mono transition-colors shadow-sm"
         >
           <span>Read the Contributing & Schema Guide</span>

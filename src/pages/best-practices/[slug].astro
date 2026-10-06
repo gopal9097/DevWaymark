@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const practices = await getCollection('best-practices');
@@ -20,9 +21,9 @@ const { practice } = Astro.props;
 >
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
     <nav class="flex items-center gap-2 text-xs font-mono text-text-faint mb-6" aria-label="Breadcrumb">
-      <a href="/" class="hover:text-text-main">Home</a>
+      <a href={url('/')} class="hover:text-text-main">Home</a>
       <span>/</span>
-      <a href="/best-practices" class="hover:text-text-main">Best Practices</a>
+      <a href={url('/best-practices')} class="hover:text-text-main">Best Practices</a>
       <span>/</span>
       <span class="text-forest dark:text-mint font-semibold">{practice.title}</span>
     </nav>
@@ -130,10 +131,10 @@ const { practice } = Astro.props;
     </section>
 
     <div class="pt-8 border-t border-border-subtle flex items-center justify-between text-xs font-mono">
-      <a href="/best-practices" class="text-text-muted hover:text-text-main transition-colors">
+      <a href={url('/best-practices')} class="text-text-muted hover:text-text-main transition-colors">
         ← Back to All Guides
       </a>
-      <a href="/practice" class="text-forest dark:text-mint font-semibold hover:underline">
+      <a href={url('/practice')} class="text-forest dark:text-mint font-semibold hover:underline">
         Test knowledge with quizzes →
       </a>
     </div>

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TopicModal from '../../components/TopicModal.astro';
 import { getCollection } from 'astro:content';
+import { url } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const roadmaps = await getCollection('roadmaps');
@@ -32,9 +33,9 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
   <section class="border-b border-border-subtle bg-bg-surface py-10 lg:py-14 bg-grid-pattern">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <nav class="flex items-center gap-2 text-xs font-mono text-text-faint mb-6" aria-label="Breadcrumb">
-        <a href="/" class="hover:text-text-main">Home</a>
+        <a href={url('/')} class="hover:text-text-main">Home</a>
         <span>/</span>
-        <a href="/roadmaps" class="hover:text-text-main">Roadmaps</a>
+        <a href={url('/roadmaps')} class="hover:text-text-main">Roadmaps</a>
         <span>/</span>
         <span class="text-forest dark:text-mint font-semibold">{roadmap.title}</span>
       </nav>
