@@ -16,7 +16,6 @@
   <img src="https://img.shields.io/badge/Access-100%25_Free_Forever-404E3B" alt="Free Forever">
   <img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License">
 </p>
-
 ---
 
 ## Table of Contents
@@ -315,19 +314,21 @@ DevWaymark works on all modern desktop and mobile browsers:
   - **Ankit Kumar Mishra**
   - **Ankul Kumar**
   - **Nitish Kumar**
+  - **Anand Pandit**
 
 ### Primary Contributions
 - **Gopal Kumar Singh:** Project vision, system architecture, base layouts & UI components, Tailwind CSS v4 design system, dynamic routing engine, and local-first progress storage.
 - **Ankit Kumar Mishra:** Core web & systems engineering tracks (Frontend, Backend, DevOps, System Design) and interactive practice quizzes.
 - **Ankul Kumar:** Cloud infrastructure, Cybersecurity, Databases, and Production Best Practices guidelines.
 - **Nitish Kumar:** Language deep-dives (JavaScript, React, Python), Mobile development, and the interactive "Where Do I Start?" 60-second triage guide.
+- **Anand Pandit:** AI & LLM Applications roadmap (vector embeddings, RAG pipelines, prompt architecture, agents, and evaluations).
 
 ---
 
 ## How This Project Was Built
 
 - **Idea, Feature Set & Project Direction:** Gopal Kumar Singh ([@gopal9097](https://github.com/gopal9097)).
-- **Collaborative Team Effort:** Built together with my 3 friends (**Ankit Kumar Mishra**, **Ankul Kumar**, and **Nitish Kumar**). I came up with the idea and overall concept, and our team distributed different parts and tracks among ourselves to build out the platform collaboratively.
+- **Collaborative Team Effort:** Built together with my 4 friends (**Ankit Kumar Mishra**, **Ankul Kumar**, **Nitish Kumar**, and **Anand Pandit**). I came up with the idea and overall concept, and our team distributed different parts and tracks among ourselves to build out the platform collaboratively.
 - **Brand & Logo Design:** The brand concept and `< ◇ >` vector logo were designed with Google Antigravity.
 - **AI Assistance & Implementation:**
   During development, whenever we encountered roadblocks or needed to clarify complex architectural patterns, TypeScript types, or Zod collection configurations, we used AI assistants for guidance. We also used AI to refine and format our code and explanations so they are clean, well-structured, and easy for any learner or developer to understand. Every component, schema definition, and resource was reviewed, tested, and integrated by our team.
