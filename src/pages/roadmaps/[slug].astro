@@ -283,6 +283,7 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
   }
 
   const backdrop = document.getElementById('topic-drawer-backdrop');
+  const drawerBody = document.getElementById('topic-drawer-body');
   const closeBtn = document.getElementById('topic-close-btn');
   const titleEl = document.getElementById('topic-modal-title');
   const stageBadge = document.getElementById('topic-stage-badge');
@@ -306,7 +307,12 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
     const node = allNodes[index];
 
     if (titleEl) titleEl.textContent = node.title;
-    if (stageBadge) stageBadge.textContent = `Stage ${node.stageNumber}: ${node.stageTitle}`;
+    if (stageBadge) {
+      stageBadge.textContent =
+        node.stageTitle && node.stageTitle.startsWith('Stage ')
+          ? node.stageTitle
+          : `Stage ${node.stageNumber}: ${node.stageTitle}`;
+    }
     if (importanceBadge) importanceBadge.textContent = node.importance.toUpperCase();
     if (timeEstimate) timeEstimate.textContent = `~${node.estimatedHours || 10} hours estimated study`;
     if (descEl) descEl.textContent = node.description;
@@ -329,15 +335,15 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
           href="${r.url}"
           target="_blank"
           rel="noopener noreferrer"
-          class="flex items-center justify-between p-3 rounded-xl border border-border-subtle hover:border-sage bg-bg-surface-hover hover:bg-sage/10 transition-colors text-xs"
+          class="flex items-center justify-between p-3.5 rounded-xl border border-border-subtle hover:border-sage bg-bg-surface-hover hover:bg-sage/15 transition-colors text-xs sm:text-sm group"
         >
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded font-mono uppercase text-[10px] bg-sage/15 text-forest dark:text-mint border border-sage/30">
+          <div class="flex items-center gap-2.5 min-w-0 pr-3">
+            <span class="px-2 py-0.5 rounded font-mono font-semibold uppercase text-[10px] bg-sage/15 text-forest dark:text-mint border border-sage/30 shrink-0">
               ${r.type}
             </span>
-            <span class="font-medium text-text-main">${r.title}</span>
+            <span class="font-semibold text-text-main group-hover:text-forest dark:group-hover:text-mint truncate">${r.title}</span>
           </div>
-          <svg class="w-4 h-4 text-text-faint shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" class="w-4 h-4 text-text-faint group-hover:text-sage shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
         </a>
@@ -362,6 +368,8 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
 
     backdrop?.classList.remove('hidden');
     backdrop?.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (drawerBody) drawerBody.scrollTop = 0;
 
     history.replaceState(null, '', `#${node.id}`);
   }
@@ -371,11 +379,11 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
     if (!doneBtn || !doneBtnLabel) return;
     if (isDone) {
       doneBtn.className =
-        'flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-forest text-white hover:bg-forest-dark dark:bg-sage dark:text-forest-deep';
+        'flex-1 py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-forest text-white hover:bg-forest-dark dark:bg-sage dark:text-forest-deep';
       doneBtnLabel.textContent = 'Completed ✓';
     } else {
       doneBtn.className =
-        'flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-sage text-white hover:bg-sage-hover';
+        'flex-1 py-3 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-sm bg-sage text-white hover:bg-sage-hover';
       doneBtnLabel.textContent = 'Mark as Done';
     }
   }
@@ -383,6 +391,7 @@ const totalHours = allNodes.reduce((acc, n) => acc + (n.estimatedHours || 10), 0
   function closeModal() {
     backdrop?.classList.add('hidden');
     backdrop?.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
     currentNodeIndex = -1;
     history.replaceState(null, '', window.location.pathname);
   }
